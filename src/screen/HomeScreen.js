@@ -5,10 +5,8 @@ import PickerModal from 'react-native-picker-modal-view';
 import {convertToRupiah} from '../utils/convert';
 import {connect} from 'react-redux';
 import {converDate} from '../utils/convert';
-import {loadRoutes} from '../redux/actions/SchedulesActions';
-import {loadUserData} from '../redux/actions/UserActions';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import style from '../style/index';
+
 import colors from '../config/colors';
 
 const localStyle = StyleSheet.create({

@@ -2,12 +2,9 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Button from '../components/Button';
-import FormTextInput from '../components/TextInput';
 import strings from '../config/strings';
 import styles from '../style/index';
 import colors from '../config/colors';
-import {setLogin} from '../redux/actions/AuthActions';
-import {connect} from 'react-redux';
 
 class SuccessRegis extends Component {
   state = {
@@ -18,7 +15,7 @@ class SuccessRegis extends Component {
   render() {
     return (
       <>
-        <View style={styles.parent}>
+        <View style={styles.parentBlue}>
           <View style={localStyles.formContainer}>
             <View style={localStyles.notif}>
               <Icon name="check-circle" size={70} color={colors.MAIN_GREY} />
@@ -26,21 +23,20 @@ class SuccessRegis extends Component {
                 style={{
                   fontSize: 24,
                   fontWeight: 'bold',
-                  color: colors.BLACK,
-                  marginVertical: 15,
+                  marginTop: 15,
+                  marginBottom: 10,
+                  color: colors.WHITE,
                 }}>
-                Congratulations {this.props.route.params.username}!
+                Congratulations !
               </Text>
-              <Text style={{marginBottom: 10}}>
-                Your registration is completed. Please check your email to
-                verify yourself.
+              <Text style={{marginBottom: 0, color: colors.WHITE}}>
+                Your registration is completed.
+              </Text>
+              <Text style={{marginBottom: 20, color: colors.WHITE}}>
+                Please check your email to verify yourself.
               </Text>
             </View>
-            <Button
-              label={strings.LOGIN}
-              buttonType="login"
-              onPress={() => this.props.navigation.navigate('LoginScreen')}
-            />
+            <Button label={strings.LOGIN} buttonType="login" />
           </View>
         </View>
       </>
@@ -51,7 +47,7 @@ class SuccessRegis extends Component {
 const localStyles = StyleSheet.create({
   formContainer: {
     flex: 1,
-    width: '90%',
+    width: '80%',
     marginTop: '50%',
   },
   notif: {
@@ -77,8 +73,4 @@ const localStyles = StyleSheet.create({
     marginTop: 7,
   },
 });
-const mapDispatchToProps = {setLogin};
-export default connect(
-  null,
-  mapDispatchToProps,
-)(SuccessRegis);
+export default SuccessRegis;
