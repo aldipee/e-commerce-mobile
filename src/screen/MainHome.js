@@ -2,8 +2,10 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import LoginScreen from '../screen/Login';
 
+// Screen Import
+import LoginScreen from '../screen/Login';
+import HomeScreen from '../screen/HomeScreen';
 const BottomTab = createBottomTabNavigator();
 
 function MainHome() {
@@ -13,10 +15,10 @@ function MainHome() {
         activeTintColor: '#e91e63',
       }}>
       <BottomTab.Screen
-        name="Login"
-        component={LoginScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarLabel: 'Login',
+          tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
             <FeatherIcon name="home" size={size} color={color} />
           ),
@@ -24,7 +26,7 @@ function MainHome() {
       />
 
       <BottomTab.Screen
-        name="Home"
+        name="Login"
         component={LoginScreen}
         options={{
           tabBarLabel: 'Login',

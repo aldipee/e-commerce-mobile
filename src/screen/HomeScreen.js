@@ -1,12 +1,19 @@
-import React, {Component} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
-import {Card, Button, Header, Text as Txt} from 'react-native-elements';
+import React from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  StatusBar,
+  Alert,
+} from 'react-native';
+import {Card, Button, Header, SearchBar} from 'react-native-elements';
 import PickerModal from 'react-native-picker-modal-view';
-import {convertToRupiah} from '../utils/convert';
-import {connect} from 'react-redux';
-import {converDate} from '../utils/convert';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
+// Lokal Config
+import {convertToRupiah} from '../utils/convert';
 import colors from '../config/colors';
 
 const localStyle = StyleSheet.create({
@@ -57,73 +64,35 @@ const localStyle = StyleSheet.create({
     padding: 10,
     fontWeight: 'bold',
   },
-  cardContainer: {
-    marginTop: -140,
-  },
+  cardContainer: {},
 });
 
-class HomeForm extends Component {
-  constructor(props) {
-    super(props);
-    this.props.loadRoutes();
-    this.state = {
-      selectedRoute: {},
-      selectedDate: '',
-      selectedLabel: '',
-      date: {},
-      routes: [],
-    };
-  }
-
-  // componentWillMount() {
-  //   this.setState({
-  //     routes: this.props.routes,
-  //   });
-  // }
-
-  componentDidMount() {
-    this.setState({
-      routes: this.props.routes,
-    });
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.route.params !== prevProps.route.params) {
-      // eslint-disable-next-line
-      this.setState({
-        selectedDate: this.props.route.params.dateSelected.dateString,
-      });
-    }
-  }
-  Bo = selected => {
-    console.log(selected);
-    const value = selected.Value.split(/\s*\-\s*/g);
-    const data = {
-      origin: value[0],
-      destination: value[1],
-    };
-    this.setState({
-      selectedRoute: data,
-      selectedLabel: selected.Name,
-    });
+const HomeForm = () => {
+  const searchOnFocus = () => {
+    Alert.alert('OOOO');
   };
-
-  showCalendar = () => {
-    this.props.navigation.navigate('Calendar');
-  };
-  onSubmit = () => {
-    const query = `?origin=${this.state.selectedRoute.origin}&destination=${
-      this.state.selectedRoute.destination
-    }&date=${this.state.selectedDate}`;
-    this.props.navigation.navigate('Schedules', {
-      query,
-      label: this.state.selectedLabel,
-    });
-  };
-  render() {
-    const {singleData} = this.props.userData;
-    return (
+  return (
+    <>
+      <StatusBar backgroundColor="#fff" />
       <View>
-        <Header containerStyle={localStyle.headerContainer} />
+        <SearchBar
+          onFocus={() => searchOnFocus()}
+          placeholder="Type Here..."
+          containerStyle={{
+            backgroundColor: '#fff',
+            borderBottomColor: '#fff',
+            borderTopColor: '#fff',
+            paddingHorizontal: 15,
+            paddingVertical: 5,
+          }}
+          inputContainerStyle={{
+            backgroundColor: colors.SECOND_GREY,
+            height: 43,
+          }}
+          inputStyle={{fontSize: 14}}
+          showLoading={true}
+          underlineColorAndroid={colors.MAIN_GREY}
+        />
         <View style={localStyle.cardContainer}>
           <Card
             containerStyle={{
@@ -151,18 +120,19 @@ class HomeForm extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <Text style={{fontSize: 23, fontWeight: 'bold'}}>
-                  {convertToRupiah(singleData.balance)}
+                <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                  {convertToRupiah(130000)}
                 </Text>
                 <Button
-                  icon={<Icon name="md-wallet" size={20} color="#fff" />}
+                  containerStyle={{marginTop: -16}}
+                  icon={<Icon name="md-wallet" size={18} color="#fff" />}
                   title="Top up"
                 />
               </View>
             </View>
           </Card>
           <Card
-            title={`Pick up your trip ${singleData.fullName}!`}
+            title={`Pick up your trip !`}
             containerStyle={{
               borderTopWidth: 0,
               borderRightWidth: 0,
@@ -175,69 +145,21 @@ class HomeForm extends Component {
               shadowRadius: 2,
             }}>
             <View>
-              <Txt style={localStyle.label}>Origin</Txt>
-              {console.log('heee', this.props.routes)}
-              {this.props.routes && this.props.routes.length !== 0 && (
-                <PickerModal
-                  style={localStyle.input}
-                  onSelected={selected => this.Bo(selected)}
-                  onRequestClosed={() => console.warn('closed...')}
-                  onBackRequest={() => console.warn('back key pressed')}
-                  items={
-                    typeof this.props.routes == 'object'
-                      ? (() => {
-                          console.log('aaa', this.props.routes);
-                          return this.props.routes;
-                        })()
-                      : []
-                  }
-                  sortingLanguage={'tr'}
-                  showToTopButton={true}
-                  defaultSelected={this.state.selectedItem}
-                  autoCorrect={false}
-                  autoGenerateAlphabet={true}
-                  chooseText={'Choose one'}
-                  searchText={'Search...'}
-                  forceSelect={false}
-                  autoSort={true}
-                />
-              )}
+              <Text>Hola</Text>
             </View>
 
-            <View>
-              <Txt style={localStyle.label}>Date</Txt>
-              <TouchableOpacity onPress={this.showCalendar}>
-                <Text style={localStyle.date}>
-                  {this.props.route.params
-                    ? converDate(
-                        this.props.route.params.dateSelected.dateString,
-                      )
-                    : 'Select Date'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <View />
             <Button
               icon={{name: 'search', color: '#fff'}}
               backgroundColor={colors.ORANGE}
               buttonStyle={localStyle.button}
               title="Search "
-              onPress={this.onSubmit}
             />
           </Card>
         </View>
       </View>
-    );
-  }
-}
+    </>
+  );
+};
 
-const mapStateToProps = state => ({
-  routes: state.schedulesData.routes,
-  userData: state.userData,
-});
-
-const mapDispatchToProps = {loadRoutes, loadUserData};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HomeForm);
+export default HomeForm;
