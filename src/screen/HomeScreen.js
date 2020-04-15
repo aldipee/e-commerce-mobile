@@ -74,9 +74,9 @@ const localStyle = StyleSheet.create({
   },
 });
 
-const HomeForm = () => {
+const HomeForm = props => {
   const searchOnFocus = () => {
-    Alert.alert('OOOO');
+    props.navigation.navigate('SearchScreen');
   };
   const [currentSlider, setCurrentSlider] = useState(1);
   const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
@@ -95,6 +95,7 @@ const HomeForm = () => {
       />
     );
   };
+
   return (
     <>
       <StatusBar backgroundColor="#fff" />
@@ -149,6 +150,7 @@ const HomeForm = () => {
               tappableDots={!!currentSlider}
             />
           </Card>
+
           <Card
             containerStyle={{
               borderTopWidth: 0,
@@ -211,6 +213,55 @@ const HomeForm = () => {
               title="Search "
             />
           </Card>
+          {/* Horizontal Scroll */}
+          <View
+            style={{
+              backgroundColor: colors.SECOND_BLUE,
+              paddingBottom: 20,
+              marginTop: 9,
+              marginBottom: 80,
+            }}>
+            <Card containerStyle={{padding: 5, borderRadius: 3, width: '80%'}}>
+              <Tile
+                imageSrc={require('../../src/product.jpg')}
+                width={'100%'}
+                height={400}
+                imageContainerStyle={{borderRadius: 3}}>
+                <View>
+                  <View style={{marginTop: -30}}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        color: colors.BLACK,
+                      }}>
+                      Sepatu Futsal Nike Phantom Venom
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginTop: 5,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: colors.ORANGE,
+                          fontWeight: 'bold',
+                        }}>
+                        Rp 874.000
+                      </Text>
+                      <Text
+                        style={{color: colors.MAIN_GREY, fontWeight: 'bold'}}>
+                        340 Terjual
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </Tile>
+            </Card>
+          </View>
+          {/* End of Horizontal Scroll */}
         </ScrollView>
       </SafeAreaView>
     </>

@@ -16,15 +16,16 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="SearchScreen"
-            options={{headerShown: false}}
-            component={SearchScreen}
-          />
-          <Stack.Screen
             name="Home"
             options={{title: 'Login', headerShown: false}}
             component={MainHome}
           />
+          <Stack.Screen
+            name="SearchScreen"
+            options={{headerShown: false}}
+            component={SearchScreen}
+          />
+
           <Stack.Screen
             name="SignUp"
             options={{title: 'SignUp', headerShown: false}}

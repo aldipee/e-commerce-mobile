@@ -50,6 +50,7 @@ function SearchScreen(props) {
       <SearchBar
         onChangeText={keyword => setSearchKeyword(keyword)}
         placeholder="Coba cari 'sepatu nike '...."
+        cancelIcon={{name: 'arrow-left', color: 'red', type: 'feather'}}
         containerStyle={{
           backgroundColor: colors.SECOND_BLUE,
           borderTopWidth: 0,

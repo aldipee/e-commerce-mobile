@@ -8,7 +8,7 @@ import LoginScreen from '../screen/Login';
 import HomeScreen from '../screen/HomeScreen';
 const BottomTab = createBottomTabNavigator();
 
-function MainHome() {
+function MainHome(props) {
   return (
     <BottomTab.Navigator
       tabBarOptions={{
