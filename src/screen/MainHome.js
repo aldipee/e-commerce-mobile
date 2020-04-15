@@ -24,12 +24,21 @@ function MainHome() {
           ),
         }}
       />
-
       <BottomTab.Screen
         name="Login"
         component={LoginScreen}
         options={{
           tabBarLabel: 'Login',
+          tabBarIcon: ({color, size}) => (
+            <FeatherIcon name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="MyTransaction"
+        component={LoginScreen}
+        options={{
+          tabBarLabel: '',
           tabBarIcon: ({color, size}) => (
             <FeatherIcon name="home" size={size} color={color} />
           ),

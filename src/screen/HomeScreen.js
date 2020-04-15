@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Text,
   StatusBar,
   Alert,
@@ -12,7 +11,6 @@ import {
 import {Card, Button, Tile, SearchBar} from 'react-native-elements';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {itemWidth, sliderWidth} from '../style/SlideEntry';
-import PickerModal from 'react-native-picker-modal-view';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -86,7 +84,7 @@ const HomeForm = () => {
     return (
       <Tile
         imageSrc={require('../../src/banner.jpeg')}
-        titleStyle={{fontSize: 10, color: 'red'}}
+        titleStyle={{fontSize: 10}}
         contentContainerStyle={{
           backgroundColor: 'red',
           height: 0,

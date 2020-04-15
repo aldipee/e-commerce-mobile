@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import SignUp from '../src/screen/SignUp';
 import MainHome from './screen/MainHome';
 import SuccessRegis from './screen/SuccesRegis';
+import SearchScreen from './screen/SearchScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,11 @@ class Index extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="SearchScreen"
+            options={{headerShown: false}}
+            component={SearchScreen}
+          />
           <Stack.Screen
             name="Home"
             options={{title: 'Login', headerShown: false}}
