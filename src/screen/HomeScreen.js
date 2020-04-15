@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,8 +6,12 @@ import {
   Text,
   StatusBar,
   Alert,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
-import {Card, Button, Header, SearchBar} from 'react-native-elements';
+import {Card, Button, Tile, SearchBar} from 'react-native-elements';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {itemWidth, sliderWidth} from '../style/SlideEntry';
 import PickerModal from 'react-native-picker-modal-view';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -64,17 +68,39 @@ const localStyle = StyleSheet.create({
     padding: 10,
     fontWeight: 'bold',
   },
-  cardContainer: {},
+  paginationDot: {
+    width: 8,
+    height: 5,
+    borderRadius: 4,
+    marginHorizontal: 8,
+  },
 });
 
 const HomeForm = () => {
   const searchOnFocus = () => {
     Alert.alert('OOOO');
   };
+  const [currentSlider, setCurrentSlider] = useState(1);
+  const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
+  const _renderItem = ({item, index}) => {
+    return (
+      <Tile
+        imageSrc={require('../../src/banner.jpeg')}
+        titleStyle={{fontSize: 10, color: 'red'}}
+        contentContainerStyle={{
+          backgroundColor: 'red',
+          height: 0,
+          flex: 0,
+        }}
+        width={300}
+        height={150}
+      />
+    );
+  };
   return (
     <>
       <StatusBar backgroundColor="#fff" />
-      <View>
+      <SafeAreaView>
         <SearchBar
           onFocus={() => searchOnFocus()}
           placeholder="Type Here..."
@@ -82,18 +108,49 @@ const HomeForm = () => {
             backgroundColor: '#fff',
             borderBottomColor: '#fff',
             borderTopColor: '#fff',
-            paddingHorizontal: 15,
-            paddingVertical: 5,
+            paddingTop: 5,
+            paddingBottom: 8,
           }}
           inputContainerStyle={{
             backgroundColor: colors.SECOND_GREY,
-            height: 43,
+            height: 46,
           }}
           inputStyle={{fontSize: 14}}
           showLoading={true}
           underlineColorAndroid={colors.MAIN_GREY}
         />
-        <View style={localStyle.cardContainer}>
+
+        <ScrollView style={localStyle.cardContainer}>
+          <Card>
+            <Carousel
+              ref={c => setCurrentSlider(c)}
+              data={[1, 2, 3, 4, 5]}
+              renderItem={_renderItem}
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              hasParallaxImages={true}
+              inactiveSlideScale={0.94}
+              inactiveSlideOpacity={0.7}
+              loop={true}
+              loopClonesPerSide={2}
+              autoplay={true}
+              autoplayDelay={500}
+              autoplayInterval={3000}
+              onSnapToItem={index => setSlider1ActiveSlide(index)}
+            />
+            <Pagination
+              style={{paddingTop: -40}}
+              dotsLength={5}
+              activeDotIndex={slider1ActiveSlide}
+              dotColor={'rgba(255, 255, 255, 0.92)'}
+              dotStyle={localStyle.paginationDot}
+              inactiveDotColor={colors.black}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
+              carouselRef={currentSlider}
+              tappableDots={!!currentSlider}
+            />
+          </Card>
           <Card
             containerStyle={{
               borderTopWidth: 0,
@@ -156,8 +213,8 @@ const HomeForm = () => {
               title="Search "
             />
           </Card>
-        </View>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 };
