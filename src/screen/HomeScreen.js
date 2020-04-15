@@ -7,8 +7,9 @@ import {
   Alert,
   ScrollView,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
-import {Card, Button, Tile, SearchBar} from 'react-native-elements';
+import {Card, Button, Tile, SearchBar, Image} from 'react-native-elements';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {itemWidth, sliderWidth} from '../style/SlideEntry';
 
@@ -93,6 +94,49 @@ const HomeForm = props => {
         width={300}
         height={150}
       />
+    );
+  };
+
+  const _renderItemHorizontalProduct = ({item, index}) => {
+    return (
+      <Card containerStyle={{padding: 5, borderRadius: 3, width: '80%'}}>
+        <Tile
+          imageSrc={require('../../src/product.jpg')}
+          width={'100%'}
+          height={400}
+          imageContainerStyle={{borderRadius: 3}}>
+          <View>
+            <View style={{marginTop: -30}}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: colors.BLACK,
+                }}>
+                Sepatu Futsal Nike Phantom Venom
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 5,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: colors.ORANGE,
+                    fontWeight: 'bold',
+                  }}>
+                  Rp 874.000
+                </Text>
+                <Text style={{color: colors.MAIN_GREY, fontWeight: 'bold'}}>
+                  340 Terjual
+                </Text>
+              </View>
+            </View>
+          </View>
+        </Tile>
+      </Card>
     );
   };
 
@@ -219,49 +263,100 @@ const HomeForm = props => {
               backgroundColor: colors.SECOND_BLUE,
               paddingBottom: 20,
               marginTop: 9,
-              marginBottom: 80,
+              marginBottom: 20,
             }}>
-            <Card containerStyle={{padding: 5, borderRadius: 3, width: '80%'}}>
-              <Tile
-                imageSrc={require('../../src/product.jpg')}
-                width={'100%'}
-                height={400}
-                imageContainerStyle={{borderRadius: 3}}>
-                <View>
-                  <View style={{marginTop: -30}}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: colors.BLACK,
-                      }}>
-                      Sepatu Futsal Nike Phantom Venom
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginTop: 5,
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: colors.ORANGE,
-                          fontWeight: 'bold',
-                        }}>
-                        Rp 874.000
-                      </Text>
-                      <Text
-                        style={{color: colors.MAIN_GREY, fontWeight: 'bold'}}>
-                        340 Terjual
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </Tile>
-            </Card>
+            <Carousel
+              data={[1, 2, 3, 4, 5]}
+              renderItem={_renderItemHorizontalProduct}
+              sliderWidth={sliderWidth}
+              itemWidth={itemWidth}
+              inactiveSlideScale={0.95}
+              inactiveSlideOpacity={1}
+              enableMomentum={false}
+              activeSlideAlignment={'start'}
+              containerCustomStyle={{
+                marginRight: 0,
+              }}
+              contentContainerCustomStyle={{
+                paddingRight: 0,
+              }}
+              activeAnimationType={'spring'}
+              activeAnimationOptions={{
+                friction: 4,
+                tension: 40,
+              }}
+            />
           </View>
           {/* End of Horizontal Scroll */}
+
+          {/* Start Scroll Vertical */}
+          <Text style={{marginLeft: 8, fontSize: 18, fontWeight: 'bold'}}>
+            Terlaris
+          </Text>
+          <View
+            style={{
+              marginBottom: 100,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {[1, 2, 3, 4, 5, 6].map((data, index) => (
+              <Card
+                containerStyle={{
+                  borderTopWidth: 0,
+                  borderRightWidth: 0,
+                  borderLeftWidth: 0,
+                  borderBottomWidth: 0,
+                  marginHorizontal: 0,
+                  width: '48%',
+                  padding: 2,
+                  marginLeft: 5,
+                  borderRadius: 1,
+                  marginBottom: 0,
+                  shadowColor: '#000',
+                  shadowOffset: {width: 0, height: 2},
+                  shadowOpacity: 0.8,
+                  shadowRadius: 2,
+                }}>
+                <Image
+                  source={{
+                    uri:
+                      'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/22/batch-upload/batch-upload_bd2f7280-355f-4985-8353-accfd559937a.jpg',
+                  }}
+                  style={{width: '100%', height: 150}}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+                <View style={{padding: 5}}>
+                  <Text style={{textAlign: 'center'}}>
+                    Sepatu Futsal Adidas Nemeziz 19.3
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        fontWeight: 'bold',
+                        color: colors.ORANGE,
+                        marginTop: 5,
+                      }}>
+                      Rp 860.000
+                    </Text>
+                    <Text style={{fontSize: 9, marginTop: 9}}>300 Terjual</Text>
+                  </View>
+                </View>
+                <View style={{padding: 10}}>
+                  <Button
+                    title="Beli"
+                    buttonStyle={{borderRadius: 1}}
+                    titleStyle={{fontSize: 14}}
+                  />
+                </View>
+              </Card>
+            ))}
+          </View>
+          {/* End of Scroll Vertical */}
         </ScrollView>
       </SafeAreaView>
     </>

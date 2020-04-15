@@ -49,6 +49,7 @@ function SearchScreen(props) {
     <SafeAreaView>
       <SearchBar
         onChangeText={keyword => setSearchKeyword(keyword)}
+        value={searchKeyword}
         placeholder="Coba cari 'sepatu nike '...."
         cancelIcon={{name: 'arrow-left', color: 'red', type: 'feather'}}
         containerStyle={{
@@ -104,7 +105,7 @@ function SearchScreen(props) {
       <FlatList
         style={{padding: 5}}
         data={dummyArray}
-        renderItem={renderItem}
+        renderItem={searchKeyword ? renderItem : null}
       />
       {/* End Searched Item here */}
       <ScrollView />
