@@ -20,11 +20,6 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="PaymentList"
-            options={{headerShown: true, title: 'Select Payament Method'}}
-            component={PayamentList}
-          />
-          <Stack.Screen
             name="Home"
             options={{headerShown: false}}
             component={MainHome}
@@ -62,6 +57,11 @@ class Index extends Component {
               headerShown: false,
             }}
             component={SuccessRegis}
+          />
+          <Stack.Screen
+            name="PaymentList"
+            options={{headerShown: true, title: 'Select Payament Method'}}
+            component={PayamentList}
           />
         </Stack.Navigator>
       </NavigationContainer>
