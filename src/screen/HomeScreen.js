@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -13,12 +13,16 @@ import {
 import {Card, Button, Tile, SearchBar, Image} from 'react-native-elements';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {itemWidth, sliderWidth} from '../style/SlideEntry';
-
 import Icon from 'react-native-vector-icons/Ionicons';
-
+// Redux
+import {connect} from 'react-redux';
+import {getProducts} from '../redux/actions/ProductActions';
 // Lokal Config
 import {convertToRupiah} from '../utils/convert';
 import colors from '../config/colors';
+import {API} from '../config/server';
+import HorizontalProducts from '../components/MainHome/HorizontalProducts';
+import VerticalProducts from '../components/MainHome/VerticalProducts';
 
 const localStyle = StyleSheet.create({
   button: {
@@ -97,6 +101,10 @@ const HomeForm = props => {
   };
   const [currentSlider, setCurrentSlider] = useState(1);
   const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
+
+  useEffect(() => {
+    props.getProducts();
+  }, []);
   const _renderItem = ({item, index}) => {
     return (
       <Tile
@@ -312,160 +320,35 @@ const HomeForm = props => {
             />
           </View>
           {/* End of Horizontal Scroll */}
-          {/* Start Scroll Horizontal */}
-          <Text style={{marginLeft: 8, fontSize: 18, fontWeight: 'bold'}}>
-            Terlaris
-          </Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View
-              style={{
-                marginBottom: 30,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}>
-              {[1, 2, 3, 4, 5, 6].map((data, index) => (
-                <Card
-                  containerStyle={{
-                    borderTopWidth: 0,
-                    borderRightWidth: 0,
-                    borderLeftWidth: 0,
-                    borderBottomWidth: 0,
-                    marginHorizontal: 0,
-                    padding: 2,
-                    marginLeft: 5,
-                    borderRadius: 1,
-                    marginBottom: 0,
-                    shadowColor: '#000',
-                    shadowOffset: {width: 0, height: 2},
-                    shadowOpacity: 0.8,
-                    shadowRadius: 2,
-                  }}>
-                  <Image
-                    source={{
-                      uri:
-                        'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/22/batch-upload/batch-upload_bd2f7280-355f-4985-8353-accfd559937a.jpg',
-                    }}
-                    style={{width: '100%', height: 230}}
-                    PlaceholderContent={<ActivityIndicator />}
-                  />
-                  <View style={{padding: 5}}>
-                    <Text style={{textAlign: 'center'}}>
-                      Sepatu Futsal Adidas Nemeziz 19.3
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 17,
-                          fontWeight: 'bold',
-                          color: colors.ORANGE,
-                          marginTop: 5,
-                        }}>
-                        Rp 860.000
-                      </Text>
-                      <Text style={{fontSize: 9, marginTop: 9}}>
-                        300 Terjual
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{padding: 10}}>
-                    <Button
-                      title="Beli"
-                      buttonStyle={{borderRadius: 1}}
-                      titleStyle={{fontSize: 14}}
-                      onPress={() =>
-                        props.navigation.navigate('ProductDetails')
-                      }
-                    />
-                  </View>
-                </Card>
-              ))}
-            </View>
-          </ScrollView>
-          {/* End of Scroll Vertical */}
+
+          <HorizontalProducts
+            title="Product Terbaik"
+            items={props.data.data && props.data.data}
+            navigation={props.navigation}
+          />
 
           {/* Start Scroll Vertical */}
-          <Text style={{marginLeft: 8, fontSize: 18, fontWeight: 'bold'}}>
-            Terlaris
-          </Text>
-          <ScrollView horizontal={false}>
-            <View
-              style={{
-                marginBottom: 100,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}>
-              {[1, 2, 3, 4, 5, 6].map((data, index) => (
-                <Card
-                  containerStyle={{
-                    borderTopWidth: 0,
-                    borderRightWidth: 0,
-                    borderLeftWidth: 0,
-                    borderBottomWidth: 0,
-                    marginHorizontal: 0,
-                    width: '48%',
-                    padding: 2,
-                    marginLeft: 5,
-                    borderRadius: 1,
-                    marginBottom: 0,
-                    shadowColor: '#000',
-                    shadowOffset: {width: 0, height: 2},
-                    shadowOpacity: 0.8,
-                    shadowRadius: 2,
-                  }}>
-                  <Image
-                    source={{
-                      uri:
-                        'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/22/batch-upload/batch-upload_bd2f7280-355f-4985-8353-accfd559937a.jpg',
-                    }}
-                    style={{width: '100%', height: 150}}
-                    PlaceholderContent={<ActivityIndicator />}
-                  />
-                  <View style={{padding: 5}}>
-                    <Text style={{textAlign: 'center'}}>
-                      Sepatu Futsal Adidas Nemeziz 19.3
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 17,
-                          fontWeight: 'bold',
-                          color: colors.ORANGE,
-                          marginTop: 5,
-                        }}>
-                        Rp 860.000
-                      </Text>
-                      <Text style={{fontSize: 9, marginTop: 9}}>
-                        300 Terjual
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{padding: 10}}>
-                    <Button
-                      title="Beli"
-                      buttonStyle={{borderRadius: 1}}
-                      titleStyle={{fontSize: 14}}
-                      onPress={() =>
-                        props.navigation.navigate('ProductDetails')
-                      }
-                    />
-                  </View>
-                </Card>
-              ))}
-            </View>
-          </ScrollView>
-          {/* End of Scroll Vertical */}
+          <VerticalProducts
+            title="Paling laris"
+            items={props.data.data && props.data.data}
+            navigation={props.navigation}
+          />
         </ScrollView>
+        {/* End of Scroll Vertical */}
       </SafeAreaView>
     </>
   );
 };
 
-export default HomeForm;
+const mapStateToProps = state => ({
+  data: state.productData,
+});
+
+const mapDispatchToProps = {
+  getProducts,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(HomeForm);

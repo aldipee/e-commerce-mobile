@@ -17,15 +17,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Local
 import colors from '../config/colors';
 import {convertToRupiah} from '../utils/convert';
-function ProductDetailScreen() {
+import {API} from '../config/server';
+function ProductDetailScreen(props) {
+  const {data} = props.route.params;
   return (
     <SafeAreaView>
       <View>
         <ScrollView>
           <Image
             source={{
-              uri:
-                'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/11/batch-upload/batch-upload_30a08522-d5df-41fc-a030-51e103c37909.jpg',
+              uri: API.API_URL_STATIC.concat(data.picture),
             }}
             style={{width: 370, height: 300}}
             PlaceholderContent={<ActivityIndicator />}
@@ -39,17 +40,16 @@ function ProductDetailScreen() {
             }}>
             {/* Product informations */}
             <View style={localStyle.productInfoContainer}>
-              <Text style={localStyle.mainTitle}>
-                Sepatu Futsal Nike Tiempo Legend 8 Academy [AT-000329] -
-                White/Red
-              </Text>
+              <Text style={localStyle.mainTitle}>{data.name}</Text>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={localStyle.price}>{convertToRupiah(870000)}</Text>
+                <Text style={localStyle.price}>
+                  {convertToRupiah(data.price)}
+                </Text>
                 <Text style={localStyle.stockReady}>Stok Tersedia</Text>
               </View>
             </View>
@@ -79,7 +79,7 @@ function ProductDetailScreen() {
                       color={colors.SECOND_BLUE}
                     />
                     <Text style={{fontSize: 14, color: colors.SECOND_BLUE}}>
-                      103 Stok
+                      {data.stock} Stok
                     </Text>
                   </View>
                   <View style={{alignItems: 'center'}}>
