@@ -61,6 +61,7 @@ function Cart() {
                   </TouchableOpacity>
                   <Input
                     value={1}
+                    textContentType={Number}
                     containerStyle={{width: 70}}
                     inputContainerStyle={{
                       fontSize: 11,

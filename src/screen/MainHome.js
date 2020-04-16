@@ -28,7 +28,6 @@ function MainHome(props) {
           ),
         }}
       />
-
       <BottomTab.Screen
         name="Transaction"
         component={TransactionsList}

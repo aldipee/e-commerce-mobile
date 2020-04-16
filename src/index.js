@@ -10,6 +10,7 @@ import SearchScreen from './screen/SearchScreen';
 import ProductDetailScreen from './screen/ProductDetailScreen';
 import TransactionList from './screen/TransactionTav';
 import DetailsTransactions from './screen/Transactions/DetailsTransactions';
+import PayamentList from './screen/PaymentList';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,11 @@ class Index extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="PaymentList"
+            options={{headerShown: true, title: 'Select Payament Method'}}
+            component={PayamentList}
+          />
           <Stack.Screen
             name="Home"
             options={{headerShown: false}}
