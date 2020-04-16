@@ -19,21 +19,15 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="TrxDetails"
-            options={{headerShown: true}}
-            component={DetailsTransactions}
-          />
-          <Stack.Screen
-            name="TrxList"
-            options={{headerShown: false}}
-            component={TransactionList}
-          />
-          <Stack.Screen
             name="Home"
             options={{headerShown: false}}
             component={MainHome}
           />
-
+          <Stack.Screen
+            name="TrxDetails"
+            options={{headerShown: true}}
+            component={DetailsTransactions}
+          />
           <Stack.Screen
             name="ProductDetails"
             options={{headerShown: true}}
@@ -45,7 +39,11 @@ class Index extends Component {
             options={{headerShown: false}}
             component={SearchScreen}
           />
-
+          <Stack.Screen
+            name="TrxList"
+            options={{headerShown: false}}
+            component={TransactionList}
+          />
           <Stack.Screen
             name="SignUp"
             options={{title: 'SignUp', headerShown: false}}

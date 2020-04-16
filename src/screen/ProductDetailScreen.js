@@ -6,6 +6,9 @@ import {
   SafeAreaView,
   StyleSheet,
   ActivityIndicator,
+  Animated,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {Card, Tile, Button, Image} from 'react-native-elements';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -179,17 +182,47 @@ function ProductDetailScreen() {
           </View>
         </View>
       </View>
+      {/* <View style={[localStyle.sheet]}>
+        <Animated.View style={[localStyle.popup]}>
+          <TouchableOpacity>
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+
+      <Animated.View style={[StyleSheet.absoluteFill, localStyle.cover]} /> */}
     </SafeAreaView>
   );
 }
 
 const localStyle = StyleSheet.create({
+  cover: {
+    backgroundColor: 'rgba(0,0,0,.5)',
+  },
+  sheet: {
+    position: 'absolute',
+    top: Dimensions.get('window').height,
+    left: 0,
+    right: 0,
+    height: '100%',
+    justifyContent: 'flex-end',
+  },
+  popup: {
+    backgroundColor: '#FFF',
+    marginHorizontal: 10,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    minHeight: 180,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   fixedFooter: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 100,
     },
+
     shadowOpacity: 0.8,
     shadowRadius: 12.35,
 

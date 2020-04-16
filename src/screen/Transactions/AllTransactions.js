@@ -4,12 +4,13 @@ import {Card, Button, ListItem} from 'react-native-elements';
 
 import myColors from '../../config/colors';
 
-export default function AllTransactions() {
+export default function AllTransactions(props) {
   return (
     <View>
       <View>
         {[1, 2, 3, 4, 5, 5, 6].map(data => (
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('TrxDetails')}>
             <Card containerStyle={{borderWidth: 0}}>
               <View>
                 <View
