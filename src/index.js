@@ -7,6 +7,7 @@ import SignUp from '../src/screen/SignUp';
 import MainHome from './screen/MainHome';
 import SuccessRegis from './screen/SuccesRegis';
 import SearchScreen from './screen/SearchScreen';
+import ProductDetailScreen from './screen/ProductDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,9 +18,16 @@ class Index extends Component {
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
-            options={{title: 'Login', headerShown: false}}
+            options={{headerShown: false}}
             component={MainHome}
           />
+
+          <Stack.Screen
+            name="ProductDetails"
+            options={{headerShown: true}}
+            component={ProductDetailScreen}
+          />
+
           <Stack.Screen
             name="SearchScreen"
             options={{headerShown: false}}

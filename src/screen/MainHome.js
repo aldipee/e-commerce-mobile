@@ -5,42 +5,44 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // Screen Import
 import LoginScreen from '../screen/Login';
+import colors from '../config/colors';
 import HomeScreen from '../screen/HomeScreen';
+import ProfileScreen from '../screen/ProfileScreen';
 const BottomTab = createBottomTabNavigator();
 
 function MainHome(props) {
   return (
     <BottomTab.Navigator
       tabBarOptions={{
-        activeTintColor: '#e91e63',
+        activeTintColor: colors.ORANGE,
       }}>
       <BottomTab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Telusuri',
           tabBarIcon: ({color, size}) => (
-            <FeatherIcon name="home" size={size} color={color} />
+            <FeatherIcon name="search" size={size} color={color} />
           ),
         }}
       />
       <BottomTab.Screen
-        name="Login"
+        name="Transaction"
         component={LoginScreen}
         options={{
-          tabBarLabel: 'Login',
+          tabBarLabel: 'Transaksi',
           tabBarIcon: ({color, size}) => (
-            <FeatherIcon name="home" size={size} color={color} />
+            <IonIcon name="md-paper" size={size} color={color} />
           ),
         }}
       />
       <BottomTab.Screen
-        name="MyTransaction"
-        component={LoginScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
-          tabBarLabel: '',
+          tabBarLabel: 'Akun',
           tabBarIcon: ({color, size}) => (
-            <FeatherIcon name="home" size={size} color={color} />
+            <FeatherIcon name="user" size={size} color={color} />
           ),
         }}
       />

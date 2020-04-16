@@ -8,6 +8,7 @@ import {
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import {Card, Button, Tile, SearchBar, Image} from 'react-native-elements';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
@@ -72,6 +73,21 @@ const localStyle = StyleSheet.create({
     height: 5,
     borderRadius: 4,
     marginHorizontal: 8,
+  },
+  iconContianer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+  },
+  iconItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+    borderWidth: 1,
+    borderColor: colors.MAIN_GREY,
+    padding: 15,
+    marginTop: 9,
+    width: 130,
   },
 });
 
@@ -233,7 +249,6 @@ const HomeForm = props => {
             </View>
           </Card>
           <Card
-            title={`Pick up your trip !`}
             containerStyle={{
               borderTopWidth: 0,
               borderRightWidth: 0,
@@ -245,17 +260,26 @@ const HomeForm = props => {
               shadowOpacity: 0.8,
               shadowRadius: 2,
             }}>
-            <View>
-              <Text>Hola</Text>
+            <View style={localStyle.iconContianer}>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
+                <Text>Sepatu Futsal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
+                <Text>Sepatu Bola</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
+                <Text>Sepatu Casual</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
+                <Text>Sepatu Sneaker</Text>
+              </TouchableOpacity>
             </View>
 
             <View />
-            <Button
-              icon={{name: 'search', color: '#fff'}}
-              backgroundColor={colors.ORANGE}
-              buttonStyle={localStyle.button}
-              title="Search "
-            />
           </Card>
           {/* Horizontal Scroll */}
           <View
