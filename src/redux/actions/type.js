@@ -1,2 +1,3 @@
 // Product
 export const GET_PRODUCTS = 'GET_PRODUCTS';
+export const SET_LOADING_PRODUCT = 'SET_LOADING_PRODUCT';

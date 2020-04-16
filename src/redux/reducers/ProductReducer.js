@@ -1,7 +1,7 @@
-import {GET_PRODUCTS} from '../actions/type';
+import {GET_PRODUCTS, SET_LOADING_PRODUCT} from '../actions/type';
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   data: [],
   pageInfo: {},
 };
@@ -9,7 +9,16 @@ const initialState = {
 export default (state = initialState, {type, payload}) => {
   switch (type) {
     case GET_PRODUCTS: {
-      return {...state, data: payload.data, pageInfo: payload.pageInfo};
+      return {
+        ...state,
+        data: payload.data,
+        pageInfo: payload.pageInfo,
+        isLoading: false,
+      };
+    }
+
+    case SET_LOADING_PRODUCT: {
+      return {...state, isLoading: payload};
     }
 
     default:

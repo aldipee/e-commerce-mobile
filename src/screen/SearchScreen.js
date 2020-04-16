@@ -10,11 +10,16 @@ import {
   FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
+import {getProducts} from '../redux/actions/ProductActions';
 import colors from '../config/colors';
+import {convertToRupiah} from '../utils/convert';
 
 function SearchScreen(props) {
   const onSeachKeyword = keyword => {
-    console.log(keyword);
+    setSearchKeyword(keyword);
+    const query = `product/all?search[key]=products.name&search[value]=${keyword}&limit=10`;
+    props.getProducts(query);
   };
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchData, setSearchData] = useState([]);
@@ -27,14 +32,15 @@ function SearchScreen(props) {
 
   // Item will be rendered when search show
   const renderItem = ({item}) => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => props.navigation.navigate('ProductDetails', {data: item})}>
       <ListItem
         containerStyle={{marginVertical: 2}}
-        title={'Sepatu Futsal Nike Original'}
+        title={item.name}
         titleStyle={{fontSize: 14, paddingBottom: 5}}
-        subtitle={'Rp 540.000 | AT-3300405'}
+        subtitle={`${convertToRupiah(item.price)} | AT-3300405`}
         leftAvatar={{
-          source: {uri: item.avatar_url},
+          source: {uri: item.picture},
           rounded: false,
         }}
         bottomDivider
@@ -48,7 +54,7 @@ function SearchScreen(props) {
   return (
     <SafeAreaView>
       <SearchBar
-        onChangeText={keyword => setSearchKeyword(keyword)}
+        onChangeText={keyword => onSeachKeyword(keyword)}
         value={searchKeyword}
         placeholder="Coba cari 'sepatu nike '...."
         cancelIcon={{name: 'arrow-left', color: 'red', type: 'feather'}}
@@ -104,7 +110,7 @@ function SearchScreen(props) {
       {/* Searched item will be rendere here with flatlist */}
       <FlatList
         style={{padding: 5}}
-        data={dummyArray}
+        data={props.data.data && props.data.data}
         renderItem={searchKeyword ? renderItem : null}
       />
       {/* End Searched Item here */}
@@ -137,4 +143,13 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+const mapStateToProps = state => ({
+  data: state.productData,
+});
+
+const mapDispatchToProps = {getProducts};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SearchScreen);
