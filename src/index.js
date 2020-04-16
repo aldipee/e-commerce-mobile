@@ -8,6 +8,7 @@ import MainHome from './screen/MainHome';
 import SuccessRegis from './screen/SuccesRegis';
 import SearchScreen from './screen/SearchScreen';
 import ProductDetailScreen from './screen/ProductDetailScreen';
+import TransactionList from './screen/TransactionTav';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,11 @@ class Index extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="TrxList"
+            options={{headerShown: false}}
+            component={TransactionList}
+          />
           <Stack.Screen
             name="Home"
             options={{headerShown: false}}

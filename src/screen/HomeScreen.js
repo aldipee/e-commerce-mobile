@@ -375,6 +375,7 @@ const HomeForm = props => {
                     title="Beli"
                     buttonStyle={{borderRadius: 1}}
                     titleStyle={{fontSize: 14}}
+                    onPress={() => props.navigation.navigate('ProductDetails')}
                   />
                 </View>
               </Card>
