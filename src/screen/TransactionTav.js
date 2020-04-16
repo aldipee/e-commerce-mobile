@@ -10,12 +10,32 @@ const Tab = createMaterialTopTabNavigator();
 function MyTabs() {
   return (
     <ScrollView showsHorizontalScrollIndicator={false}>
-      <Tab.Navigator>
-        <Tab.Screen name="AllTrx" component={AllTransactions} />
-        <Tab.Screen name="TrxCode1" component={AllTransactions} />
-        <Tab.Screen name="TrxCode2" component={AllTransactions} />
-        <Tab.Screen name="TrxCode3" component={AllTransactions} />
-        <Tab.Screen name="TrxCode4" component={AllTransactions} />
+      <Tab.Navigator
+        tabBarOptions={{
+          scrollEnabled: true,
+          labelStyle: {fontSize: 12},
+          tabStyle: {width: 130},
+        }}>
+        <Tab.Screen
+          name="AllTrx"
+          options={{tabBarLabel: 'Semua'}}
+          component={AllTransactions}
+        />
+        <Tab.Screen
+          name="TrxCode1"
+          options={{tabBarLabel: 'Menunggu Pembayaran'}}
+          component={AllTransactions}
+        />
+        <Tab.Screen
+          name="TrxCode2"
+          options={{tabBarLabel: 'Dikirim'}}
+          component={AllTransactions}
+        />
+        <Tab.Screen
+          name="TrxCode3"
+          options={{tabBarLabel: 'Selesai'}}
+          component={AllTransactions}
+        />
       </Tab.Navigator>
     </ScrollView>
   );
