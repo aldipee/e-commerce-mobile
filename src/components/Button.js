@@ -12,6 +12,7 @@ const Button = ({label, onPress, buttonType}) => {
       marginBottom: 12,
       paddingVertical: 12,
       borderRadius: 4,
+      marginTop: 10,
       borderWidth: StyleSheet.hairlineWidth,
       borderColor: 'rgba(255,255,255,0.7)',
     },

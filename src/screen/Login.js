@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, SafeAreaView, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -14,6 +21,7 @@ class Login extends Component {
   state = {
     username: '',
     password: '',
+    error: null,
   };
   componentDidMount() {
     AsyncStorage.getItem('token', (err, result) => {
@@ -30,9 +38,18 @@ class Login extends Component {
       username: this.state.username,
       password: this.state.password,
     };
-    this.props.setLogin(data);
-
-    // this.props.navigation.navigate('Home');
+    this.props.setLogin(data, status => {
+      if (status.status) {
+        this.props.navigation.navigate('Home');
+      } else if (status.status === 'ERRVERIFY') {
+        Alert.alert('Please verify your email first!');
+      } else {
+        this.setState({error: 'Username or password invalid!'});
+        setTimeout(() => {
+          this.setState({error: null});
+        }, 1300);
+      }
+    });
   };
   render() {
     return (
@@ -56,15 +73,15 @@ class Login extends Component {
                 label="Username"
                 icon="user"
                 onChangeText={text => this.setState({username: text.trim()})}
-                errorMessage={this.state.error ? this.state.error : false}
               />
               <Input
                 autoFocus={true}
                 placeholder="Your password"
                 label="Password"
                 icon="lock"
-                onChangeText={text => this.setState({username: text.trim()})}
-                errorMessage={this.state.error ? this.state.error : false}
+                onChangeText={text => this.setState({password: text.trim()})}
+                errorStyle={{color: this.state.error ? 'red' : 'white'}}
+                errorMessage={'Username or password invalid'}
               />
               <View>
                 <Text style={localStyles.forgot}>Forgot password?</Text>

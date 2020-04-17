@@ -10,6 +10,7 @@ import HomeScreen from '../screen/HomeScreen';
 import ProfileScreen from '../screen/ProfileScreen';
 import TransactionsList from '../screen/TransactionTav';
 import Cart from '../screen/Cart';
+import {connect} from 'react-redux';
 const BottomTab = createBottomTabNavigator();
 
 function MainHome(props) {
@@ -30,7 +31,7 @@ function MainHome(props) {
       />
       <BottomTab.Screen
         name="Transaction"
-        component={TransactionsList}
+        component={props.auth.isLogin ? TransactionsList : LoginScreen}
         options={{
           tabBarLabel: 'Transaksi',
           tabBarIcon: ({color, size}) => (
@@ -50,7 +51,7 @@ function MainHome(props) {
       />
       <BottomTab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={props.auth.isLogin ? ProfileScreen : LoginScreen}
         options={{
           tabBarLabel: 'Akun',
           tabBarIcon: ({color, size}) => (
@@ -62,4 +63,12 @@ function MainHome(props) {
   );
 }
 
-export default MainHome;
+const mapStateToProps = state => {
+  return {
+    auth: state.authData,
+  };
+};
+export default connect(
+  mapStateToProps,
+  null,
+)(MainHome);

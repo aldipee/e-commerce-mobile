@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {connect} from 'react-redux';
 // Screens Import
 import SignUp from '../src/screen/SignUp';
+import LoginScreen from '../src/screen/Login';
 import MainHome from './screen/MainHome';
 import SuccessRegis from './screen/SuccesRegis';
 import SearchScreen from './screen/SearchScreen';
@@ -11,6 +12,7 @@ import ProductDetailScreen from './screen/ProductDetailScreen';
 import TransactionList from './screen/TransactionTav';
 import DetailsTransactions from './screen/Transactions/DetailsTransactions';
 import PayamentList from './screen/PaymentList';
+import UploadImage from './screen/User/UploadImage';
 
 const Stack = createStackNavigator();
 
@@ -46,9 +48,19 @@ class Index extends Component {
             component={TransactionList}
           />
           <Stack.Screen
+            name="UploadImage"
+            options={{headerShown: false}}
+            component={UploadImage}
+          />
+          <Stack.Screen
             name="SignUp"
-            options={{title: 'SignUp', headerShown: false}}
+            options={{title: 'SignUp', headerShown: true}}
             component={SignUp}
+          />
+          <Stack.Screen
+            name="LoginScreen"
+            options={{title: 'SignUp', headerShown: false}}
+            component={LoginScreen}
           />
           <Stack.Screen
             name="SuccessRegis"

@@ -1,23 +1,15 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  View,
-  ScrollView,
-  StyleSheet,
-  StatusBar,
-  SafeAreaView,
-} from 'react-native';
+import {Text, View, ScrollView, StyleSheet} from 'react-native';
 import {Card, colors, Avatar, Button, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {connect} from 'react-redux';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
 // Local
-import myColors from '../config/colors';
-import {setLogout} from '../redux/actions/AuthActions';
-import MainHome from '../screen/MainHome';
+import myColors from '../../config/colors';
+import {setLogout} from '../../redux/actions/AuthActions';
 
-function ProfileScreen(props) {
+function UploadImage(props) {
   const onLogout = status => {
     props.setLogout(data => {
       if (data) {
@@ -42,9 +34,9 @@ function ProfileScreen(props) {
         }}>
         <Avatar
           rounded
-          size="large"
+          size="xlarge"
           title="AP"
-          onPress={() => props.navigation.navigate('UploadImage')}
+          onPress={() => console.log('Works!')}
           activeOpacity={0.7}
         />
         <Text
@@ -98,74 +90,6 @@ function ProfileScreen(props) {
             </View>
           </Card>
         </View>
-        {/* Purhcase History */}
-        <View style={{marginTop: 25}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>
-            Riwayat Transaksi
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-            }}>
-            <View style={localStyle.iconBox}>
-              <FeatherIcon
-                name="credit-card"
-                color={myColors.MAIN_GREY}
-                size={30}
-              />
-              <Text style={localStyle.iconDesc}> Menunggu Pembayaran</Text>
-            </View>
-            <View style={localStyle.iconBox}>
-              <FeatherIcon name="box" color={myColors.MAIN_GREY} size={30} />
-              <Text style={localStyle.iconDesc}> Diproses</Text>
-            </View>
-            <View style={localStyle.iconBox}>
-              <FeatherIcon name="truck" color={myColors.MAIN_GREY} size={30} />
-              <Text style={localStyle.iconDesc}> Dikirim</Text>
-            </View>
-            <View style={localStyle.iconBox}>
-              <FeatherIcon name="box" color={myColors.MAIN_GREY} size={30} />
-              <Text style={localStyle.iconDesc}> Selesai</Text>
-            </View>
-          </View>
-        </View>
-        {/* Data Diri Here */}
-        <View style={{marginVertical: 30}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Data Diri</Text>
-          <View>
-            <ListItem
-              containerStyle={{paddingLeft: 1}}
-              title={'Email'}
-              subtitle={'aldipeee@gmail.com'}
-              rightTitle={'Terverifikasi'}
-              rightTitleStyle={{fontSize: 11}}
-              titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
-              bottomDivider
-            />
-            <ListItem
-              containerStyle={{paddingLeft: 1}}
-              title={'Nomor Handphone'}
-              subtitle={'082185142048'}
-              rightTitle={'Terverifikasi'}
-              rightTitleStyle={{fontSize: 11}}
-              titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
-              bottomDivider
-            />
-            {['Alamat', 'Tanggal lahir'].map((data, index) => (
-              <ListItem
-                containerStyle={{paddingLeft: 1}}
-                key={index}
-                title={data}
-                titleStyle={{fontSize: 14, color: myColors.BLACK}}
-                bottomDivider
-                chevron
-              />
-            ))}
-          </View>
-        </View>
-        {/* End of Data diri */}
         <View style={{marginBottom: 20}}>
           <Button
             onPress={onLogout}
@@ -190,4 +114,4 @@ const localStyle = StyleSheet.create({
 export default connect(
   null,
   {setLogout},
-)(ProfileScreen);
+)(UploadImage);

@@ -12,7 +12,11 @@ import Button from '../components/Button';
 import strings from '../config/strings';
 import styles from '../style/index';
 import colors from '../config/colors';
-import {setNewUser, checkUsername} from '../redux/actions/AuthActions';
+import {
+  setNewUser,
+  checkUsername,
+  checkEmail,
+} from '../redux/actions/AuthActions';
 import {connect} from 'react-redux';
 
 class SignUp extends Component {
@@ -23,29 +27,40 @@ class SignUp extends Component {
     confirmPassword: '',
     error: null,
     emailError: null,
+    fullName: '',
+    phoneNumber: '',
+    phoneNumberError: '',
   };
   componentDidMount() {}
-  toRegister = () => {
-    this.props.navigation.navigate('SignUp');
-  };
+
   checkemail = () => {
-    let req = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    console.log(req.test(this.state.email));
-    if (!req.test(this.state.email)) {
-      this.setState({emailError: 'Email is invalid!'});
+    this.props.checkEmail(this.state.email, notAvailable => {
+      let req = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      console.log(req.test(this.state.email));
+      if (!req.test(this.state.email)) {
+        this.setState({emailError: 'Email is invalid!'});
+      } else {
+        notAvailable
+          ? this.setState({emailError: null})
+          : this.setState({emailError: 'Email already exist!'});
+      }
+    });
+  };
+  checkPhone = () => {
+    let req = /^(^\+62\s?|^0)(\d{3,4}?){2}\d{3,4}$/;
+    console.log(req.test(this.state.phoneNumber));
+    if (!req.test(this.state.phoneNumber)) {
+      this.setState({phoneNumberError: 'Phone number is invalid'});
     } else {
-      this.setState({emailError: null});
+      this.setState({phoneNumberError: null});
     }
   };
   checkUser = () => {
     console.log(this.state.username);
-    this.props.checkUsername(this.state.username, success => {
-      console.log('IS ', success);
-      if (!success) {
-        this.setState({error: 'Username already exist!'});
-      } else {
-        this.setState({error: null});
-      }
+    this.props.checkUsername(this.state.username, notAvailable => {
+      notAvailable
+        ? this.setState({error: null})
+        : this.setState({error: 'Username already exist'});
     });
   };
   SignUp = () => {
@@ -53,6 +68,8 @@ class SignUp extends Component {
       email: this.state.email,
       username: this.state.username,
       password: this.state.password,
+      fullname: this.state.fullName,
+      phone: this.state.phoneNumber,
     };
     this.props.setNewUser(data, success => {
       if (success) {
@@ -67,8 +84,7 @@ class SignUp extends Component {
   render() {
     return (
       <ScrollView>
-        <Text>Welcome back!</Text>
-        <View style={styles.parent}>
+        <View style={[styles.parent, localStyles.parent]}>
           <View style={localStyles.formContainer}>
             <View style={localStyles.con}>
               <Input
@@ -81,13 +97,32 @@ class SignUp extends Component {
                 errorMessage={this.state.error ? this.state.error : false}
               />
               <Input
+                placeholder={'Your full name'}
+                label="Full Name"
+                icon="user-check"
+                onChangeText={text => this.setState({fullName: text.trim()})}
+              />
+              <Input
                 placeholder={strings.EMAIL_PLACEHOLDER}
                 label="Email"
                 icon="mail"
                 onChangeText={text => this.setState({email: text.trim()})}
                 onBlur={() => this.checkemail()}
                 errorMessage={
-                  !this.state.emailError ? false : 'Email not valid'
+                  !this.state.emailError ? false : this.state.emailError
+                }
+              />
+              <Input
+                placeholder={'Your Phone Number'}
+                keyboardType="phone-pad"
+                label="Phone Number"
+                icon="phone"
+                onChangeText={text => this.setState({phoneNumber: text})}
+                onBlur={() => this.checkPhone()}
+                errorMessage={
+                  !this.state.phoneNumberError
+                    ? false
+                    : this.state.phoneNumberError
                 }
               />
               <Input
@@ -129,13 +164,17 @@ const localStyles = StyleSheet.create({
   formContainer: {
     flex: 1,
     width: '90%',
-    marginTop: '20%',
+    marginTop: '4%',
   },
   forgot: {
     marginLeft: 210,
     marginTop: -17,
     marginBottom: 20,
     color: colors.DODGER_BLUE,
+  },
+  parent: {
+    marginTop: -20,
+    backgroundColor: '#fff',
   },
   form: {
     marginTop: 50,
@@ -157,7 +196,7 @@ const localStyles = StyleSheet.create({
     marginTop: 7,
   },
 });
-const mapDispatchToProps = {setNewUser, checkUsername};
+const mapDispatchToProps = {setNewUser, checkUsername, checkEmail};
 export default connect(
   null,
   mapDispatchToProps,

@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../config/colors';
 
 export default function Text(props) {
@@ -13,7 +14,7 @@ export default function Text(props) {
       borderTopWidth: StyleSheet.hairlineWidth,
       borderRightWidth: StyleSheet.hairlineWidth,
       borderLeftWidth: StyleSheet.hairlineWidth,
-      marginBottom: 20,
+      marginBottom: 0,
       paddingLeft: 40,
       padding: 13,
       fontSize: 15,
@@ -48,7 +49,7 @@ export default function Text(props) {
       }}
       onBlur={onBlur}
       labelStyle={{fontSize: 13, marginBottom: 4}}
-      containerStyle={{paddingBottom: 10, marginTop: 10}}
+      containerStyle={{paddingBottom: 3, marginTop: 10}}
       label={label}
       placeholder={placeholder}
       leftIcon={<Icon name={icon} size={24} color={colors.SECOND_BLUE} />}
