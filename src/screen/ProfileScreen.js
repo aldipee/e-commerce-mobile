@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -11,6 +11,8 @@ import {Card, colors, Avatar, Button, ListItem} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {connect} from 'react-redux';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {convertToRupiah} from '../utils/convert';
+import {getProfileDetail} from '../redux/actions/AuthActions';
 
 // Local
 import myColors from '../config/colors';
@@ -18,15 +20,19 @@ import {setLogout} from '../redux/actions/AuthActions';
 import MainHome from '../screen/MainHome';
 
 function ProfileScreen(props) {
+  useEffect(() => {
+    props.getProfileDetail();
+  }, []);
   const onLogout = status => {
     props.setLogout(data => {
       if (data) {
         props.navigation.navigate('Home');
       } else {
-        props.navigation.navigate('Home');
       }
     });
   };
+
+  const {profileData} = props.data;
   return (
     <ScrollView>
       {/* Avatar and Picture */}
@@ -54,7 +60,7 @@ function ProfileScreen(props) {
             color: myColors.WHITE,
             marginTop: 10,
           }}>
-          Abi Daniela
+          {profileData.full_name}
         </Text>
       </View>
       <View style={{paddingHorizontal: 10, backgroundColor: '#fff'}}>
@@ -86,7 +92,7 @@ function ProfileScreen(props) {
                       color: myColors.SECOND_BLUE,
                       fontWeight: 'bold',
                     }}>
-                    Rp 350.000
+                    {profileData && convertToRupiah(profileData.balance)}
                   </Text>
                 </View>
               </View>
@@ -138,7 +144,7 @@ function ProfileScreen(props) {
             <ListItem
               containerStyle={{paddingLeft: 1}}
               title={'Email'}
-              subtitle={'aldipeee@gmail.com'}
+              subtitle={profileData && profileData.email}
               rightTitle={'Terverifikasi'}
               rightTitleStyle={{fontSize: 11}}
               titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
@@ -147,7 +153,7 @@ function ProfileScreen(props) {
             <ListItem
               containerStyle={{paddingLeft: 1}}
               title={'Nomor Handphone'}
-              subtitle={'082185142048'}
+              subtitle={profileData && profileData.phone}
               rightTitle={'Terverifikasi'}
               rightTitleStyle={{fontSize: 11}}
               titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
@@ -187,7 +193,13 @@ const localStyle = StyleSheet.create({
   iconDesc: {fontSize: 11, alignItems: 'center'},
 });
 
+const masStateToProps = state => {
+  return {
+    data: state.authData,
+  };
+};
+
 export default connect(
-  null,
-  {setLogout},
+  masStateToProps,
+  {setLogout, getProfileDetail},
 )(ProfileScreen);

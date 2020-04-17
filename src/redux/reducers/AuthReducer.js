@@ -1,7 +1,12 @@
-import {SET_LOGIN, SET_LOADING_AUTH} from '../actions/type';
+import {
+  SET_LOGIN,
+  SET_LOADING_AUTH,
+  GET_PROFILE_DETAILS,
+} from '../actions/type';
 const initialState = {
   isLogin: false,
   isLoading: false,
+  profileData: {},
   token: '',
 };
 
@@ -14,6 +19,13 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         isLoading: true,
+      };
+    }
+
+    case GET_PROFILE_DETAILS: {
+      return {
+        ...state,
+        profileData: payload,
       };
     }
 

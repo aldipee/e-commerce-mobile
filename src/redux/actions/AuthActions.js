@@ -4,10 +4,14 @@ import {
   SET_LOGOUT,
   CREATE_NEW_USER,
   UPLOAD_USER_PICTURE,
+  GET_PROFILE_DETAILS,
 } from '../actions/type';
 import {API} from '../../config/server';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+AsyncStorage.getItem('token', (err, result) => {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${result}`;
+});
 
 export const setLogin = (data, callback) => async dispatch => {
   try {
@@ -69,6 +73,18 @@ export const setLogout = callback => async dispatch => {
   } catch (error) {
     callback(false);
     console.log(error);
+  }
+};
+
+export const getProfileDetail = () => async dispatch => {
+  try {
+    const res = await axios.get(API.API_URL.concat('auth/detail'));
+    dispatch({
+      type: GET_PROFILE_DETAILS,
+      payload: res.data.msg,
+    });
+  } catch (error) {
+    console.log(error, 'FROM AUTH ACTIONS');
   }
 };
 
