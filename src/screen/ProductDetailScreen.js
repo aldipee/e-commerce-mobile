@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   ScrollView,
@@ -7,19 +7,30 @@ import {
   StyleSheet,
   ActivityIndicator,
   Animated,
+  ToastAndroid,
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import {Card, Tile, Button, Image} from 'react-native-elements';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import {connect} from 'react-redux';
 // Local
+import {addToCart} from '../redux/actions/CartActions';
 import colors from '../config/colors';
 import {convertToRupiah} from '../utils/convert';
 import {API} from '../config/server';
 function ProductDetailScreen(props) {
+  const [quantity, setQuantity] = useState(1);
   const {data} = props.route.params;
+
+  const onSelectedProduct = () => {
+    if (data.stock < quantity) {
+      ToastAndroid.show('Stock tidak cukup', ToastAndroid.SHORT);
+    } else {
+      props.addToCart(data, quantity);
+    }
+  };
   return (
     <SafeAreaView>
       <View>
@@ -174,6 +185,7 @@ function ProductDetailScreen(props) {
               }}
             />
             <Button
+              onPress={onSelectedProduct}
               containerStyle={{margin: 5}}
               titleStyle={{fontSize: 14}}
               title="Tambah ke keranjang"
@@ -267,4 +279,7 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default ProductDetailScreen;
+export default connect(
+  null,
+  {addToCart},
+)(ProductDetailScreen);

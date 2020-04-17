@@ -1,12 +1,46 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {Card, Header, ListItem, Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
-
-import myColors from '../config/colors';
+import {API} from '../config/server';
 import {ScrollView} from 'react-native-gesture-handler';
+import {connect} from 'react-redux';
+import {addToCart, updateCart} from '../redux/actions/CartActions';
+import myColors from '../config/colors';
+import {convertToRupiah} from '../utils/convert';
 
-function Cart() {
+function Cart(props) {
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [cart, setCart] = useState([]);
+
+  const fetchData = () => {
+    return new Promise((resolve, reject) => {
+      if (props.cart.data.length !== 0) {
+        resolve(props.cart.data);
+      }
+    });
+  };
+  // useEffect(async () => {
+  //   await setCart(props.cart.data);
+  // });
+
+  useEffect(() => {
+    async function getData() {
+      const data = fetchData();
+      return data;
+    }
+    getData()
+      .then(data => {
+        setCart(data);
+        return data;
+      })
+      .then(data => {
+        const totalPayment = data.reduce((prev, item) => {
+          return prev + item.price * item.quantity;
+        }, 0);
+        setTotalPayment(totalPayment);
+      });
+  });
   return (
     <>
       <Header
@@ -19,72 +53,92 @@ function Cart() {
         }}
       />
       <ScrollView>
-        {[1, 2, 3, 4].map(data => (
-          <View style={{backgroundColor: '#fff', marginTop: 10}}>
-            <View style={{paddingHorizontal: 20}}>
-              <View style={{backgroundColor: '#fff'}}>
-                <ListItem
-                  containerStyle={{marginVertical: 2}}
-                  title={'Sepatu Futsal Nike Original'}
-                  subtitle={'Size 42'}
-                  titleStyle={{fontSize: 14, paddingBottom: 5}}
-                  leftAvatar={{
-                    source: {
-                      uri:
-                        'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
-                    },
-                    rounded: false,
-                  }}
-                  chevron
-                />
-              </View>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  paddingHorizontal: 15,
-                  paddingVertical: 10,
-                }}>
+        {cart &&
+          cart.map((data, index) => (
+            <View style={{backgroundColor: '#fff', marginTop: 10}}>
+              <View style={{paddingHorizontal: 10}}>
+                <View style={{backgroundColor: '#fff'}}>
+                  <ListItem
+                    containerStyle={{marginVertical: 2}}
+                    title={data.name}
+                    subtitle={'Size 42'}
+                    titleStyle={{fontSize: 14, paddingBottom: 5}}
+                    leftAvatar={{
+                      source: {
+                        uri: API.API_URL_STATIC.concat(data.picture),
+                      },
+                      rounded: false,
+                    }}
+                    chevron
+                  />
+                </View>
                 <View
                   style={{
-                    width: 100,
-                    flexDirection: 'row',
-                    marginTop: 10,
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    backgroundColor: '#fff',
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
                   }}>
-                  <TouchableOpacity>
-                    <Icon
-                      name="minuscircleo"
-                      size={20}
-                      color={myColors.MAIN_BLUE}
+                  <View
+                    style={{
+                      width: 100,
+                      flexDirection: 'row',
+                      marginTop: 10,
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.updateCart(
+                          props.cart.data,
+                          data.quantity - 1,
+                          index,
+                        )
+                      }>
+                      <Icon
+                        name="minuscircleo"
+                        size={20}
+                        color={myColors.MAIN_BLUE}
+                      />
+                    </TouchableOpacity>
+                    <Input
+                      keyboardType="numeric"
+                      defaultValue={`${data.quantity}`}
+                      textContentType={Number}
+                      containerStyle={{width: 60}}
+                      inputStyle={{fontSize: 14, textAlign: 'center'}}
+                      inputContainerStyle={{
+                        alignItems: 'center',
+                        padding: 0,
+                        margin: 0,
+                        height: 30,
+                      }}
                     />
-                  </TouchableOpacity>
-                  <Input
-                    value={1}
-                    textContentType={Number}
-                    containerStyle={{width: 70}}
-                    inputContainerStyle={{
-                      fontSize: 11,
-                      padding: 0,
-                      margin: 0,
-                      height: 30,
-                    }}
-                  />
-                  <TouchableOpacity>
-                    <Icon
-                      name="pluscircleo"
-                      size={20}
-                      color={myColors.MAIN_BLUE}
-                    />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.updateCart(
+                          props.cart.data,
+                          data.quantity + 1,
+                          index,
+                        )
+                      }>
+                      <Icon
+                        name="pluscircleo"
+                        size={20}
+                        color={myColors.MAIN_BLUE}
+                      />
+                    </TouchableOpacity>
 
-                  <Text style={{fontSize: 12}}> X Rp 300.000 =</Text>
-                  <Text style={{fontSize: 16, marginLeft: 10}}>Rp 130.000</Text>
+                    <Text style={{fontSize: 12, marginLeft: 10}}>
+                      x {convertToRupiah(data.price)} =
+                    </Text>
+                    <Text style={{fontSize: 16, marginLeft: 5}}>
+                      {convertToRupiah(data.price * data.quantity)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        ))}
+          ))}
 
         <View style={[localStyle.cta]}>
           <View>
@@ -95,7 +149,7 @@ function Cart() {
                 color: myColors.ORANGE,
                 fontWeight: 'bold',
               }}>
-              Rp 450.000
+              {convertToRupiah(totalPayment)}
             </Text>
           </View>
           <Button
@@ -119,4 +173,13 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default Cart;
+const mapStateToProps = state => ({
+  cart: state.cartData,
+});
+
+const mapDispatchToProps = {addToCart, updateCart};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Cart);

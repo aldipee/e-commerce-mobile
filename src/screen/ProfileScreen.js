@@ -92,7 +92,9 @@ function ProfileScreen(props) {
                       color: myColors.SECOND_BLUE,
                       fontWeight: 'bold',
                     }}>
-                    {profileData && convertToRupiah(profileData.balance)}
+                    {profileData &&
+                      profileData.balance &&
+                      convertToRupiah(profileData.balance)}
                   </Text>
                 </View>
               </View>

@@ -9,3 +9,8 @@ export const SET_LOGOUT = 'SET_LOGOUT';
 export const CREATE_NEW_USER = 'SET_NEW_USER';
 export const UPLOAD_USER_PICTURE = 'UPLOAD_USER_PICTURE';
 export const GET_PROFILE_DETAILS = 'GET_PROFILE_DETAILS';
+
+// Cart
+export const ADD_TO_CART = 'ADD_TO_CART';
+export const UPDATE_ITEM_ON_CART = 'UPDATE_ITEM_ON_CART';
+export const DELETE_FROM_CART = 'DELETE_FROM_CART';
