@@ -153,6 +153,9 @@ function Cart(props) {
             </Text>
           </View>
           <Button
+            onPress={() =>
+              props.navigation.navigate('CartDetails', {totalPayment, cart})
+            }
             title="Beli"
             buttonStyle={{paddingHorizontal: 30, fontSize: 15}}
           />

@@ -23,14 +23,14 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="CartDetails"
-            options={{headerShown: true, title: 'Pengiriman'}}
-            component={CartDetails}
-          />
-          <Stack.Screen
             name="Home"
             options={{headerShown: false}}
             component={MainHome}
+          />
+          <Stack.Screen
+            name="CartDetails"
+            options={{headerShown: true, title: 'Pengiriman'}}
+            component={CartDetails}
           />
           <Stack.Screen
             name="TrxDetails"

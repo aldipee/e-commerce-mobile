@@ -1,13 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, ListItem, Button} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import myColors from '../../config/colors';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
-function DetailsTransactions() {
+import {getShippingCost} from '../../redux/actions/ShippingActions';
+import {connect} from 'react-redux';
+import {convertToRupiah} from '../../utils/convert';
+function CartDetails(props) {
+  const dataFromCart = props.route.params;
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
+  const [courierList, setCourierList] = useState(null);
+  const [selectedCourier, setSelectedCourier] = useState(null);
+  const [totalPayment, setTotalPayment] = useState(0);
+  const selectCourier = data => {
+    setSelectedCourier(data);
+    toggleModal();
+    setTotalPayment(dataFromCart.totalPayment + data.cost);
+  };
+
+  useEffect(() => {
+    props.getShippingCost(null, null, null, res => {
+      setCourierList(res.data);
+    });
+  }, []);
   return (
     <ScrollView>
       <View style={localStyle.container}>
@@ -39,7 +57,38 @@ function DetailsTransactions() {
                 </TouchableOpacity>
               </View>
               <View style={{paddingHorizontal: 15, paddingVertical: 10}}>
-                <Text>Conten Here</Text>
+                {courierList &&
+                  courierList.costs.map((data, index) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        selectCourier({
+                          title: `${courierList.code.toUpperCase()} ${
+                            data.service
+                          }`,
+                          cost: data.cost[0].value,
+                          etd: data.cost[0].etd,
+                        })
+                      }>
+                      <ListItem
+                        containerStyle={{marginVertical: 2}}
+                        title={`${courierList.code.toUpperCase()} ${
+                          data.service
+                        }`}
+                        titleStyle={{fontSize: 14, paddingBottom: 5}}
+                        subtitle={`${convertToRupiah(data.cost[0].value)} | ${
+                          data.cost[0].etd
+                        } Hari`}
+                        leftAvatar={{
+                          source: {
+                            uri: courierList.logo,
+                          },
+                          rounded: false,
+                        }}
+                        bottomDivider
+                        chevron
+                      />
+                    </TouchableOpacity>
+                  ))}
               </View>
             </View>
           </View>
@@ -77,36 +126,26 @@ function DetailsTransactions() {
           <Text style={{fontSize: 17, fontWeight: 'bold', marginTop: 20}}>
             Informasi Pesanan
           </Text>
-          <ListItem
-            containerStyle={{marginVertical: 2}}
-            title={'Sepatu Futsal Nike Original'}
-            titleStyle={{fontSize: 14, paddingBottom: 5}}
-            subtitle={'Rp 350.000 | 2 Items'}
-            leftAvatar={{
-              source: {
-                uri:
-                  'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
-              },
-              rounded: false,
-            }}
-            bottomDivider
-            chevron
-          />
-          <ListItem
-            containerStyle={{marginVertical: 2}}
-            title={'Sepatu Futsal Nike Original'}
-            titleStyle={{fontSize: 14, paddingBottom: 5}}
-            subtitle={'Rp 350.000 | 2 Items'}
-            leftAvatar={{
-              source: {
-                uri:
-                  'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
-              },
-              rounded: false,
-            }}
-            bottomDivider
-            chevron
-          />
+          {dataFromCart &&
+            dataFromCart.cart.map((data, index) => (
+              <ListItem
+                containerStyle={{marginVertical: 2}}
+                title={data.name}
+                titleStyle={{fontSize: 14, paddingBottom: 5}}
+                subtitle={`${convertToRupiah(data.price)} | ${
+                  data.quantity
+                } item`}
+                leftAvatar={{
+                  source: {
+                    uri:
+                      'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
+                  },
+                  rounded: false,
+                }}
+                bottomDivider
+                chevron
+              />
+            ))}
         </View>
 
         {/* Select Jasa Kurir */}
@@ -116,23 +155,27 @@ function DetailsTransactions() {
         <View style={[localStyle.inline, localStyle.justifyContent]}>
           <View style={{marginTop: 15}}>
             <Text>Jasa Pengiriman</Text>
-            <Text
-              style={{
-                fontSize: 17,
-                fontWeight: 'bold',
-                marginTop: 10,
-                color: myColors.BLACK,
-              }}>
-              JNE Reguler
-            </Text>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: myColors.ORANGE,
-              }}>
-              Rp 50.000
-            </Text>
+            {selectCourier && (
+              <View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: 'bold',
+                    marginTop: 10,
+                    color: myColors.BLACK,
+                  }}>
+                  {selectedCourier && selectedCourier.title}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    color: myColors.ORANGE,
+                  }}>
+                  {selectedCourier && convertToRupiah(selectedCourier.cost)}
+                </Text>
+              </View>
+            )}
           </View>
           <Button
             onPress={toggleModal}
@@ -169,12 +212,14 @@ function DetailsTransactions() {
             <View style={[localStyle.details, localStyle.inline]} />
             <View style={[localStyle.inline, localStyle.details]}>
               <Text>Total Pembelian</Text>
-              <Text>Rp 904.000</Text>
+              <Text>{convertToRupiah(dataFromCart.totalPayment)}</Text>
             </View>
-            <View style={[localStyle.inline, localStyle.details]}>
-              <Text>Total Ongkir</Text>
-              <Text>Rp 30.000</Text>
-            </View>
+            {selectedCourier && selectedCourier.cost && (
+              <View style={[localStyle.inline, localStyle.details]}>
+                <Text>Total Ongkir</Text>
+                <Text>{convertToRupiah(selectedCourier.cost)}</Text>
+              </View>
+            )}
             <View style={[localStyle.inline, localStyle.totalContainer]}>
               <Text style={{fontSize: 16, fontWeight: 'bold'}}>
                 Total Pembayaran
@@ -185,7 +230,7 @@ function DetailsTransactions() {
                   fontWeight: 'bold',
                   color: myColors.ORANGE,
                 }}>
-                Rp 934.000
+                {selectedCourier ? convertToRupiah(totalPayment) : '-'}
               </Text>
             </View>
           </Card>
@@ -194,6 +239,7 @@ function DetailsTransactions() {
           <Button
             containerStyle={{margin: 5}}
             titleStyle={{fontSize: 14}}
+            disabled={!selectedCourier ? true : null}
             title="Pilih Pembayaran"
             buttonStyle={{
               backgroundColor: myColors.ORANGE,
@@ -245,4 +291,11 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default DetailsTransactions;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = {getShippingCost};
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(CartDetails);
