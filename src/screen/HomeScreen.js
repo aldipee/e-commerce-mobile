@@ -1,26 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   StyleSheet,
   Text,
   StatusBar,
-  Alert,
   ScrollView,
   SafeAreaView,
-  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {Card, Button, Tile, SearchBar, Image} from 'react-native-elements';
+import {Card, Tile, SearchBar} from 'react-native-elements';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {itemWidth, sliderWidth} from '../style/SlideEntry';
 import Icon from 'react-native-vector-icons/Ionicons';
 // Redux
 import {connect} from 'react-redux';
 import {getProducts} from '../redux/actions/ProductActions';
+import {getProfileDetail} from '../redux/actions/AuthActions';
 // Lokal Config
-import {convertToRupiah} from '../utils/convert';
+import BalanceCard from '../components/MainHome/BalanceCard';
 import colors from '../config/colors';
-import {API} from '../config/server';
 import HorizontalProducts from '../components/MainHome/HorizontalProducts';
 import VerticalProducts from '../components/MainHome/VerticalProducts';
 
@@ -102,9 +101,13 @@ const HomeForm = props => {
   const [currentSlider, setCurrentSlider] = useState(1);
   const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
 
-  useEffect(() => {
-    props.getProducts();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      props.getProducts();
+      props.getProfileDetail();
+    }, []),
+  );
+
   const _renderItem = ({item, index}) => {
     return (
       <Tile
@@ -123,44 +126,42 @@ const HomeForm = props => {
 
   const _renderItemHorizontalProduct = ({item, index}) => {
     return (
-      <Card containerStyle={{padding: 5, borderRadius: 3, width: '80%'}}>
-        <Tile
-          imageSrc={require('../../src/product.jpg')}
-          width={'100%'}
-          height={400}
-          imageContainerStyle={{borderRadius: 3}}>
-          <View>
-            <View style={{marginTop: -30}}>
+      <Tile
+        imageSrc={require('../../src/product.jpg')}
+        width={'100%'}
+        height={400}
+        imageContainerStyle={{borderRadius: 3}}>
+        <View>
+          <View style={{marginTop: -30}}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: colors.BLACK,
+              }}>
+              Sepatu Futsal Nike Phantom Venom
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 5,
+              }}>
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 18,
+                  color: colors.ORANGE,
                   fontWeight: 'bold',
-                  color: colors.BLACK,
                 }}>
-                Sepatu Futsal Nike Phantom Venom
+                Rp 874.000
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 5,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: colors.ORANGE,
-                    fontWeight: 'bold',
-                  }}>
-                  Rp 874.000
-                </Text>
-                <Text style={{color: colors.MAIN_GREY, fontWeight: 'bold'}}>
-                  340 Terjual
-                </Text>
-              </View>
+              <Text style={{color: colors.MAIN_GREY, fontWeight: 'bold'}}>
+                340 Terjual
+              </Text>
             </View>
           </View>
-        </Tile>
-      </Card>
+        </View>
+      </Tile>
     );
   };
 
@@ -172,7 +173,7 @@ const HomeForm = props => {
           onFocus={() => searchOnFocus()}
           placeholder="Type Here..."
           containerStyle={{
-            backgroundColor: '#fff',
+            backgroundColor: colors.SECOND_BLUE,
             borderBottomColor: '#fff',
             borderTopColor: '#fff',
             paddingTop: 5,
@@ -183,28 +184,29 @@ const HomeForm = props => {
             height: 46,
           }}
           inputStyle={{fontSize: 14}}
-          showLoading={true}
           underlineColorAndroid={colors.MAIN_GREY}
         />
 
         <ScrollView style={localStyle.cardContainer}>
-          <Card>
-            <Carousel
-              ref={c => setCurrentSlider(c)}
-              data={[1, 2, 3, 4, 5]}
-              renderItem={_renderItem}
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              hasParallaxImages={true}
-              inactiveSlideScale={0.94}
-              inactiveSlideOpacity={0.7}
-              loop={true}
-              loopClonesPerSide={2}
-              autoplay={true}
-              autoplayDelay={500}
-              autoplayInterval={3000}
-              onSnapToItem={index => setSlider1ActiveSlide(index)}
-            />
+          <View>
+            <Card>
+              <Carousel
+                ref={c => setCurrentSlider(c)}
+                data={[1, 2, 3, 4, 5]}
+                renderItem={_renderItem}
+                sliderWidth={sliderWidth}
+                itemWidth={itemWidth}
+                hasParallaxImages={true}
+                inactiveSlideScale={0.94}
+                inactiveSlideOpacity={0.7}
+                loop={true}
+                loopClonesPerSide={2}
+                autoplay={true}
+                autoplayDelay={500}
+                autoplayInterval={1400}
+                onSnapToItem={index => setSlider1ActiveSlide(index)}
+              />
+            </Card>
             <Pagination
               style={{paddingTop: -40}}
               dotsLength={5}
@@ -217,45 +219,11 @@ const HomeForm = props => {
               carouselRef={currentSlider}
               tappableDots={!!currentSlider}
             />
-          </Card>
+          </View>
+          {props.userData && props.userData.username && (
+            <BalanceCard balance={props.userData.balance} />
+          )}
 
-          <Card
-            containerStyle={{
-              borderTopWidth: 0,
-              borderRightWidth: 0,
-              borderLeftWidth: 0,
-              borderBottomWidth: 0,
-              borderRadius: 5,
-              shadowColor: '#000',
-              shadowOffset: {width: 0, height: 2},
-              shadowOpacity: 0.8,
-              shadowRadius: 2,
-            }}>
-            <View>
-              <Text
-                style={{
-                  fontSize: 12,
-                  textTransform: 'uppercase',
-                  color: colors.MAIN_GREY,
-                }}>
-                Your balance
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                  {convertToRupiah(130000)}
-                </Text>
-                <Button
-                  containerStyle={{marginTop: -16}}
-                  icon={<Icon name="md-wallet" size={18} color="#fff" />}
-                  title="Top up"
-                />
-              </View>
-            </View>
-          </Card>
           <Card
             containerStyle={{
               borderTopWidth: 0,
@@ -297,26 +265,20 @@ const HomeForm = props => {
               marginTop: 9,
               marginBottom: 20,
             }}>
-            <Carousel
-              data={[1, 2, 3, 4, 5]}
-              renderItem={_renderItemHorizontalProduct}
-              sliderWidth={sliderWidth}
-              itemWidth={itemWidth}
-              inactiveSlideScale={0.95}
-              inactiveSlideOpacity={1}
-              enableMomentum={false}
-              activeSlideAlignment={'start'}
-              containerCustomStyle={{
-                marginRight: 0,
-              }}
-              contentContainerCustomStyle={{
-                paddingRight: 0,
-              }}
-              activeAnimationType={'spring'}
-              activeAnimationOptions={{
-                friction: 4,
-                tension: 40,
-              }}
+            <Text
+              style={{
+                color: colors.WHITE,
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginLeft: 15,
+                marginTop: 10,
+                marginBottom: -10,
+              }}>
+              New Arrivals!
+            </Text>
+            <HorizontalProducts
+              items={props.data.data && props.data.data}
+              navigation={props.navigation}
             />
           </View>
           {/* End of Horizontal Scroll */}
@@ -342,10 +304,12 @@ const HomeForm = props => {
 
 const mapStateToProps = state => ({
   data: state.productData,
+  userData: state.authData.profileData,
 });
 
 const mapDispatchToProps = {
   getProducts,
+  getProfileDetail,
 };
 
 export default connect(

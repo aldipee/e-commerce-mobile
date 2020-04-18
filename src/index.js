@@ -51,7 +51,7 @@ class Index extends Component {
 
           <Stack.Screen
             name="SearchScreen"
-            options={{headerShown: false}}
+            options={{headerShown: true}}
             component={SearchScreen}
           />
           <Stack.Screen

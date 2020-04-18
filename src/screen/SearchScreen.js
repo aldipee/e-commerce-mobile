@@ -23,9 +23,7 @@ function SearchScreen(props) {
   };
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchData, setSearchData] = useState([]);
-  const [dummyArray, setDummyArray] = useState(
-    Array.from({length: 10}, () => Math.floor(Math.random() * 40)),
-  );
+
   const searchByBrand = data => {
     // going to show product with particular brand
   };

@@ -1,86 +1,136 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {Card, Button, ListItem} from 'react-native-elements';
 
-import myColors from '../../config/colors';
+import {getTransaction} from '../../redux/actions/AuthActions';
+import {convertToRupiah, converDate} from '../../utils/convert';
+import {connect} from 'react-redux';
 
-export default function AllTransactions(props) {
+import myColors from '../../config/colors';
+import {API} from '../../config/server';
+
+function AllTransactions(props) {
+  const [isLoading, setIsLoading] = useState(true);
+  useFocusEffect(
+    useCallback(() => {
+      props.getTransaction();
+      setIsLoading(false);
+    }, []),
+  );
+
   return (
     <View>
       <View>
-        {[1, 2, 3, 4, 5, 5, 6].map(data => (
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate('TrxDetails')}>
-            <Card containerStyle={{borderWidth: 0}}>
-              <View>
-                <View
-                  style={{
-                    alignItems: 'flex-end',
-                    marginTop: -6,
-                    marginBottom: -4,
-                  }}>
-                  <Text
+        {!isLoading &&
+          props.data.map((data, index) => (
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate('TrxDetails', {
+                  data,
+                  userData: props.userData,
+                })
+              }>
+              <Card containerStyle={{borderWidth: 0}}>
+                <View>
+                  <View
                     style={{
-                      backgroundColor: myColors.GREEN,
-                      color: myColors.WHITE,
-                      padding: 4,
-                      borderRadius: 4,
+                      alignItems: 'flex-end',
+                      marginTop: -6,
+                      marginBottom: -4,
                     }}>
-                    Transaksi Selesai
-                  </Text>
-                </View>
-                {/* Tanggal dan Nomor pesanan */}
-                <View
-                  style={{
-                    marginTop: 10,
-                    borderBottomColor: myColors.SECOND_GREY,
-                    borderBottomWidth: 1,
-                    paddingBottom: 10,
-                  }}>
-                  <Text style={{fontSize: 15}}>28 April 2020</Text>
+                    {data.status ? (
+                      <Text
+                        style={{
+                          backgroundColor: myColors.GREEN,
+                          color: myColors.WHITE,
+                          padding: 4,
+                          borderRadius: 4,
+                        }}>
+                        Transaksi Selesai
+                      </Text>
+                    ) : (
+                      <Text
+                        style={{
+                          backgroundColor: myColors.ORANGE,
+                          color: myColors.WHITE,
+                          padding: 4,
+                          borderRadius: 4,
+                        }}>
+                        Belum Dibayar
+                      </Text>
+                    )}
+                  </View>
+                  {/* Tanggal dan Nomor pesanan */}
+                  <View
+                    style={{
+                      marginTop: 10,
+                      borderBottomColor: myColors.SECOND_GREY,
+                      borderBottomWidth: 1,
+                      paddingBottom: 10,
+                    }}>
+                    <Text style={{fontSize: 15}}>
+                      {converDate(data.created_at)}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={{color: myColors.MAIN_GREY}}>
+                        Nomor Transaksi :
+                      </Text>
+                      <Text style={{color: myColors.MAIN_GREY}}>{`TR0000${
+                        data.id
+                      }`}</Text>
+                    </View>
+                  </View>
+                  {/* Product */}
+                  <View>
+                    <ListItem
+                      containerStyle={{marginVertical: 2}}
+                      title={`Sepatu`}
+                      titleStyle={{fontSize: 14, paddingBottom: 5}}
+                      leftAvatar={{
+                        source: {
+                          uri: 'none',
+                        },
+                        rounded: false,
+                      }}
+                      bottomDivider
+                      chevron
+                    />
+                  </View>
+                  {/* TotalPayment */}
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}>
-                    <Text style={{color: myColors.MAIN_GREY}}>
-                      Nomor Transaksi :
+                    <Text>Total Pembayaran:</Text>
+                    <Text style={{fontSize: 17}}>
+                      {convertToRupiah(data.total_price)}
                     </Text>
-                    <Text style={{color: myColors.MAIN_GREY}}>TR0000201</Text>
                   </View>
                 </View>
-                {/* Product */}
-                <View>
-                  <ListItem
-                    containerStyle={{marginVertical: 2}}
-                    title={'Sepatu Futsal Nike Original'}
-                    titleStyle={{fontSize: 14, paddingBottom: 5}}
-                    leftAvatar={{
-                      source: {
-                        uri:
-                          'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
-                      },
-                      rounded: false,
-                    }}
-                    bottomDivider
-                    chevron
-                  />
-                </View>
-                {/* TotalPayment */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text>Total Pembayaran:</Text>
-                  <Text style={{fontSize: 17}}>Rp 500.000</Text>
-                </View>
-              </View>
-            </Card>
-          </TouchableOpacity>
-        ))}
+              </Card>
+            </TouchableOpacity>
+          ))}
       </View>
     </View>
   );
 }
+
+const mapStateToProps = state => {
+  return {
+    data: state.authData.history,
+    userData: state.authData.profileData,
+  };
+};
+
+const mapDispatchToProps = {getTransaction};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AllTransactions);

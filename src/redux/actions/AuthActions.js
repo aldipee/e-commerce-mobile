@@ -4,6 +4,7 @@ import {
   SET_LOGOUT,
   CREATE_NEW_USER,
   UPLOAD_USER_PICTURE,
+  GET_ALL_USER_TRANSACTIONS,
   GET_PROFILE_DETAILS,
 } from '../actions/type';
 import {API} from '../../config/server';
@@ -33,6 +34,21 @@ export const setLogin = (data, callback) => async dispatch => {
   } catch (error) {
     console.log(error, 'This error appears from AuthActions');
     callback({status: false, messsage: 'ERROR SERVER'});
+  }
+};
+export const getTransaction = () => async dispatch => {
+  try {
+    const res = await axios.get(
+      API.API_URL.concat(
+        'transactions/user?search[key]=receipt_number&search[value]=&limit=100',
+      ),
+    );
+    dispatch({
+      type: GET_ALL_USER_TRANSACTIONS,
+      payload: res.data.data.data,
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
 

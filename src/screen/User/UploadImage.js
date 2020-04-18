@@ -1,9 +1,8 @@
-import React, {useState, Component} from 'react';
-import {Text, View, ScrollView, StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, ScrollView, StyleSheet, Platform} from 'react-native';
 import {Card, Avatar, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {connect} from 'react-redux';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import {API} from '../../config/server';
 import ImagePicker from 'react-native-image-picker';
 
@@ -15,13 +14,18 @@ import axios from 'axios';
 class UploadImage extends Component {
   state = {
     uri: '',
+    upload: true,
+    image: '',
   };
+  //Handle Choose Picture
   choosePicture = () => {
     var options = {
-      title: 'Pilih Gambar',
+      quality: 0.7,
+      mediaType: 'photo',
+      noData: true,
       storageOptions: {
-        skipBackup: true,
         path: 'images',
+        cameraRoll: true,
       },
     };
     ImagePicker.showImagePicker(options, response => {
@@ -35,42 +39,37 @@ class UploadImage extends Component {
       } else {
         console.log(response.fileName);
         this.setState({
-          srcImg: {uri: response.uri},
-          uri: response.uri,
-          fileName: response.fileName,
+          upload: true,
+          image: {
+            name: response.fileName,
+            type: response.type,
+            size: response.fileSize,
+            uri:
+              Platform.OS === 'android'
+                ? response.uri
+                : response.uri.replace('file://', ''),
+          },
         });
       }
     });
   };
-  uploadPicture = () => {
+  uploadPicture = async () => {
     console.log('mulai upload');
-    this.setState({loading: true});
 
-    const data = new FormData();
-    data.append('id', 'id apa saja'); // you can append anyone.
-    data.append('picture', {
-      uri: this.state.uri,
-      type: 'image/jpeg',
-      name: this.state.fileName,
-    });
-    data.append('nama', 'FC');
-    const url = API.API_URL.concat('auth/update-profile');
+    try {
+      const data = new FormData();
+      let File = {...this.state.image};
+      console.log(File);
+      data.append('picture', File); // you can append anyone.
+      data.append('name', 'xie');
 
-    axios
-      .patch(API.API_URL.concat('auth/update-profile'), data)
-      .then(data => {
-        console.log(data);
-      })
-      .catch(err => console.log(err));
-
-    //
-    var api = axios.create({
-      baseUrl: API.API_URL.concat('auth/update-profile'),
-    });
-    api
-      .patch('picture', data)
-      .then(res => console.log(res, 'berhasil'))
-      .catch(error => console.log(error, 'EROR'));
+      const res = await axios.patch(
+        API.API_URL.concat('auth/update-pic'),
+        data,
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
@@ -94,7 +93,7 @@ class UploadImage extends Component {
             onPress={this.choosePicture}
             activeOpacity={0.7}
             source={{
-              uri: this.state.uri,
+              uri: this.state.image.uri,
             }}
           />
 
@@ -156,7 +155,7 @@ class UploadImage extends Component {
           <View style={{marginBottom: 20}}>
             <Button
               onPress={this.uploadPicture}
-              title="Logout"
+              title="Upload"
               buttonStyle={{backgroundColor: myColors.ORANGE}}
             />
           </View>

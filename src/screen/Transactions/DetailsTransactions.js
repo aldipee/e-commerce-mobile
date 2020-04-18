@@ -4,22 +4,27 @@ import {Card, ListItem} from 'react-native-elements';
 
 import myColors from '../../config/colors';
 import {ScrollView} from 'react-native-gesture-handler';
-function DetailsTransactions() {
+import {converDate, convertToRupiah} from '../../utils/convert';
+import {API} from '../../config/server';
+function DetailsTransactions(props) {
+  const {data, userData} = props.route.params;
   return (
     <ScrollView>
       <View style={localStyle.container}>
         {/* Basic Info */}
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Status</Text>
-          <Text style={localStyle.status}>Pesanan Selesai</Text>
+          <Text style={localStyle.status}>
+            {data.status ? 'Selesai' : 'Menunggu pembayaran'}
+          </Text>
         </View>
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Tanggal Pembelian</Text>
-          <Text>11 Mar 2020</Text>
+          <Text>{converDate(data.created_at)}</Text>
         </View>
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Nomor Transaksi</Text>
-          <Text style={{fontSize: 14}}>TRX234344444</Text>
+          <Text style={{fontSize: 14}}>{`TRX0000${data.id}`}</Text>
         </View>
 
         {/* Informasi Pesanan */}
@@ -28,36 +33,24 @@ function DetailsTransactions() {
           <Text style={{fontSize: 15, fontWeight: 'bold', marginTop: 20}}>
             Informasi Pesanan
           </Text>
-          <ListItem
-            containerStyle={{marginVertical: 2}}
-            title={'Sepatu Futsal Nike Original'}
-            titleStyle={{fontSize: 14, paddingBottom: 5}}
-            subtitle={'Rp 350.000 | 2 Items'}
-            leftAvatar={{
-              source: {
-                uri:
-                  'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
-              },
-              rounded: false,
-            }}
-            bottomDivider
-            chevron
-          />
-          <ListItem
-            containerStyle={{marginVertical: 2}}
-            title={'Sepatu Futsal Nike Original'}
-            titleStyle={{fontSize: 14, paddingBottom: 5}}
-            subtitle={'Rp 350.000 | 2 Items'}
-            leftAvatar={{
-              source: {
-                uri:
-                  'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
-              },
-              rounded: false,
-            }}
-            bottomDivider
-            chevron
-          />
+          {data.transactionDetail.map((item, index) => (
+            <ListItem
+              containerStyle={{marginVertical: 2}}
+              title={item.name}
+              titleStyle={{fontSize: 14, paddingBottom: 5}}
+              subtitle={`${convertToRupiah(item.price)} | ${
+                item.quantity
+              } Pasang`}
+              leftAvatar={{
+                source: {
+                  uri: API.API_URL_STATIC.concat(item.picture),
+                },
+                rounded: false,
+              }}
+              bottomDivider
+              chevron
+            />
+          ))}
         </View>
         {/* Detail Pengiriman */}
         <View>
@@ -75,10 +68,11 @@ function DetailsTransactions() {
           </View>
           <View style={[localStyle.inline, localStyle.details]}>
             <Text>Alamat Pengiriman</Text>
-            <Text>
-              Aldi Pranata 682185142048. Jl Raya Bojongsoang, Kec. Bojongsoang,
-              Bandung Jawa Barat
-            </Text>
+            <Text>{`${userData.full_name}, ${userData.phone}, ${
+              userData.address[0].street
+            } ${userData.address[0].city} ${
+              userData.address[0].district
+            }`}</Text>
           </View>
         </View>
         {/* Detail Pembayaran */}
@@ -93,11 +87,11 @@ function DetailsTransactions() {
             </View>
             <View style={[localStyle.inline, localStyle.details]}>
               <Text>Total Pembelian</Text>
-              <Text>Rp 904.000</Text>
+              <Text>{convertToRupiah(data.total_price - data.postal_fee)}</Text>
             </View>
             <View style={[localStyle.inline, localStyle.details]}>
               <Text>Total Ongkir</Text>
-              <Text>Rp 30.000</Text>
+              <Text>{convertToRupiah(data.postal_fee)}</Text>
             </View>
             <View style={[localStyle.inline, localStyle.totalContainer]}>
               <Text style={{fontSize: 16, fontWeight: 'bold'}}>
@@ -109,7 +103,7 @@ function DetailsTransactions() {
                   fontWeight: 'bold',
                   color: myColors.ORANGE,
                 }}>
-                Rp 934.000
+                {convertToRupiah(data.total_price)}
               </Text>
             </View>
           </Card>

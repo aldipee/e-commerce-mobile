@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {API} from '../config/server';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
-import {addToCart, updateCart} from '../redux/actions/CartActions';
+import {addToCart, updateCart, removeItem} from '../redux/actions/CartActions';
 import myColors from '../config/colors';
 import {convertToRupiah} from '../utils/convert';
 
@@ -59,6 +59,18 @@ function Cart(props) {
               <View style={{paddingHorizontal: 10}}>
                 <View style={{backgroundColor: '#fff'}}>
                   <ListItem
+                    rightElement={() => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          props.removeItem(props.cart.data, index)
+                        }>
+                        <Icon
+                          name="delete"
+                          size={23}
+                          color={myColors.MAIN_GREY}
+                        />
+                      </TouchableOpacity>
+                    )}
                     containerStyle={{marginVertical: 2}}
                     title={data.name}
                     subtitle={'Size 42'}
@@ -69,7 +81,6 @@ function Cart(props) {
                       },
                       rounded: false,
                     }}
-                    chevron
                   />
                 </View>
                 <View
@@ -180,7 +191,7 @@ const mapStateToProps = state => ({
   cart: state.cartData,
 });
 
-const mapDispatchToProps = {addToCart, updateCart};
+const mapDispatchToProps = {addToCart, updateCart, removeItem};
 
 export default connect(
   mapStateToProps,

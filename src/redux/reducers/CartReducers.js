@@ -1,4 +1,9 @@
-import {ADD_TO_CART, SET_LOGOUT, UPDATE_ITEM_ON_CART} from '../actions/type';
+import {
+  ADD_TO_CART,
+  SET_LOGOUT,
+  UPDATE_ITEM_ON_CART,
+  DELETE_FROM_CART,
+} from '../actions/type';
 const initialState = {
   data: [],
 };
@@ -14,6 +19,12 @@ export default (state = initialState, {type, payload}) => {
       return {...state, data: []};
     }
     case UPDATE_ITEM_ON_CART: {
+      return {
+        ...state,
+        data: payload,
+      };
+    }
+    case DELETE_FROM_CART: {
       return {
         ...state,
         data: payload,

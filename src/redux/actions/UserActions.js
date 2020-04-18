@@ -1,4 +1,4 @@
-import {INSERT_USER_ADDRESS} from './type';
+import {INSERT_USER_ADDRESS, GET_ALL_USER_TRANSACTIONS} from './type';
 import {API} from '../../config/server';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';

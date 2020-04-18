@@ -22,3 +22,11 @@ export const updateCart = (alldata, quantity, index) => {
     payload: alldata,
   };
 };
+
+export const removeItem = (allData, index) => {
+  const newData = allData.filter((valu, i, arr) => i !== index);
+  return {
+    type: DELETE_FROM_CART,
+    payload: newData,
+  };
+};

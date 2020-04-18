@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, ListItem, Button} from 'react-native-elements';
+import {connect} from 'react-redux';
 import Modal from 'react-native-modal';
 import myColors from '../../config/colors';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -8,8 +9,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {getShippingCost} from '../../redux/actions/ShippingActions';
 import {addTransaction} from '../../redux/actions/TransactionActions';
 import {getProfileDetail} from '../../redux/actions/AuthActions';
-import {connect} from 'react-redux';
 import {convertToRupiah} from '../../utils/convert';
+import {API} from '../../config/server';
+
 function CartDetails(props) {
   const dataFromCart = props.route.params;
   console.log(dataFromCart);
@@ -162,8 +164,7 @@ function CartDetails(props) {
                   } item`}
                   leftAvatar={{
                     source: {
-                      uri:
-                        'https://ecs7.tokopedia.net/img/cache/700/product-1/2020/2/18/batch-upload/batch-upload_41d6e73d-6d06-479c-9680-b75ef746f82e.jpg',
+                      uri: API.API_URL_STATIC.concat(data.picture),
                     },
                     rounded: false,
                   }}
@@ -263,7 +264,12 @@ function CartDetails(props) {
           <View style={{marginTop: 15}}>
             <Button
               containerStyle={{margin: 5}}
-              onPress={onSubmit}
+              onPress={() =>
+                props.navigation.navigate('PaymentList', {
+                  totalPayment,
+                  balance: props.dataUser.balance,
+                })
+              }
               titleStyle={{fontSize: 14}}
               disabled={!selectedCourier ? true : null}
               title="Pilih Pembayaran"

@@ -17,7 +17,7 @@ function MainHome(props) {
   return (
     <BottomTab.Navigator
       tabBarOptions={{
-        activeTintColor: colors.ORANGE,
+        activeTintColor: colors.MAIN_BLUE,
       }}>
       <BottomTab.Screen
         name="Home"

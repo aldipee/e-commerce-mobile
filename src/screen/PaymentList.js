@@ -1,12 +1,15 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Card, Header, ListItem, Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {convertToRupiah} from '../utils/convert';
 
 import myColors from '../config/colors';
 import {ScrollView} from 'react-native-gesture-handler';
 
-function Cart() {
+function Cart(props) {
+  const {params} = props.route;
+
   return (
     <ScrollView>
       <View style={{paddingHorizontal: 20, backgroundColor: myColors.WHITE}}>
@@ -16,19 +19,22 @@ function Cart() {
           </Text>
           <Text
             style={{fontSize: 16, fontWeight: 'bold', color: myColors.ORANGE}}>
-            Rp 1.030.000
+            {convertToRupiah(params.totalPayment)}
           </Text>
         </View>
         <View style={{marginTop: 20}}>
           <Text style={{fontSize: 17, fontWeight: 'bold'}}>
             Pembayaran Instant
           </Text>
-          {[1].map(data => (
-            <View style={[localStyle.customCard, localStyle.inline]}>
-              <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
-              <Text style={[localStyle.title]}>Alfamart</Text>
+          <View style={[localStyle.customCard, localStyle.inline]}>
+            <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
+            <View>
+              <Text style={[localStyle.titleSaldo]}>Saldo GoldenFoot</Text>
+              <Text style={[localStyle.title]}>
+                {convertToRupiah(params.balance)}
+              </Text>
             </View>
-          ))}
+          </View>
         </View>
         <View style={{marginTop: 20, paddingBottom: 100}}>
           <Text style={{fontSize: 17, fontWeight: 'bold'}}>Metode Lain</Text>
@@ -69,6 +75,9 @@ const localStyle = StyleSheet.create({
 
     elevation: 3,
     borderRadius: 2,
+  },
+  titleSaldo: {
+    marginLeft: 10,
   },
   inline: {
     flexDirection: 'row',

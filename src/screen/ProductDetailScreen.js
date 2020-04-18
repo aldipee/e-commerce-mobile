@@ -11,8 +11,9 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {Card, Tile, Button, Image} from 'react-native-elements';
+import {Card, Tile, Button, Image, Input} from 'react-native-elements';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
 // Local
@@ -20,20 +21,113 @@ import {addToCart} from '../redux/actions/CartActions';
 import colors from '../config/colors';
 import {convertToRupiah} from '../utils/convert';
 import {API} from '../config/server';
+import Modal from 'react-native-modal';
 function ProductDetailScreen(props) {
   const [quantity, setQuantity] = useState(1);
   const {data} = props.route.params;
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => setShowModal(!showModal);
+
+  const updateCart = total => {
+    if (total > data.stock) {
+      ToastAndroid.show('Stock tidak cukup', ToastAndroid.SHORT);
+    } else if (total < 1) {
+      ToastAndroid.show('Pemesanan minimal 1', ToastAndroid.SHORT);
+    } else {
+      setQuantity(total);
+    }
+  };
 
   const onSelectedProduct = () => {
-    if (data.stock < quantity) {
-      ToastAndroid.show('Stock tidak cukup', ToastAndroid.SHORT);
-    } else {
-      props.addToCart(data, quantity);
-    }
+    props.addToCart(data, quantity);
+    ToastAndroid.show('Produk berhasil ditambahkan!', ToastAndroid.SHORT);
+    props.navigation.navigate('MyCart');
   };
   return (
     <SafeAreaView>
       <View>
+        <Modal isVisible={showModal} style={{margin: 0}} coverScreen={true}>
+          <View style={{flex: 1}}>
+            <View
+              style={{
+                backgroundColor: colors.WHITE,
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                height: 230,
+              }}>
+              <View
+                style={{
+                  padding: 15,
+                  borderBottomColor: colors.SECOND_GREY,
+                  borderBottomWidth: 1,
+                  justifyContent: 'space-between',
+                  alignContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                  Pilih Jumlah
+                </Text>
+                <TouchableOpacity onPress={toggleModal}>
+                  <Icon name="close" size={23} />
+                </TouchableOpacity>
+              </View>
+              <View style={{paddingHorizontal: 15, paddingVertical: 10}}>
+                <Text>{data.stock} Stok Tersedia</Text>
+                <View
+                  style={{
+                    width: 100,
+                    flexDirection: 'row',
+                    marginTop: 10,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity onPress={() => updateCart(quantity - 1)}>
+                    <Icon
+                      name="minuscircleo"
+                      size={20}
+                      color={colors.MAIN_BLUE}
+                    />
+                  </TouchableOpacity>
+                  <Input
+                    keyboardType="numeric"
+                    defaultValue={`${quantity}`}
+                    textContentType={Number}
+                    containerStyle={{width: 60}}
+                    inputStyle={{fontSize: 14, textAlign: 'center'}}
+                    inputContainerStyle={{
+                      alignItems: 'center',
+                      padding: 0,
+                      margin: 0,
+                      height: 30,
+                    }}
+                  />
+                  <TouchableOpacity onPress={() => updateCart(quantity + 1)}>
+                    <Icon
+                      name="pluscircleo"
+                      size={20}
+                      color={colors.MAIN_BLUE}
+                    />
+                  </TouchableOpacity>
+
+                  <Text style={{fontSize: 12, marginLeft: 10}}>
+                    x {convertToRupiah(data.price)} =
+                  </Text>
+                  <Text style={{fontSize: 16, marginLeft: 5}}>
+                    {convertToRupiah(data.price * quantity)}
+                  </Text>
+                </View>
+                <Button
+                  onPress={onSelectedProduct}
+                  containerStyle={{marginTop: 40}}
+                  titleStyle={{fontSize: 14}}
+                  title="Tambah ke keranjang"
+                  buttonStyle={{backgroundColor: colors.ORANGE}}
+                />
+              </View>
+            </View>
+          </View>
+        </Modal>
         <ScrollView>
           <Image
             source={{
@@ -185,7 +279,7 @@ function ProductDetailScreen(props) {
               }}
             />
             <Button
-              onPress={onSelectedProduct}
+              onPress={toggleModal}
               containerStyle={{margin: 5}}
               titleStyle={{fontSize: 14}}
               title="Tambah ke keranjang"
