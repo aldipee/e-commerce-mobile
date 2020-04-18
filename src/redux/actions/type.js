@@ -9,9 +9,14 @@ export const SET_LOGOUT = 'SET_LOGOUT';
 export const CREATE_NEW_USER = 'SET_NEW_USER';
 export const UPLOAD_USER_PICTURE = 'UPLOAD_USER_PICTURE';
 export const GET_PROFILE_DETAILS = 'GET_PROFILE_DETAILS';
+export const INSERT_USER_ADDRESS = 'INSERT_USER_ADDRESS';
 
 // Cart
 export const ADD_TO_CART = 'ADD_TO_CART';
 export const UPDATE_ITEM_ON_CART = 'UPDATE_ITEM_ON_CART';
 export const DELETE_FROM_CART = 'DELETE_FROM_CART';
 export const GET_SHIPPING_COST = 'GET_SHIPPING_COST';
+
+// Transaction
+export const ADD_NEW_TRANSACTION = 'ADD_NEW_TRANSACTION';
+export const GET_ALL_CITY = 'GET_ALL_CITY';

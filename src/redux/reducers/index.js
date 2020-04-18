@@ -4,11 +4,13 @@ import {combineReducers} from 'redux';
 import AuthReducer from './AuthReducer';
 import ProductReducer from './ProductReducer';
 import CartReducer from './CartReducers';
+import ShippingReducers from './ShippingReducers';
 
 const appReducer = combineReducers({
   authData: AuthReducer,
   productData: ProductReducer,
   cartData: CartReducer,
+  shippingData: ShippingReducers,
 });
 
 const rootReducer = (state, action) => {

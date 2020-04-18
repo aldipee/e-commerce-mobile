@@ -18,6 +18,8 @@ import {getProfileDetail} from '../redux/actions/AuthActions';
 import myColors from '../config/colors';
 import {setLogout} from '../redux/actions/AuthActions';
 import MainHome from '../screen/MainHome';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {API} from '../config/server';
 
 function ProfileScreen(props) {
   useEffect(() => {
@@ -49,7 +51,12 @@ function ProfileScreen(props) {
         <Avatar
           rounded
           size="large"
-          title="AP"
+          source={{
+            uri: profileData.photo
+              ? API.API_URL_STATIC.concat(profileData.photo)
+              : null,
+          }}
+          title={profileData.photo ? profileData.photo : 'AP'}
           onPress={() => props.navigation.navigate('UploadImage')}
           activeOpacity={0.7}
         />
@@ -162,14 +169,17 @@ function ProfileScreen(props) {
               bottomDivider
             />
             {['Alamat', 'Tanggal lahir'].map((data, index) => (
-              <ListItem
-                containerStyle={{paddingLeft: 1}}
-                key={index}
-                title={data}
-                titleStyle={{fontSize: 14, color: myColors.BLACK}}
-                bottomDivider
-                chevron
-              />
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate('AddAddress')}>
+                <ListItem
+                  containerStyle={{paddingLeft: 1}}
+                  key={index}
+                  title={data}
+                  titleStyle={{fontSize: 14, color: myColors.BLACK}}
+                  bottomDivider
+                  chevron
+                />
+              </TouchableOpacity>
             ))}
           </View>
         </View>
