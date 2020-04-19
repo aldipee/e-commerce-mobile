@@ -20,21 +20,25 @@ function MyTabs() {
           name="AllTrx"
           options={{tabBarLabel: 'Belum Dibayar'}}
           component={AllTransactions}
+          initialParams={{itemId: 0}}
         />
         <Tab.Screen
           name="TrxCode1"
           options={{tabBarLabel: 'Dibayar'}}
           component={AllTransactions}
+          initialParams={{itemId: 1}}
         />
         <Tab.Screen
           name="TrxCode2"
           options={{tabBarLabel: 'Dikirim'}}
           component={AllTransactions}
+          initialParams={{itemId: 2}}
         />
         <Tab.Screen
           name="TrxCode3"
           options={{tabBarLabel: 'Selesai'}}
           component={AllTransactions}
+          initialParams={{itemId: 3}}
         />
       </Tab.Navigator>
     </ScrollView>

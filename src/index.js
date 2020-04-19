@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Linking, Platform} from 'react-native';
 import {connect} from 'react-redux';
 // Screens Import
 import SignUp from '../src/screen/SignUp';
@@ -17,6 +18,7 @@ import CartDetails from './screen/Cart/CartDetails';
 import AddAddress from './screen/User/AddAddress';
 import Invoice from './screen/Payment/Invoice';
 import PaymentSuccess from './screen/Payment/PaymentSucces';
+import DataNotFound from './screen/Others/DataNotFound';
 
 const Stack = createStackNavigator();
 
@@ -32,7 +34,7 @@ class Index extends Component {
           />
           <Stack.Screen
             name="PaymentSuccess"
-            options={{headerShown: true}}
+            options={{headerShown: false}}
             component={PaymentSuccess}
           />
 

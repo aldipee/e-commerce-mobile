@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {Card, Button, ListItem} from 'react-native-elements';
+import DataNotFound from '../Others/DataNotFound';
 
 import {getTransaction} from '../../redux/actions/AuthActions';
 import {convertToRupiah, converDate} from '../../utils/convert';
+import {getStatus} from '../../utils/showDetail';
 import {connect} from 'react-redux';
 
 import myColors from '../../config/colors';
@@ -20,8 +22,11 @@ function AllTransactions(props) {
   const [isLoading, setIsLoading] = useState(true);
   useFocusEffect(
     useCallback(() => {
-      props.getTransaction();
-      setIsLoading(false);
+      setIsLoading(true);
+      setTimeout(() => {
+        props.getTransaction(props.route.params && props.route.params.itemId);
+        setIsLoading(false);
+      }, 1000);
     }, []),
   );
 
@@ -29,104 +34,89 @@ function AllTransactions(props) {
     console.log('lalala');
   };
 
+  let items;
+  if (!props.data) {
+    items = <DataNotFound message="Yaah, kamu gak punya transaksi nih" />;
+  } else {
+    items = props.data.map((data, index) => (
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate('TrxDetails', {
+            data,
+            userData: props.userData,
+          })
+        }>
+        <Card containerStyle={{borderWidth: 0}}>
+          <View>
+            <View
+              style={{
+                alignItems: 'flex-end',
+                marginTop: -6,
+                marginBottom: -4,
+              }}>
+              {getStatus(data.status)}
+            </View>
+            {/* Tanggal dan Nomor pesanan */}
+            <View
+              style={{
+                marginTop: 10,
+                borderBottomColor: myColors.SECOND_GREY,
+                borderBottomWidth: 1,
+                paddingBottom: 10,
+              }}>
+              <Text style={{fontSize: 15}}>{converDate(data.created_at)}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text style={{color: myColors.MAIN_GREY}}>
+                  Nomor Transaksi :
+                </Text>
+                <Text style={{color: myColors.MAIN_GREY}}>{`TR0000${
+                  data.id
+                }`}</Text>
+              </View>
+            </View>
+            {/* Product */}
+            <View>
+              <ListItem
+                containerStyle={{marginVertical: 2}}
+                title={`${data.transactionDetail[0].id_product}`}
+                titleStyle={{fontSize: 14, paddingBottom: 5}}
+                leftAvatar={{
+                  source: {
+                    uri: 'none',
+                  },
+                  rounded: false,
+                }}
+                bottomDivider
+                chevron
+              />
+            </View>
+            {/* TotalPayment */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text>Total Pembayaran:</Text>
+              <Text style={{fontSize: 17}}>
+                {convertToRupiah(data.total_price)}
+              </Text>
+            </View>
+          </View>
+        </Card>
+      </TouchableOpacity>
+    ));
+  }
+
   return (
     <View>
       <View>
         {!isLoading ? (
-          props.data.map((data, index) => (
-            <TouchableOpacity
-              onPress={() =>
-                props.navigation.navigate('TrxDetails', {
-                  data,
-                  userData: props.userData,
-                })
-              }>
-              <Card containerStyle={{borderWidth: 0}}>
-                <View>
-                  <View
-                    style={{
-                      alignItems: 'flex-end',
-                      marginTop: -6,
-                      marginBottom: -4,
-                    }}>
-                    {data.status ? (
-                      <Text
-                        style={{
-                          backgroundColor: myColors.GREEN,
-                          color: myColors.WHITE,
-                          padding: 4,
-                          borderRadius: 4,
-                        }}>
-                        Transaksi Selesai
-                      </Text>
-                    ) : (
-                      <Text
-                        style={{
-                          backgroundColor: myColors.ORANGE,
-                          color: myColors.WHITE,
-                          padding: 4,
-                          borderRadius: 4,
-                        }}>
-                        Belum Dibayar
-                      </Text>
-                    )}
-                  </View>
-                  {/* Tanggal dan Nomor pesanan */}
-                  <View
-                    style={{
-                      marginTop: 10,
-                      borderBottomColor: myColors.SECOND_GREY,
-                      borderBottomWidth: 1,
-                      paddingBottom: 10,
-                    }}>
-                    <Text style={{fontSize: 15}}>
-                      {converDate(data.created_at)}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{color: myColors.MAIN_GREY}}>
-                        Nomor Transaksi :
-                      </Text>
-                      <Text style={{color: myColors.MAIN_GREY}}>{`TR0000${
-                        data.id
-                      }`}</Text>
-                    </View>
-                  </View>
-                  {/* Product */}
-                  <View>
-                    <ListItem
-                      containerStyle={{marginVertical: 2}}
-                      title={`Sepatu`}
-                      titleStyle={{fontSize: 14, paddingBottom: 5}}
-                      leftAvatar={{
-                        source: {
-                          uri: 'none',
-                        },
-                        rounded: false,
-                      }}
-                      bottomDivider
-                      chevron
-                    />
-                  </View>
-                  {/* TotalPayment */}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <Text>Total Pembayaran:</Text>
-                    <Text style={{fontSize: 17}}>
-                      {convertToRupiah(data.total_price)}
-                    </Text>
-                  </View>
-                </View>
-              </Card>
-            </TouchableOpacity>
-          ))
+          items
         ) : (
           <View
             style={{

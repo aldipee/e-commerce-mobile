@@ -10,6 +10,7 @@ export const addTransaction = (
   totalPrice,
   postalFee,
   Product,
+  callback,
 ) => async dispatch => {
   try {
     const data = {
@@ -19,6 +20,7 @@ export const addTransaction = (
     };
     console.log(data, 'Heres data transcation that will be send');
     const res = await axios.post(API.API_URL.concat('transactions/new'), data);
+    callback(true);
     dispatch({
       type: ADD_NEW_TRANSACTION,
     });

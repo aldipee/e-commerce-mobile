@@ -36,7 +36,11 @@ class SuccessRegis extends Component {
                 Please check your email to verify yourself.
               </Text>
             </View>
-            <Button label={strings.LOGIN} buttonType="login" />
+            <Button
+              label="Back to Home"
+              buttonType="login"
+              onPress={() => this.props.navigation.navigate('Home')}
+            />
           </View>
         </View>
       </>

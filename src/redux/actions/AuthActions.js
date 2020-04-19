@@ -37,11 +37,11 @@ export const setLogin = (data, callback) => async dispatch => {
     callback({status: false, messsage: 'ERROR SERVER'});
   }
 };
-export const getTransaction = () => async dispatch => {
+export const getTransaction = statusId => async dispatch => {
   try {
     const res = await axios.get(
       API.API_URL.concat(
-        'transactions/user?search[key]=receipt_number&search[value]=&limit=100',
+        `transactions/user?search[key]=status&search[value]=${statusId}&limit=100`,
       ),
     );
     dispatch({
@@ -74,7 +74,7 @@ export const checkEmail = (email, callback) => async dispatch => {
 export const setNewUser = (data, callback) => async dispatch => {
   try {
     const res = await axios.post(API.API_URL.concat('auth/register'), data);
-    console.log(res, 'BEDUl');
+    callback(true);
   } catch (err) {
     callback(err);
   }

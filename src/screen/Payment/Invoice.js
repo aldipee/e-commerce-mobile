@@ -2,12 +2,26 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
+import {addTransaction} from '../../redux/actions/TransactionActions';
+import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
 import myColors from '../../config/colors';
 
 import {convertToRupiah, converDate} from '../../utils/convert';
 function Invoice(props) {
-  const {shippingCost, totalPayment, balance} = props.route.params;
+  const {shippingCost, totalPayment, balance, cartData} = props.route.params;
+  const insertTransaction = () => {
+    props.addTransaction(
+      cartData.totalPayment,
+      cartData.shippingCost,
+      cartData.Product,
+      done => {
+        if (done) {
+          props.navigation.navigate('PaymentSuccess', cartData);
+        }
+      },
+    );
+  };
   return (
     <ScrollView>
       <View style={localStyle.container}>
@@ -72,6 +86,7 @@ function Invoice(props) {
         </View>
         <View style={{marginTop: 15}}>
           <Button
+            onPress={insertTransaction}
             containerStyle={{margin: 5}}
             titleStyle={{fontSize: 14}}
             title="Bayar Sekarang"
@@ -125,4 +140,7 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default Invoice;
+export default connect(
+  null,
+  {addTransaction},
+)(Invoice);

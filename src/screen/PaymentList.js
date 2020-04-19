@@ -9,6 +9,7 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
 function PaymentList(props) {
   const {params} = props.route;
+  const {cartData} = params;
 
   return (
     <ScrollView>
@@ -32,6 +33,7 @@ function PaymentList(props) {
                 balance: params.balance,
                 totalPayment: params.totalPayment,
                 shippingCost: params.shippingCost,
+                cartData,
               })
             }>
             <View style={[localStyle.customCard, localStyle.inline]}>

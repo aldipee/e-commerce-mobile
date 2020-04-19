@@ -5,6 +5,7 @@ import {Card, ListItem} from 'react-native-elements';
 import myColors from '../../config/colors';
 import {ScrollView} from 'react-native-gesture-handler';
 import {converDate, convertToRupiah} from '../../utils/convert';
+import {getStatus} from '../../utils/showDetail';
 import {API} from '../../config/server';
 function DetailsTransactions(props) {
   const {data, userData} = props.route.params;
@@ -14,9 +15,7 @@ function DetailsTransactions(props) {
         {/* Basic Info */}
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Status</Text>
-          <Text style={localStyle.status}>
-            {data.status ? 'Selesai' : 'Menunggu pembayaran'}
-          </Text>
+          <Text style={localStyle.status}>{getStatus(data.status)}</Text>
         </View>
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Tanggal Pembelian</Text>

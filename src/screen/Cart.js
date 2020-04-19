@@ -6,6 +6,7 @@ import {API} from '../config/server';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {addToCart, updateCart, removeItem} from '../redux/actions/CartActions';
+import DataNotFound from '../screen/Others/DataNotFound';
 import myColors from '../config/colors';
 import {convertToRupiah} from '../utils/convert';
 
@@ -52,126 +53,130 @@ function Cart(props) {
           style: {color: '#fff', fontSize: 19, fontWeight: 'bold'},
         }}
       />
-      <ScrollView>
-        {cart &&
-          cart.map((data, index) => (
-            <View style={{backgroundColor: '#fff', marginTop: 10}}>
-              <View style={{paddingHorizontal: 10}}>
-                <View style={{backgroundColor: '#fff'}}>
-                  <ListItem
-                    rightElement={() => (
-                      <TouchableOpacity
-                        onPress={() =>
-                          props.removeItem(props.cart.data, index)
-                        }>
-                        <Icon
-                          name="delete"
-                          size={23}
-                          color={myColors.MAIN_GREY}
-                        />
-                      </TouchableOpacity>
-                    )}
-                    containerStyle={{marginVertical: 2}}
-                    title={data.name}
-                    subtitle={'Size 42'}
-                    titleStyle={{fontSize: 14, paddingBottom: 5}}
-                    leftAvatar={{
-                      source: {
-                        uri: API.API_URL_STATIC.concat(data.picture),
-                      },
-                      rounded: false,
-                    }}
-                  />
-                </View>
-                <View
-                  style={{
-                    backgroundColor: '#fff',
-                    paddingHorizontal: 15,
-                    paddingVertical: 10,
-                  }}>
-                  <View
-                    style={{
-                      width: 100,
-                      flexDirection: 'row',
-                      marginTop: 10,
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        props.updateCart(
-                          props.cart.data,
-                          data.quantity - 1,
-                          index,
-                        )
-                      }>
-                      <Icon
-                        name="minuscircleo"
-                        size={20}
-                        color={myColors.MAIN_BLUE}
-                      />
-                    </TouchableOpacity>
-                    <Input
-                      keyboardType="numeric"
-                      defaultValue={`${data.quantity}`}
-                      textContentType={Number}
-                      containerStyle={{width: 60}}
-                      inputStyle={{fontSize: 14, textAlign: 'center'}}
-                      inputContainerStyle={{
-                        alignItems: 'center',
-                        padding: 0,
-                        margin: 0,
-                        height: 30,
+      {cart.length === 0 ? (
+        <DataNotFound message="Keranjang mu kosong nih" />
+      ) : (
+        <ScrollView>
+          {cart &&
+            cart.map((data, index) => (
+              <View style={{backgroundColor: '#fff', marginTop: 10}}>
+                <View style={{paddingHorizontal: 10}}>
+                  <View style={{backgroundColor: '#fff'}}>
+                    <ListItem
+                      rightElement={() => (
+                        <TouchableOpacity
+                          onPress={() =>
+                            props.removeItem(props.cart.data, index)
+                          }>
+                          <Icon
+                            name="delete"
+                            size={23}
+                            color={myColors.MAIN_GREY}
+                          />
+                        </TouchableOpacity>
+                      )}
+                      containerStyle={{marginVertical: 2}}
+                      title={data.name}
+                      subtitle={'Size 42'}
+                      titleStyle={{fontSize: 14, paddingBottom: 5}}
+                      leftAvatar={{
+                        source: {
+                          uri: API.API_URL_STATIC.concat(data.picture),
+                        },
+                        rounded: false,
                       }}
                     />
-                    <TouchableOpacity
-                      onPress={() =>
-                        props.updateCart(
-                          props.cart.data,
-                          data.quantity + 1,
-                          index,
-                        )
-                      }>
-                      <Icon
-                        name="pluscircleo"
-                        size={20}
-                        color={myColors.MAIN_BLUE}
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: '#fff',
+                      paddingHorizontal: 15,
+                      paddingVertical: 10,
+                    }}>
+                    <View
+                      style={{
+                        width: 100,
+                        flexDirection: 'row',
+                        marginTop: 10,
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          props.updateCart(
+                            props.cart.data,
+                            data.quantity - 1,
+                            index,
+                          )
+                        }>
+                        <Icon
+                          name="minuscircleo"
+                          size={20}
+                          color={myColors.MAIN_BLUE}
+                        />
+                      </TouchableOpacity>
+                      <Input
+                        keyboardType="numeric"
+                        defaultValue={`${data.quantity}`}
+                        textContentType={Number}
+                        containerStyle={{width: 60}}
+                        inputStyle={{fontSize: 14, textAlign: 'center'}}
+                        inputContainerStyle={{
+                          alignItems: 'center',
+                          padding: 0,
+                          margin: 0,
+                          height: 30,
+                        }}
                       />
-                    </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          props.updateCart(
+                            props.cart.data,
+                            data.quantity + 1,
+                            index,
+                          )
+                        }>
+                        <Icon
+                          name="pluscircleo"
+                          size={20}
+                          color={myColors.MAIN_BLUE}
+                        />
+                      </TouchableOpacity>
 
-                    <Text style={{fontSize: 12, marginLeft: 10}}>
-                      x {convertToRupiah(data.price)} =
-                    </Text>
-                    <Text style={{fontSize: 16, marginLeft: 5}}>
-                      {convertToRupiah(data.price * data.quantity)}
-                    </Text>
+                      <Text style={{fontSize: 12, marginLeft: 10}}>
+                        x {convertToRupiah(data.price)} =
+                      </Text>
+                      <Text style={{fontSize: 16, marginLeft: 5}}>
+                        {convertToRupiah(data.price * data.quantity)}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
 
-        <View style={[localStyle.cta]}>
-          <View>
-            <Text style={{fontSize: 12}}>Total Pembelian</Text>
-            <Text
-              style={{
-                fontSize: 17,
-                color: myColors.ORANGE,
-                fontWeight: 'bold',
-              }}>
-              {convertToRupiah(totalPayment)}
-            </Text>
+          <View style={[localStyle.cta]}>
+            <View>
+              <Text style={{fontSize: 12}}>Total Pembelian</Text>
+              <Text
+                style={{
+                  fontSize: 17,
+                  color: myColors.ORANGE,
+                  fontWeight: 'bold',
+                }}>
+                {convertToRupiah(totalPayment)}
+              </Text>
+            </View>
+            <Button
+              onPress={() =>
+                props.navigation.navigate('CartDetails', {totalPayment, cart})
+              }
+              title="Beli"
+              buttonStyle={{paddingHorizontal: 30, fontSize: 15}}
+            />
           </View>
-          <Button
-            onPress={() =>
-              props.navigation.navigate('CartDetails', {totalPayment, cart})
-            }
-            title="Beli"
-            buttonStyle={{paddingHorizontal: 30, fontSize: 15}}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </>
   );
 }

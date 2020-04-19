@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {Linking, Platform, Alert} from 'react-native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // Screen Import
@@ -14,6 +15,33 @@ import {connect} from 'react-redux';
 const BottomTab = createBottomTabNavigator();
 
 function MainHome(props) {
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      Linking.getInitialURL().then(url => {
+        navigate(url);
+      });
+    } else {
+      Linking.addEventListener('url', handleOpenURL);
+    }
+  }, []);
+  // B
+
+  const handleOpenURL = event => {
+    // D
+    navigate(event.url);
+  };
+
+  const navigate = url => {
+    // E
+    const {navigate} = props.navigation;
+    const route = url.replace(/.*?:\/\//g, '');
+    const id = route.match(/\/([^\/]+)\/?$/)[1];
+    const routeName = route.split('/')[0];
+
+    if (routeName === 'people') {
+      navigate('LoginScreen', {id, name: 'chris'});
+    }
+  };
   return (
     <BottomTab.Navigator
       tabBarOptions={{

@@ -12,7 +12,7 @@ export const addNewAddress = (data, callback) => async dispatch => {
       API.API_URL.concat('auth/insert-address'),
       data,
     );
-    console.log(res);
+    console.log(res, 'SFFFFFFFFFFFFFFF');
     if (res.data.success) {
       callback({success: true});
     } else {

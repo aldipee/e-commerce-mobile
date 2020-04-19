@@ -269,6 +269,11 @@ function CartDetails(props) {
                   totalPayment,
                   balance: props.dataUser.balance,
                   shippingCost: selectedCourier.cost,
+                  cartData: {
+                    totalPayment,
+                    shippingCost: selectedCourier.cost,
+                    Product: dataFromCart.cart,
+                  },
                 })
               }
               titleStyle={{fontSize: 14}}

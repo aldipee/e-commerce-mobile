@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
-import {Card, ListItem, Button} from 'react-native-elements';
+import {sButton} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
 import {getAllCity} from '../../redux/actions/ShippingActions';
@@ -15,7 +15,7 @@ import PickerModal from 'react-native-picker-modal-view';
 import Input from '../../components/Input';
 import myColors from '../../config/colors';
 
-function AddAddress(props) {
+function myAddress(props) {
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState('');
   const [cities, setCities] = useState([]);
@@ -63,7 +63,6 @@ function AddAddress(props) {
   return (
     <ScrollView>
       <View style={localStyle.container}>
-        {/* Form  */}
         <View>
           <Input
             placeholder={'Alamat Lengkap'}
@@ -175,4 +174,4 @@ const mapDispatchToProps = {getAllCity, addNewAddress};
 export default connect(
   mapStatToProps,
   mapDispatchToProps,
-)(AddAddress);
+)(myAddress);

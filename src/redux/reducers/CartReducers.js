@@ -3,6 +3,7 @@ import {
   SET_LOGOUT,
   UPDATE_ITEM_ON_CART,
   DELETE_FROM_CART,
+  ADD_NEW_TRANSACTION,
 } from '../actions/type';
 const initialState = {
   data: [],
@@ -24,6 +25,13 @@ export default (state = initialState, {type, payload}) => {
         data: payload,
       };
     }
+    case ADD_NEW_TRANSACTION: {
+      return {
+        ...state,
+        data: [],
+      };
+    }
+
     case DELETE_FROM_CART: {
       return {
         ...state,

@@ -72,10 +72,13 @@ class SignUp extends Component {
       phone: this.state.phoneNumber,
     };
     this.props.setNewUser(data, success => {
+      this.props.navigation.navigate('SuccessRegis', {
+        username: this.state.username,
+      });
+
+      console.log(success, 'THIS FUCKING STATUS');
       if (success) {
-        this.props.navigation.navigate('SuccessRegis', {
-          username: this.state.username,
-        });
+        console.log(success, 'THIS FUCKING STATUS');
       } else {
         Alert.alert('Registration failed, please try again later');
       }

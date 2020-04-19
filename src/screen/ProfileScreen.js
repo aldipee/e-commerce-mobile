@@ -219,7 +219,22 @@ function ProfileScreen(props) {
                   titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
                   bottomDivider
                 />
-                {['Alamat', 'Tanggal lahir'].map((data, index) => (
+                <ListItem
+                  containerStyle={{paddingLeft: 1}}
+                  title={'Alamat'}
+                  subtitle={
+                    profileData.address &&
+                    `${profileData.address[0].street}, ${
+                      profileData.address[0].city
+                    }, ${profileData.address[0].district} - ${
+                      profileData.address[0].postcode
+                    }`
+                  }
+                  rightTitleStyle={{fontSize: 11}}
+                  titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
+                  bottomDivider
+                />
+                {/* {['Alamat', 'Tanggal lahir'].map((data, index) => (
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('AddAddress')}>
                     <ListItem
@@ -231,7 +246,7 @@ function ProfileScreen(props) {
                       chevron
                     />
                   </TouchableOpacity>
-                ))}
+                ))} */}
               </View>
             </View>
             {/* End of Data diri */}
