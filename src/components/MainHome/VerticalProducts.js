@@ -66,7 +66,11 @@ export default function HorizontalProducts({title, items, navigation}) {
                   }}>
                   {convertToRupiah(data.price)}
                 </Text>
-                <Text style={{fontSize: 9, marginTop: 9}}>300 Terjual</Text>
+                <Text style={{fontSize: 9, marginTop: 9}}>
+                  {data.soldProduct[0] === null
+                    ? `0 terjual`
+                    : `${data.soldProduct[0]} terjual`}
+                </Text>
               </View>
             </View>
             <View style={{padding: 10}}>

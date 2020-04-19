@@ -36,7 +36,7 @@ function NoData(props) {
 
 const localStyle = StyleSheet.create({
   container: {
-    paddingTop: 250,
+    paddingTop: 100,
     paddingHorizontal: 20,
   },
 });

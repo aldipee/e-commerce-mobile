@@ -19,6 +19,7 @@ import AddAddress from './screen/User/AddAddress';
 import Invoice from './screen/Payment/Invoice';
 import PaymentSuccess from './screen/Payment/PaymentSucces';
 import DataNotFound from './screen/Others/DataNotFound';
+import colors from './config/colors';
 
 const Stack = createStackNavigator();
 
@@ -55,7 +56,11 @@ class Index extends Component {
           />
           <Stack.Screen
             name="TrxDetails"
-            options={{headerShown: true}}
+            options={{
+              headerShown: true,
+              title: 'Transaksi Detail',
+              headerTintColor: colors.SECOND_BLUE,
+            }}
             component={DetailsTransactions}
           />
           <Stack.Screen

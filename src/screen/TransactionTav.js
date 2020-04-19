@@ -13,8 +13,14 @@ function MyTabs() {
       <Tab.Navigator
         tabBarOptions={{
           scrollEnabled: true,
-          labelStyle: {fontSize: 12},
-          tabStyle: {width: 130},
+          labelStyle: {fontSize: 14},
+          lazy: true,
+          tabStyle: {width: 100},
+          style: {
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
+          },
         }}>
         <Tab.Screen
           name="AllTrx"
