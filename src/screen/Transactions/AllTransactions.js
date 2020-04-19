@@ -1,56 +1,69 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
   RefreshControl,
   StyleSheet,
   ScrollView,
   Alert,
-} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import {Card, Button, ListItem, CheckBox} from 'react-native-elements';
-import DataNotFound from '../Others/DataNotFound';
-import colors from '../../config/colors';
-import {getTransaction} from '../../redux/actions/AuthActions';
-import {convertToRupiah, converDate} from '../../utils/convert';
-import {getStatus} from '../../utils/showDetail';
-import {connect} from 'react-redux';
-import Modal from 'react-native-modal';
-import Icon from 'react-native-vector-icons/AntDesign';
+} from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
+import { Card, Button, ListItem, CheckBox } from 'react-native-elements'
+import DataNotFound from '../Others/DataNotFound'
+import colors from '../../config/colors'
+import { getTransaction } from '../../redux/actions/AuthActions'
+import { convertToRupiah, converDate } from '../../utils/convert'
+import { getStatus } from '../../utils/showDetail'
+import { connect } from 'react-redux'
+import Modal from 'react-native-modal'
+import Icon from 'react-native-vector-icons/AntDesign'
 
-import myColors from '../../config/colors';
-import {API} from '../../config/server';
+import myColors from '../../config/colors'
+import { API } from '../../config/server'
 
 function AllTransactions(props) {
-  const [sortKey, setSortKey] = useState(0);
-  const [sortValue, setSortValue] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const toggleModal = () => setShowModal(!showModal);
+  const [sortKey, setSortKey] = useState(1)
+  const [sortValue, setSortValue] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [showModal, setShowModal] = useState(false)
+  const toggleModal = () => setShowModal(!showModal)
   useFocusEffect(
     useCallback(() => {
-      setIsLoading(true);
+      setIsLoading(true)
       setTimeout(() => {
-        props.getTransaction(props.route.params && props.route.params.itemId);
-        setIsLoading(false);
-      }, 1000);
-    }, []),
-  );
+        props.getTransaction(props.route.params && props.route.params.itemId, {
+          key: 0,
+          sort: sortValue,
+        })
+        setIsLoading(false)
+      }, 1000)
+    }, [])
+  )
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false)
   function wait(timeout) {
     return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
+      setTimeout(resolve, timeout)
+    })
+  }
+
+  const filterNow = () => {
+    const conditions = {
+      key: sortKey,
+      sort: sortValue,
+    }
+    toggleModal()
+    props.getTransaction(props.route.params && props.route.params.itemId, conditions)
   }
   const onRefresh = React.useCallback(() => {
-    Alert.alert('SSSS');
-  }, []);
+    Alert.alert('SSSS')
+  }, [isLoading])
 
-  let items;
+  let items
   if (!props.data) {
-    items = <DataNotFound message="Yaah, kamu gak punya transaksi nih" />;
+    items = <DataNotFound message="Yaah, kamu gak punya transaksi nih" />
   } else {
     items = (
       <>
@@ -62,7 +75,7 @@ function AllTransactions(props) {
                 userData: props.userData,
               })
             }>
-            <Card containerStyle={{borderWidth: 0}}>
+            <Card containerStyle={{ borderWidth: 0 }}>
               <View>
                 <View
                   style={{
@@ -80,29 +93,21 @@ function AllTransactions(props) {
                     borderBottomWidth: 1,
                     paddingBottom: 10,
                   }}>
-                  <Text style={{fontSize: 15}}>
-                    {converDate(data.created_at)}
-                  </Text>
+                  <Text style={{ fontSize: 15 }}>{converDate(data.created_at)}</Text>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{color: myColors.MAIN_GREY}}>
-                      Nomor Transaksi :
-                    </Text>
-                    <Text style={{color: myColors.MAIN_GREY}}>{`TR0000${
-                      data.id
-                    }`}</Text>
+                    <Text style={{ color: myColors.MAIN_GREY }}>Nomor Transaksi :</Text>
+                    <Text style={{ color: myColors.MAIN_GREY }}>{`TR0000${data.id}`}</Text>
                   </View>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{color: myColors.MAIN_GREY}}>
-                      Nomor Invoice :
-                    </Text>
+                    <Text style={{ color: myColors.MAIN_GREY }}>Nomor Invoice :</Text>
                     <Text
                       style={{
                         color: myColors.MAIN_GREY,
@@ -113,20 +118,18 @@ function AllTransactions(props) {
                 {/* Product */}
                 <View>
                   <ListItem
-                    containerStyle={{marginVertical: 2}}
+                    containerStyle={{ marginVertical: 2 }}
                     title={`${data.transactionDetail[0].name}`}
-                    titleStyle={{fontSize: 14, paddingBottom: 5}}
+                    titleStyle={{ fontSize: 14, paddingBottom: 5 }}
                     subtitle={
                       data.transactionDetail.length > 1
-                        ? `${data.transactionDetail[0].quantity} pasang + ${data
-                            .transactionDetail.length - 1} produk lain`
+                        ? `${data.transactionDetail[0].quantity} pasang + ${data.transactionDetail
+                            .length - 1} produk lain`
                         : `${data.transactionDetail[0].quantity} pasang`
                     }
                     leftAvatar={{
                       source: {
-                        uri: API.API_URL_STATIC.concat(
-                          data.transactionDetail[0].picture,
-                        ),
+                        uri: API.API_URL_STATIC.concat(data.transactionDetail[0].picture),
                       },
                       rounded: false,
                     }}
@@ -142,29 +145,27 @@ function AllTransactions(props) {
                     alignItems: 'center',
                   }}>
                   <Text>Total Pembayaran:</Text>
-                  <Text style={{fontSize: 17}}>
-                    {convertToRupiah(data.total_price)}
-                  </Text>
+                  <Text style={{ fontSize: 17 }}>{convertToRupiah(data.total_price)}</Text>
                 </View>
               </View>
             </Card>
           </TouchableOpacity>
         ))}
       </>
-    );
+    )
   }
 
   return (
     <View>
-      <Modal isVisible={showModal} style={{margin: 0}} coverScreen={true}>
-        <View style={{flex: 1}}>
+      <Modal isVisible={showModal} style={{ margin: 0 }} coverScreen={true}>
+        <View style={{ flex: 1 }}>
           <View
             style={{
               backgroundColor: colors.WHITE,
               position: 'absolute',
               bottom: 0,
               width: '100%',
-              height: 330,
+              height: 310,
             }}>
             <View
               style={{
@@ -175,15 +176,15 @@ function AllTransactions(props) {
                 alignContent: 'center',
                 flexDirection: 'row',
               }}>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>Filter</Text>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Filter</Text>
               <TouchableOpacity onPress={toggleModal}>
                 <Icon name="close" size={23} />
               </TouchableOpacity>
             </View>
-            <View style={{paddingHorizontal: 15, paddingVertical: 10}}>
+            <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
               <View
                 style={{
-                  width: 100,
+                  width: 90,
                   flexDirection: 'row',
                   marginTop: 10,
                   justifyContent: 'space-between',
@@ -191,16 +192,17 @@ function AllTransactions(props) {
                 }}
               />
               <Text>Sorting berdasarkan</Text>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <CheckBox
                   onPress={() => setSortKey(1)}
                   center
                   title="Total "
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
-                  checked={sortKey ? true : 0}
+                  checked={sortKey ? true : false}
                 />
                 <CheckBox
+                  onPress={() => setSortKey(0)}
                   center
                   title="Tanggal"
                   checkedIcon="dot-circle-o"
@@ -209,29 +211,30 @@ function AllTransactions(props) {
                 />
               </View>
               <Text>Urutan</Text>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <CheckBox
-                  onPress={() => setSortValue(1)}
+                  onPress={() => setSortValue(0)}
                   center
                   title="Terbesar"
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
-                  checked={sortValue ? true : 0}
+                  checked={!sortValue ? true : false}
                 />
                 <CheckBox
-                  onPress={() => setSortValue(0)}
+                  onPress={() => setSortValue(1)}
                   center
                   title="Terkecil"
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
-                  checked={!sortValue ? true : false}
+                  checked={sortValue ? true : false}
                 />
               </View>
               <Button
-                containerStyle={{marginTop: 40}}
-                titleStyle={{fontSize: 14}}
-                title="Tambah ke keranjang"
-                buttonStyle={{backgroundColor: colors.ORANGE}}
+                onPress={filterNow}
+                containerStyle={{ marginTop: 10 }}
+                titleStyle={{ fontSize: 14 }}
+                title="Terapkan"
+                buttonStyle={{ backgroundColor: colors.ORANGE }}
               />
             </View>
           </View>
@@ -239,13 +242,12 @@ function AllTransactions(props) {
       </Modal>
       <View>
         <View style={localStyle.fixedFooter}>
-          <View style={{width: 300}}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ width: 300 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
               <Button
                 onPress={toggleModal}
-                containerStyle={{margin: 0, justifyContent: 'flex-end'}}
-                titleStyle={{fontSize: 14}}
+                containerStyle={{ margin: 0, justifyContent: 'flex-end' }}
+                titleStyle={{ fontSize: 14 }}
                 title="Filter"
                 buttonStyle={{
                   backgroundColor: colors.ORANGE,
@@ -265,7 +267,7 @@ function AllTransactions(props) {
             />
           }>
           {!isLoading ? (
-            <View style={{marginTop: 10}}>{items}</View>
+            <View style={{ marginTop: 10 }}>{items}</View>
           ) : (
             <View
               style={{
@@ -280,7 +282,7 @@ function AllTransactions(props) {
         </ScrollView>
       </View>
     </View>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -304,17 +306,17 @@ const localStyle = StyleSheet.create({
     left: 0,
     right: 0,
   },
-});
+})
 
 const mapStateToProps = state => {
   return {
     data: state.authData.history,
     userData: state.authData.profileData,
-  };
-};
+  }
+}
 
-const mapDispatchToProps = {getTransaction};
+const mapDispatchToProps = { getTransaction }
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(AllTransactions);
+  mapDispatchToProps
+)(AllTransactions)

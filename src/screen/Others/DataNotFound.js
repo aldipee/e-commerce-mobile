@@ -1,16 +1,16 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 
-import {ScrollView} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/AntDesign';
-import myColors from '../../config/colors';
+import { ScrollView } from 'react-native-gesture-handler'
+import Icon from 'react-native-vector-icons/AntDesign'
+import myColors from '../../config/colors'
 
 function NoData(props) {
   return (
     <ScrollView>
       <View style={localStyle.container}>
         {/* Detail Pengiriman */}
-        <View style={{marginBottom: 20}}>
+        <View style={{ marginBottom: 20 }}>
           <View
             style={{
               justifyContent: 'center',
@@ -31,7 +31,7 @@ function NoData(props) {
         </View>
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -39,6 +39,6 @@ const localStyle = StyleSheet.create({
     paddingTop: 100,
     paddingHorizontal: 20,
   },
-});
+})
 
-export default NoData;
+export default NoData

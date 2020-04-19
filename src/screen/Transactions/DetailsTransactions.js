@@ -1,14 +1,14 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Card, ListItem} from 'react-native-elements';
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import { Card, ListItem } from 'react-native-elements'
 
-import myColors from '../../config/colors';
-import {ScrollView} from 'react-native-gesture-handler';
-import {converDate, convertToRupiah} from '../../utils/convert';
-import {getStatus} from '../../utils/showDetail';
-import {API} from '../../config/server';
+import myColors from '../../config/colors'
+import { ScrollView } from 'react-native-gesture-handler'
+import { converDate, convertToRupiah } from '../../utils/convert'
+import { getStatus } from '../../utils/showDetail'
+import { API } from '../../config/server'
 function DetailsTransactions(props) {
-  const {data, userData} = props.route.params;
+  const { data, userData } = props.route.params
   return (
     <ScrollView>
       <View style={localStyle.container}>
@@ -23,23 +23,19 @@ function DetailsTransactions(props) {
         </View>
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Nomor Transaksi</Text>
-          <Text style={{fontSize: 14}}>{`TRX0000${data.id}`}</Text>
+          <Text style={{ fontSize: 14 }}>{`TRX0000${data.id}`}</Text>
         </View>
 
         {/* Informasi Pesanan */}
 
         <View>
-          <Text style={{fontSize: 15, fontWeight: 'bold', marginTop: 20}}>
-            Informasi Pesanan
-          </Text>
+          <Text style={{ fontSize: 15, fontWeight: 'bold', marginTop: 20 }}>Informasi Pesanan</Text>
           {data.transactionDetail.map((item, index) => (
             <ListItem
-              containerStyle={{marginVertical: 2}}
+              containerStyle={{ marginVertical: 2 }}
               title={item.name}
-              titleStyle={{fontSize: 14, paddingBottom: 5}}
-              subtitle={`${convertToRupiah(item.price)} | ${
-                item.quantity
-              } Pasang`}
+              titleStyle={{ fontSize: 14, paddingBottom: 5 }}
+              subtitle={`${convertToRupiah(item.price)} | ${item.quantity} Pasang`}
               leftAvatar={{
                 source: {
                   uri: API.API_URL_STATIC.concat(item.picture),
@@ -53,9 +49,7 @@ function DetailsTransactions(props) {
         </View>
         {/* Detail Pengiriman */}
         <View>
-          <Text style={{fontSize: 15, fontWeight: 'bold', marginTop: 20}}>
-            Detail Pengiriman
-          </Text>
+          <Text style={{ fontSize: 15, fontWeight: 'bold', marginTop: 20 }}>Detail Pengiriman</Text>
 
           <View style={[localStyle.details, localStyle.inline]}>
             <Text>Kurir</Text>
@@ -67,16 +61,14 @@ function DetailsTransactions(props) {
           </View>
           <View style={[localStyle.inline, localStyle.details]}>
             <Text>Alamat Pengiriman</Text>
-            <Text>{`${userData.full_name}, ${userData.phone}, ${
-              userData.address[0].street
-            } ${userData.address[0].city} ${
-              userData.address[0].district
-            }`}</Text>
+            <Text>{`${userData.full_name}, ${userData.phone}, ${userData.address[0].street} ${
+              userData.address[0].city
+            } ${userData.address[0].district}`}</Text>
           </View>
         </View>
         {/* Detail Pembayaran */}
         <View>
-          <Text style={{fontSize: 15, fontWeight: 'bold', marginTop: 20}}>
+          <Text style={{ fontSize: 15, fontWeight: 'bold', marginTop: 20 }}>
             Detail Pemabayaran
           </Text>
           <Card>
@@ -93,9 +85,7 @@ function DetailsTransactions(props) {
               <Text>{convertToRupiah(data.postal_fee)}</Text>
             </View>
             <View style={[localStyle.inline, localStyle.totalContainer]}>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                Total Pembayaran
-              </Text>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Total Pembayaran</Text>
               <Text
                 style={{
                   fontSize: 16,
@@ -109,7 +99,7 @@ function DetailsTransactions(props) {
         </View>
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -146,6 +136,6 @@ const localStyle = StyleSheet.create({
   status: {
     color: myColors.GREEN,
   },
-});
+})
 
-export default DetailsTransactions;
+export default DetailsTransactions
