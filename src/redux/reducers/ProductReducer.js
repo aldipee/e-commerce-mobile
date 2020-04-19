@@ -18,7 +18,7 @@ export default (state = initialState, {type, payload}) => {
     }
 
     case SET_LOADING_PRODUCT: {
-      return {...state, isLoading: payload};
+      return {...state, isLoading: true};
     }
 
     default:

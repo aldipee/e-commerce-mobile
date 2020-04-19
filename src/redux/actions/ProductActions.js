@@ -10,9 +10,8 @@ export const getProducts = query => async dispatch => {
   try {
     setLoading();
     query =
-      query || 'product/all?search[key]=products.name&search[value]=&limit=10';
+      query || 'product/all?search[key]=products.name&search[value]=&limit=100';
     const result = await axios.get(API.API_URL.concat(query));
-    console.log(result, 'Here from Product actions');
     if (result.data.success) {
       dispatch({
         type: GET_PRODUCTS,
@@ -24,10 +23,9 @@ export const getProducts = query => async dispatch => {
   }
 };
 
-export const setLoading = () => {
-  console.log('SSSSSSSSSSSSSSSSSSSss');
-  return {
+export const setLoading = () => async dispatch => {
+  dispatch({
     type: SET_LOADING_PRODUCT,
     payload: true,
-  };
+  });
 };

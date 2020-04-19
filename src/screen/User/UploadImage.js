@@ -1,14 +1,15 @@
-import React, {Component} from 'react';
-import {Text, View, ScrollView, StyleSheet, Platform} from 'react-native';
-import {Card, Avatar, Button} from 'react-native-elements';
+import React, { Component } from 'react';
+import { Text, View, ScrollView, StyleSheet, Platform } from 'react-native';
+import { Card, Avatar, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {connect} from 'react-redux';
-import {API} from '../../config/server';
+import { connect } from 'react-redux';
+import { API } from '../../config/server';
 import ImagePicker from 'react-native-image-picker';
+import fetch from 'node-fetch';
 
 // Local
 import myColors from '../../config/colors';
-import {setLogout} from '../../redux/actions/AuthActions';
+import { setLogout } from '../../redux/actions/AuthActions';
 import axios from 'axios';
 
 class UploadImage extends Component {
@@ -55,21 +56,29 @@ class UploadImage extends Component {
   };
   uploadPicture = async () => {
     console.log('mulai upload');
+    let File = { ...this.state.image };
+    const data = new FormData();
+    data.append('picture', File);
+    fetch('https://httpbin.org/post', {
+      method: 'put',
+      body: data,
+    })
+      .then(res => res.json())
+      .then(json => console.log(json)).catch(err => console.log({ err }));
+    // try {
+    //   const data = new FormData();
+    //   let File = { ...this.state.image };
+    //   console.log(File);
+    //   data.append('picture', File); // you can append anyone.
 
-    try {
-      const data = new FormData();
-      let File = {...this.state.image};
-      console.log(File);
-      data.append('picture', File); // you can append anyone.
-      data.append('name', 'xie');
 
-      const res = await axios.patch(
-        API.API_URL.concat('auth/update-pic'),
-        data,
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    //   const res = await axios.patch(
+    //     API.API_URL.concat('auth/update-pic'),
+    //     data,
+    //   );
+    // } catch (error) {
+    //   console.log({ error });
+    // }
   };
 
   render() {
@@ -107,7 +116,7 @@ class UploadImage extends Component {
             Abi Daniela
           </Text>
         </View>
-        <View style={{paddingHorizontal: 10, backgroundColor: '#fff'}}>
+        <View style={{ paddingHorizontal: 10, backgroundColor: '#fff' }}>
           {/* Balance Info */}
           <View>
             <Card
@@ -130,8 +139,8 @@ class UploadImage extends Component {
                     borderColor: myColors.MAIN_GREY,
                   }}>
                   <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
-                  <View style={{marginLeft: 10}}>
-                    <Text style={{fontSize: 9, textTransform: 'uppercase'}}>
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={{ fontSize: 9, textTransform: 'uppercase' }}>
                       Saldo Dompet
                     </Text>
                     <Text
@@ -147,16 +156,16 @@ class UploadImage extends Component {
                 <Button
                   title="Top up"
                   type="outline"
-                  titleStyle={{fontSize: 13, paddingHorizontal: 10}}
+                  titleStyle={{ fontSize: 13, paddingHorizontal: 10 }}
                 />
               </View>
             </Card>
           </View>
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <Button
               onPress={this.uploadPicture}
               title="Upload"
-              buttonStyle={{backgroundColor: myColors.ORANGE}}
+              buttonStyle={{ backgroundColor: myColors.ORANGE }}
             />
           </View>
         </View>
@@ -171,10 +180,10 @@ const localStyle = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
   },
-  iconDesc: {fontSize: 11, alignItems: 'center'},
+  iconDesc: { fontSize: 11, alignItems: 'center' },
 });
 
 export default connect(
   null,
-  {setLogout},
+  { setLogout },
 )(UploadImage);
