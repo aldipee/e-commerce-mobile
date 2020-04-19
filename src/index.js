@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Linking, Platform } from 'react-native'
 import { connect } from 'react-redux'
 // Screens Import
 import SignUp from '../src/screen/SignUp'
@@ -18,7 +17,9 @@ import CartDetails from './screen/Cart/CartDetails'
 import AddAddress from './screen/User/AddAddress'
 import Invoice from './screen/Payment/Invoice'
 import PaymentSuccess from './screen/Payment/PaymentSucces'
-import DataNotFound from './screen/Others/DataNotFound'
+import confirmUsername from './screen/User/ForgotPasswordUsername'
+import ConfirmOTP from './screen/User/ConfirmOTP'
+import PasswordChanged from './screen/PasswordChangesSuccess'
 import colors from './config/colors'
 
 const Stack = createStackNavigator()
@@ -29,7 +30,23 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" options={{ headerShown: false }} component={MainHome} />
-          <Stack.Screen name="PaymentSuccess" options={{ headerShown: false }} component={PaymentSuccess} />
+          <Stack.Screen
+            name="ForgotPasswordUsername"
+            options={{ headerShown: false }}
+            component={confirmUsername}
+          />
+          <Stack.Screen name="ConfirmOTP" options={{ headerShown: false }} component={ConfirmOTP} />
+          <Stack.Screen
+            name="PasswordChanged"
+            options={{ headerShown: false }}
+            component={PasswordChanged}
+          />
+
+          <Stack.Screen
+            name="PaymentSuccess"
+            options={{ headerShown: false }}
+            component={PaymentSuccess}
+          />
 
           <Stack.Screen name="Invoice" options={{ headerShown: true }} component={Invoice} />
           <Stack.Screen
@@ -57,10 +74,26 @@ class Index extends Component {
             component={ProductDetailScreen}
           />
 
-          <Stack.Screen name="SearchScreen" options={{ headerShown: true }} component={SearchScreen} />
-          <Stack.Screen name="TrxList" options={{ headerShown: false }} component={TransactionList} />
-          <Stack.Screen name="UploadImage" options={{ headerShown: false }} component={UploadImage} />
-          <Stack.Screen name="SignUp" options={{ title: 'SignUp', headerShown: true }} component={SignUp} />
+          <Stack.Screen
+            name="SearchScreen"
+            options={{ headerShown: true }}
+            component={SearchScreen}
+          />
+          <Stack.Screen
+            name="TrxList"
+            options={{ headerShown: false }}
+            component={TransactionList}
+          />
+          <Stack.Screen
+            name="UploadImage"
+            options={{ headerShown: false }}
+            component={UploadImage}
+          />
+          <Stack.Screen
+            name="SignUp"
+            options={{ title: 'SignUp', headerShown: true }}
+            component={SignUp}
+          />
           <Stack.Screen
             name="LoginScreen"
             options={{ title: 'SignUp', headerShown: false }}

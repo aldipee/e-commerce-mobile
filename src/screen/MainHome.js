@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, { useEffect } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import {Linking, Platform, Alert} from 'react-native';
+import { Linking, Platform, Alert } from 'react-native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // Screen Import
@@ -11,7 +11,7 @@ import HomeScreen from '../screen/HomeScreen';
 import ProfileScreen from '../screen/ProfileScreen';
 import TransactionsList from '../screen/TransactionTav';
 import Cart from '../screen/Cart';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 const BottomTab = createBottomTabNavigator();
 
 function MainHome(props) {
@@ -33,13 +33,13 @@ function MainHome(props) {
 
   const navigate = url => {
     // E
-    const {navigate} = props.navigation;
+    const { navigate } = props.navigation;
     const route = url.replace(/.*?:\/\//g, '');
     const id = route.match(/\/([^\/]+)\/?$/)[1];
     const routeName = route.split('/')[0];
 
     if (routeName === 'people') {
-      navigate('LoginScreen', {id, name: 'chris'});
+      navigate('LoginScreen', { id, name: 'chris' });
     }
   };
   return (
@@ -52,7 +52,7 @@ function MainHome(props) {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Telusuri',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FeatherIcon name="search" size={size} color={color} />
           ),
         }}
@@ -62,7 +62,7 @@ function MainHome(props) {
         component={props.auth.isLogin ? TransactionsList : LoginScreen}
         options={{
           tabBarLabel: 'Transaksi',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <IonIcon name="md-paper" size={size} color={color} />
           ),
         }}
@@ -72,7 +72,7 @@ function MainHome(props) {
         component={Cart}
         options={{
           tabBarLabel: 'Keranjang',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <IonIcon name="md-cart" size={size} color={color} />
           ),
         }}
@@ -82,7 +82,7 @@ function MainHome(props) {
         component={props.auth.isLogin ? ProfileScreen : LoginScreen}
         options={{
           tabBarLabel: 'Akun',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FeatherIcon name="user" size={size} color={color} />
           ),
         }}

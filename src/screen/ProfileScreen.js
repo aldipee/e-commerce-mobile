@@ -1,5 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {useFocusEffect} from '@react-navigation/native';
+import React, { useState, useCallback, useEffect } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import {
   Text,
   View,
@@ -8,47 +8,47 @@ import {
   StatusBar,
   SafeAreaView,
   ActivityIndicator,
-} from 'react-native';
-import {Card, colors, Avatar, Button, ListItem} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {connect} from 'react-redux';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import {convertToRupiah} from '../utils/convert';
-import {getProfileDetail} from '../redux/actions/AuthActions';
+} from 'react-native'
+import { Card, colors, Avatar, Button, ListItem } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/AntDesign'
+import { connect } from 'react-redux'
+import FeatherIcon from 'react-native-vector-icons/Feather'
+import { convertToRupiah } from '../utils/convert'
+import { getProfileDetail } from '../redux/actions/AuthActions'
 
 // Local
-import myColors from '../config/colors';
-import {setLogout} from '../redux/actions/AuthActions';
-import MainHome from '../screen/MainHome';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {API} from '../config/server';
+import myColors from '../config/colors'
+import { setLogout } from '../redux/actions/AuthActions'
+import MainHome from '../screen/MainHome'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { API } from '../config/server'
 
 function ProfileScreen(props) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [profileDataa, setProfileData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true)
+  const [profileDataa, setProfileData] = useState(null)
   useFocusEffect(
     useCallback(() => {
-      props.getProfileDetail();
+      props.getProfileDetail()
       async function getData() {
-        const data = fetchData();
-        return data;
+        const data = fetchData()
+        return data
       }
       getData().then(data => {
-        console.log(data);
-        setProfileData(data);
-        setIsLoading(false);
-      });
-    }, []),
-  );
-  useEffect(() => {}, []);
+        console.log(data)
+        setProfileData(data)
+        setIsLoading(false)
+      })
+    }, [])
+  )
+  useEffect(() => {}, [])
 
   const fetchData = () => {
     return new Promise((resolve, reject) => {
       if (props.data.token !== '') {
-        resolve(props.data);
+        resolve(props.data)
       }
-    });
-  };
+    })
+  }
 
   // useEffect(() => {
   //   props.getProfileDetail();
@@ -57,13 +57,13 @@ function ProfileScreen(props) {
   const onLogout = status => {
     props.setLogout(data => {
       if (data) {
-        props.navigation.navigate('Home');
+        props.navigation.navigate('Home')
       } else {
       }
-    });
-  };
+    })
+  }
 
-  const {profileData} = props.data;
+  const { profileData } = props.data
   return (
     <ScrollView>
       {profileData && (
@@ -82,9 +82,7 @@ function ProfileScreen(props) {
               rounded
               size="large"
               source={{
-                uri: profileData.photo
-                  ? API.API_URL_STATIC.concat(profileData.photo)
-                  : null,
+                uri: profileData.photo ? API.API_URL_STATIC.concat(profileData.photo) : null,
               }}
               title={profileData.photo ? profileData.photo : 'AP'}
               onPress={() => props.navigation.navigate('UploadImage')}
@@ -100,7 +98,7 @@ function ProfileScreen(props) {
               {profileData.full_name}
             </Text>
           </View>
-          <View style={{paddingHorizontal: 10, backgroundColor: '#fff'}}>
+          <View style={{ paddingHorizontal: 10, backgroundColor: '#fff' }}>
             {/* Balance Info */}
             <View>
               <Card
@@ -122,39 +120,30 @@ function ProfileScreen(props) {
                       paddingRight: 17,
                       borderColor: myColors.MAIN_GREY,
                     }}>
-                    <Icon
-                      name="wallet"
-                      size={35}
-                      color={myColors.SECOND_BLUE}
-                    />
-                    <View style={{marginLeft: 10}}>
-                      <Text style={{fontSize: 9, textTransform: 'uppercase'}}>
-                        Saldo Dompet
-                      </Text>
+                    <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
+                    <View style={{ marginLeft: 10 }}>
+                      <Text style={{ fontSize: 9, textTransform: 'uppercase' }}>Saldo Dompet</Text>
                       <Text
                         style={{
                           fontSize: 13,
                           color: myColors.SECOND_BLUE,
                           fontWeight: 'bold',
                         }}>
-                        {profileData &&
-                          profileData.balance &&
-                          convertToRupiah(profileData.balance)}
+                        {profileData && profileData.balance && convertToRupiah(profileData.balance)}
                       </Text>
                     </View>
                   </View>
                   <Button
                     title="Top up"
                     type="outline"
-                    titleStyle={{fontSize: 13, paddingHorizontal: 10}}
+                    titleStyle={{ fontSize: 13, paddingHorizontal: 10 }}
                   />
                 </View>
               </Card>
             </View>
             {/* Purhcase History */}
-            <View style={{marginTop: 25}}>
-              <Text
-                style={{fontSize: 16, fontWeight: 'bold', marginBottom: 10}}>
+            <View style={{ marginTop: 25 }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>
                 Riwayat Transaksi
               </Text>
               <View
@@ -164,74 +153,57 @@ function ProfileScreen(props) {
                   justifyContent: 'space-between',
                 }}>
                 <View style={localStyle.iconBox}>
-                  <FeatherIcon
-                    name="credit-card"
-                    color={myColors.MAIN_GREY}
-                    size={30}
-                  />
+                  <FeatherIcon name="credit-card" color={myColors.MAIN_GREY} size={30} />
                   <Text style={localStyle.iconDesc}> Menunggu Pembayaran</Text>
                 </View>
                 <View style={localStyle.iconBox}>
-                  <FeatherIcon
-                    name="box"
-                    color={myColors.MAIN_GREY}
-                    size={30}
-                  />
+                  <FeatherIcon name="box" color={myColors.MAIN_GREY} size={30} />
                   <Text style={localStyle.iconDesc}> Diproses</Text>
                 </View>
                 <View style={localStyle.iconBox}>
-                  <FeatherIcon
-                    name="truck"
-                    color={myColors.MAIN_GREY}
-                    size={30}
-                  />
+                  <FeatherIcon name="truck" color={myColors.MAIN_GREY} size={30} />
                   <Text style={localStyle.iconDesc}> Dikirim</Text>
                 </View>
                 <View style={localStyle.iconBox}>
-                  <FeatherIcon
-                    name="box"
-                    color={myColors.MAIN_GREY}
-                    size={30}
-                  />
+                  <FeatherIcon name="box" color={myColors.MAIN_GREY} size={30} />
                   <Text style={localStyle.iconDesc}> Selesai</Text>
                 </View>
               </View>
             </View>
             {/* Data Diri Here */}
-            <View style={{marginVertical: 30}}>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>Data Diri</Text>
+            <View style={{ marginVertical: 30 }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Data Diri</Text>
               <View>
                 <ListItem
-                  containerStyle={{paddingLeft: 1}}
+                  containerStyle={{ paddingLeft: 1 }}
                   title={'Email'}
                   subtitle={profileData && profileData.email}
                   rightTitle={'Terverifikasi'}
-                  rightTitleStyle={{fontSize: 11}}
-                  titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
+                  rightTitleStyle={{ fontSize: 11 }}
+                  titleStyle={{ fontSize: 12, color: myColors.MAIN_GREY }}
                   bottomDivider
                 />
                 <ListItem
-                  containerStyle={{paddingLeft: 1}}
+                  containerStyle={{ paddingLeft: 1 }}
                   title={'Nomor Handphone'}
                   subtitle={profileData && profileData.phone}
                   rightTitle={'Terverifikasi'}
-                  rightTitleStyle={{fontSize: 11}}
-                  titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
+                  rightTitleStyle={{ fontSize: 11 }}
+                  titleStyle={{ fontSize: 12, color: myColors.MAIN_GREY }}
                   bottomDivider
                 />
                 <ListItem
-                  containerStyle={{paddingLeft: 1}}
+                  containerStyle={{ paddingLeft: 1 }}
                   title={'Alamat'}
                   subtitle={
                     profileData.address &&
-                    `${profileData.address[0].street}, ${
-                      profileData.address[0].city
-                    }, ${profileData.address[0].district} - ${
-                      profileData.address[0].postcode
-                    }`
+                    profileData.address.length &&
+                    `${profileData.address[0].street}, ${profileData.address[0].city}, ${
+                      profileData.address[0].district
+                    } - ${profileData.address[0].postcode}`
                   }
-                  rightTitleStyle={{fontSize: 11}}
-                  titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
+                  rightTitleStyle={{ fontSize: 11 }}
+                  titleStyle={{ fontSize: 12, color: myColors.MAIN_GREY }}
                   bottomDivider
                 />
                 {/* {['Alamat', 'Tanggal lahir'].map((data, index) => (
@@ -250,11 +222,11 @@ function ProfileScreen(props) {
               </View>
             </View>
             {/* End of Data diri */}
-            <View style={{marginBottom: 20}}>
+            <View style={{ marginBottom: 20 }}>
               <Button
                 onPress={onLogout}
                 title="Logout"
-                buttonStyle={{backgroundColor: myColors.ORANGE}}
+                buttonStyle={{ backgroundColor: myColors.ORANGE }}
               />
             </View>
           </View>
@@ -262,7 +234,7 @@ function ProfileScreen(props) {
       )}
       {/* Avatar and Picture */}
     </ScrollView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -271,16 +243,16 @@ const localStyle = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
   },
-  iconDesc: {fontSize: 11, alignItems: 'center'},
-});
+  iconDesc: { fontSize: 11, alignItems: 'center' },
+})
 
 const masStateToProps = state => {
   return {
     data: state.authData,
-  };
-};
+  }
+}
 
 export default connect(
   masStateToProps,
-  {setLogout, getProfileDetail},
-)(ProfileScreen);
+  { setLogout, getProfileDetail }
+)(ProfileScreen)

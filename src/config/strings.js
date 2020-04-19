@@ -6,6 +6,6 @@ const strings = {
   USERNAME_PLACEHOLDER: 'Pick a username',
   CONFIRM_PASSWORD: 'Confirm password',
   REGISTER: 'Create account',
-};
+}
 
-export default strings;
+export default strings

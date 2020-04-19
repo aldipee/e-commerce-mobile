@@ -5,6 +5,7 @@ import {
   CREATE_NEW_USER,
   UPLOAD_USER_PICTURE,
   GET_ALL_USER_TRANSACTIONS,
+  GET_ALL_USER_TRANSACTIONS_ON_LOAD_MORE,
   GET_PROFILE_DETAILS,
 } from '../actions/type'
 import { API } from '../../config/server'
@@ -19,8 +20,9 @@ export const setLogin = (data, callback) => async dispatch => {
   try {
     setLoading()
     const res = await axios.post(API.API_URL.concat('auth/login'), data)
+    await AsyncStorage.removeItem('token')
     const token = await AsyncStorage.setItem('token', res.data.data)
-    console.log(res)
+    console.log(res, 'FROM LOGIN')
     if (res.data.data) {
       dispatch({
         type: SET_LOGIN,
@@ -42,12 +44,28 @@ export const getTransaction = (statusId, conditions) => async dispatch => {
     let defaultSort = conditions.sort ? 1 : 0
     let defaultSortKey = conditions.key ? 'total_price' : 'id'
     console.log({ defaultSortKey, defaultSort })
-    let query = `transactions/user?search[key]=status&search[value]=${statusId}&limit=100&sort[value]=${defaultSort}&sort[key]=${defaultSortKey}`
+    let query = `transactions/user?search[key]=status&search[value]=${statusId}&limit=4&sort[value]=${defaultSort}&sort[key]=${defaultSortKey}`
 
     const res = await axios.get(API.API_URL.concat(query))
     dispatch({
       type: GET_ALL_USER_TRANSACTIONS,
-      payload: res.data.data.data,
+      payload: res.data.data,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const getTransactionLoadMore = (statusId, conditions, page) => async dispatch => {
+  try {
+    let defaultSort = conditions.sort ? 1 : 0
+    let defaultSortKey = conditions.key ? 'total_price' : 'id'
+    console.log({ defaultSortKey, defaultSort })
+    let query = `transactions/user?search[key]=status&search[value]=${statusId}&limit=3&sort[value]=${defaultSort}&sort[key]=${defaultSortKey}&page=${page}`
+
+    const res = await axios.get(API.API_URL.concat(query))
+    dispatch({
+      type: GET_ALL_USER_TRANSACTIONS_ON_LOAD_MORE,
+      payload: res.data.data,
     })
   } catch (error) {
     console.log(error)
@@ -91,6 +109,36 @@ export const setLogout = callback => async dispatch => {
   } catch (error) {
     callback(false)
     console.log(error)
+  }
+}
+
+export const forgotPassword = (username, callback) => async dispatch => {
+  try {
+    const res = await axios.post(API.API_URL.concat(`auth/forgot`), { username })
+    if (res.data.success) {
+      callback(true)
+    } else {
+      callback(false)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const setNewPassword = (otpCode, data, callback) => async dispatch => {
+  try {
+    const res = await axios.post(
+      API.API_URL.concat(`auth/reset-password?resetCode=${otpCode}`),
+      data
+    )
+
+    if (res.data.success) {
+      callback(true)
+    } else {
+      callback(false)
+    }
+  } catch (error) {
+    console.log({ error })
   }
 }
 

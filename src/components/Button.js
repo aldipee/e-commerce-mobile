@@ -1,8 +1,8 @@
-import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import colors from '../config/colors';
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import colors from '../config/colors'
 
-const Button = ({label, onPress, buttonType}) => {
+const Button = ({ label, onPress, buttonType, disabled }) => {
   const styles = StyleSheet.create({
     containers: {
       width: '100%',
@@ -39,18 +39,15 @@ const Button = ({label, onPress, buttonType}) => {
       height: 20,
       fontWeight: 'bold',
     },
-  });
+  })
   return (
     <TouchableOpacity
-      style={
-        buttonType === 'login' ? styles.containers : styles.containersRegister
-      }
+      disabled={disabled}
+      style={buttonType === 'login' ? styles.containers : styles.containersRegister}
       onPress={onPress}>
-      <Text style={buttonType === 'login' ? styles.text : styles.textRegister}>
-        {label}
-      </Text>
+      <Text style={buttonType === 'login' ? styles.text : styles.textRegister}>{label}</Text>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

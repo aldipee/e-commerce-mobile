@@ -1,26 +1,34 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Alert } from 'react-native'
-import Icon from 'react-native-vector-icons/Feather'
-import Button from '../components/Button'
-import Input from '../components/Input'
-import strings from '../config/strings'
-import styles from '../style/index'
-import colors from '../config/colors'
-import AsyncStorage from '@react-native-community/async-storage'
-import { setLogin } from '../redux/actions/AuthActions'
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, Alert, ToastAndroid } from 'react-native'
+import { forgotPassword } from '../../redux/actions/AuthActions'
+import Button from '../../components/Button'
+import Input from '../../components/Input'
+import strings from '../../config/strings'
+import styles from '../../style/index'
+import colors from '../../config/colors'
+import { setLogin, checkUsername } from '../../redux/actions/AuthActions'
 import { connect } from 'react-redux'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
-class Login extends Component {
+class ForgotPassword extends Component {
   state = {
     username: '',
-    password: '',
     error: null,
   }
-  componentDidMount() {
-    AsyncStorage.getItem('token', (err, result) => {
-      if (result) {
-        console.log('HEREEEEE', result)
+
+  checkUser = () => {
+    console.log(this.state.username)
+    this.props.checkUsername(this.state.username, notAvailable => {
+      if (!notAvailable) {
+        this.setState({ error: null })
+        this.props.forgotPassword(this.state.username, success => {
+          if (success) {
+            this.props.navigation.navigate('ConfirmOTP', { username: this.state.username })
+          } else {
+            ToastAndroid.show('Oppss, there is something error', ToastAndroid.SHORT)
+          }
+        })
+      } else {
+        this.setState({ error: `Username does'not exist` })
       }
     })
   }
@@ -51,13 +59,16 @@ class Login extends Component {
         <View style={{ backgroundColor: colors.WHITE, height: 600 }}>
           <Text
             style={{
-              fontSize: 30,
+              fontSize: 20,
               fontWeight: 'bold',
               color: colors.MAIN_GREY,
               marginTop: 60,
               paddingHorizontal: 30,
             }}>
-            Welcome back!
+            Forgot your password?
+          </Text>
+          <Text style={{ paddingHorizontal: 30, color: colors.MAIN_GREY, marginTop: 10 }}>
+            Please submit your username, we will send you OTP code to your phone
           </Text>
           <View style={styles.parent}>
             <View style={localStyles.formContainer}>
@@ -67,24 +78,14 @@ class Login extends Component {
                 label="Username"
                 icon="user"
                 onChangeText={text => this.setState({ username: text.trim() })}
+                errorMessage={this.state.error ? this.state.error : false}
               />
-              <Input
-                autoFocus={true}
-                placeholder="Your password"
-                label="Password"
-                icon="lock"
-                onChangeText={text => this.setState({ password: text.trim() })}
-                errorStyle={{ color: this.state.error ? 'red' : 'white' }}
-                errorMessage={'Username or password invalid'}
+              <Button
+                label={'Send me OTP Code'}
+                buttonType="login"
+                onPress={this.checkUser}
+                disabled={this.state.error || this.state.username === '' ? true : null}
               />
-
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('ForgotPasswordUsername')}>
-                <View>
-                  <Text style={localStyles.forgot}>Forgot password?</Text>
-                </View>
-              </TouchableOpacity>
-              <Button label={strings.LOGIN} buttonType="login" onPress={this.toHome} />
               <Text style={localStyles.or}>Don't have an account yet?</Text>
               <Button label={strings.REGISTER} onPress={this.toRegister} />
             </View>
@@ -99,7 +100,7 @@ const localStyles = StyleSheet.create({
   formContainer: {
     flex: 1,
     width: '90%',
-    marginTop: '10%',
+    marginTop: '3%',
   },
   forgot: {
     marginLeft: 200,
@@ -127,8 +128,8 @@ const localStyles = StyleSheet.create({
     marginTop: 7,
   },
 })
-const mapDispatchToProps = { setLogin }
+const mapDispatchToProps = { setLogin, checkUsername, forgotPassword }
 export default connect(
   null,
   mapDispatchToProps
-)(Login)
+)(ForgotPassword)

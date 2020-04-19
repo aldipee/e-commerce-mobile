@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import colors from '../config/colors';
+import { StyleSheet } from 'react-native'
+import colors from '../config/colors'
 
 const style = StyleSheet.create({
   parent: {
@@ -13,6 +13,6 @@ const style = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.SECOND_BLUE,
   },
-});
+})
 
-export default style;
+export default style
