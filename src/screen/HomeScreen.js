@@ -13,6 +13,12 @@ import {Card, Tile, SearchBar} from 'react-native-elements';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {itemWidth, sliderWidth} from '../style/SlideEntry';
 import Icon from 'react-native-vector-icons/Ionicons';
+//ICON
+import SoccerIcon from 'react-native-vector-icons/FontAwesome';
+import BasketBallIcon from 'react-native-vector-icons/FontAwesome5';
+import SneakerIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CasualIcon from 'react-native-vector-icons/Fontisto';
+
 // Redux
 import {connect} from 'react-redux';
 import {getProducts} from '../redux/actions/ProductActions';
@@ -87,10 +93,10 @@ const localStyle = StyleSheet.create({
     justifyContent: 'space-around',
     flexWrap: 'wrap',
     borderWidth: 1,
-    borderColor: colors.MAIN_GREY,
-    padding: 15,
+    borderColor: colors.SECOND_GREY,
+    padding: 8,
     marginTop: 9,
-    width: 130,
+    width: 110,
   },
 });
 
@@ -220,9 +226,6 @@ const HomeForm = props => {
               tappableDots={!!currentSlider}
             />
           </View>
-          {props.userData && props.userData.username && (
-            <BalanceCard balance={props.userData.balance} />
-          )}
 
           <Card
             containerStyle={{
@@ -231,6 +234,8 @@ const HomeForm = props => {
               borderLeftWidth: 0,
               borderBottomWidth: 0,
               borderRadius: 5,
+              marginBottom: 30,
+              marginTop: -10,
               shadowColor: '#000',
               shadowOffset: {width: 0, height: 2},
               shadowOpacity: 0.8,
@@ -238,25 +243,81 @@ const HomeForm = props => {
             }}>
             <View style={localStyle.iconContianer}>
               <TouchableOpacity style={localStyle.iconItem}>
-                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
-                <Text>Sepatu Futsal</Text>
+                <BasketBallIcon
+                  name="basketball-ball"
+                  color={colors.SECOND_BLUE}
+                  size={35}
+                />
+                <Text
+                  style={{
+                    marginTop: 5,
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    color: colors.MAIN_GREY,
+                    textTransform: 'uppercase',
+                  }}>
+                  Sepatu Futsal
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={localStyle.iconItem}>
-                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
-                <Text>Sepatu Bola</Text>
+                <SoccerIcon
+                  name="soccer-ball-o"
+                  color={colors.SECOND_BLUE}
+                  size={35}
+                />
+                <Text
+                  style={{
+                    marginTop: 5,
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    color: colors.MAIN_GREY,
+                    textTransform: 'uppercase',
+                  }}>
+                  Sepatu Bola
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={localStyle.iconItem}>
-                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
-                <Text>Sepatu Casual</Text>
+                <CasualIcon
+                  name="sunglasses-alt"
+                  color={colors.SECOND_BLUE}
+                  size={35}
+                />
+                <Text
+                  style={{
+                    marginTop: 5,
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    color: colors.MAIN_GREY,
+                    textTransform: 'uppercase',
+                  }}>
+                  Sepatu Casual
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={localStyle.iconItem}>
-                <Icon name="md-tennisball" color={colors.ORANGE} size={35} />
-                <Text>Sepatu Sneaker</Text>
+                <SneakerIcon
+                  name="run-fast"
+                  color={colors.SECOND_BLUE}
+                  size={35}
+                />
+                <Text
+                  style={{
+                    marginTop: 5,
+                    fontSize: 11,
+                    fontWeight: 'bold',
+                    color: colors.MAIN_GREY,
+                    textTransform: 'uppercase',
+                  }}>
+                  Sepatu Sneaker
+                </Text>
               </TouchableOpacity>
             </View>
 
             <View />
           </Card>
+          {props.userData && props.userData.username && (
+            <BalanceCard balance={props.userData.balance} />
+          )}
+
           {/* Horizontal Scroll */}
           <View
             style={{
@@ -279,6 +340,7 @@ const HomeForm = props => {
             <HorizontalProducts
               items={props.data.data && props.data.data}
               navigation={props.navigation}
+              buttonColor="orange"
             />
           </View>
           {/* End of Horizontal Scroll */}

@@ -8,7 +8,7 @@ import {convertToRupiah} from '../../utils/convert';
 
 export default function HorizontalProducts({title, items, navigation}) {
   return (
-    <View>
+    <View style={{marginTop: 50}}>
       <Text style={{marginLeft: 8, fontSize: 18, fontWeight: 'bold'}}>
         {title}
       </Text>

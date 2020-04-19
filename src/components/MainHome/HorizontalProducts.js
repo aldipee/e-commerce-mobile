@@ -5,7 +5,12 @@ import {Card, Image, Button} from 'react-native-elements';
 import {API} from '../../config/server';
 import colors from '../../config/colors';
 import {convertToRupiah} from '../../utils/convert';
-export default function HorizontalProducts({title, items, navigation}) {
+export default function HorizontalProducts({
+  title,
+  items,
+  navigation,
+  buttonColor,
+}) {
   return (
     <View>
       <Text style={{marginLeft: 8, fontSize: 18, fontWeight: 'bold'}}>
@@ -29,9 +34,11 @@ export default function HorizontalProducts({title, items, navigation}) {
                   marginHorizontal: 0,
                   padding: 2,
                   width: 210,
+                  height: 290,
                   marginLeft: 5,
                   borderRadius: 1,
-                  marginBottom: 0,
+                  marginBottom: 15,
+                  marginTop: 15,
                   shadowColor: '#000',
                   shadowOffset: {width: 0, height: 2},
                   shadowOpacity: 0.8,
@@ -66,7 +73,13 @@ export default function HorizontalProducts({title, items, navigation}) {
                 <View style={{padding: 10}}>
                   <Button
                     title="Beli"
-                    buttonStyle={{borderRadius: 1}}
+                    buttonStyle={{
+                      borderRadius: 1,
+                      backgroundColor:
+                        buttonColor === 'orange'
+                          ? colors.ORANGE
+                          : colors.SECOND_BLUE,
+                    }}
                     titleStyle={{fontSize: 14}}
                     onPress={() =>
                       navigation.navigate('ProductDetails', {data})
