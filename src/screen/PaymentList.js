@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {convertToRupiah} from '../utils/convert';
 
 import myColors from '../config/colors';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
-function Cart(props) {
+function PaymentList(props) {
   const {params} = props.route;
 
   return (
@@ -26,15 +26,24 @@ function Cart(props) {
           <Text style={{fontSize: 17, fontWeight: 'bold'}}>
             Pembayaran Instant
           </Text>
-          <View style={[localStyle.customCard, localStyle.inline]}>
-            <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
-            <View>
-              <Text style={[localStyle.titleSaldo]}>Saldo GoldenFoot</Text>
-              <Text style={[localStyle.title]}>
-                {convertToRupiah(params.balance)}
-              </Text>
+          <TouchableOpacity
+            onPress={() =>
+              props.navigation.navigate('Invoice', {
+                balance: params.balance,
+                totalPayment: params.totalPayment,
+                shippingCost: params.shippingCost,
+              })
+            }>
+            <View style={[localStyle.customCard, localStyle.inline]}>
+              <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
+              <View>
+                <Text style={[localStyle.titleSaldo]}>Saldo GoldenFoot</Text>
+                <Text style={[localStyle.title]}>
+                  {convertToRupiah(params.balance)}
+                </Text>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={{marginTop: 20, paddingBottom: 100}}>
           <Text style={{fontSize: 17, fontWeight: 'bold'}}>Metode Lain</Text>
@@ -92,4 +101,4 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default Cart;
+export default PaymentList;

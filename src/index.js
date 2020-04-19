@@ -15,6 +15,8 @@ import PayamentList from './screen/PaymentList';
 import UploadImage from './screen/User/UploadImage';
 import CartDetails from './screen/Cart/CartDetails';
 import AddAddress from './screen/User/AddAddress';
+import Invoice from './screen/Payment/Invoice';
+import PaymentSuccess from './screen/Payment/PaymentSucces';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,17 @@ class Index extends Component {
             name="Home"
             options={{headerShown: false}}
             component={MainHome}
+          />
+          <Stack.Screen
+            name="PaymentSuccess"
+            options={{headerShown: true}}
+            component={PaymentSuccess}
+          />
+
+          <Stack.Screen
+            name="Invoice"
+            options={{headerShown: true}}
+            component={Invoice}
           />
           <Stack.Screen
             name="AddAddress"

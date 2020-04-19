@@ -12,15 +12,16 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 AsyncStorage.getItem('token', (err, result) => {
   axios.defaults.headers.common['Authorization'] = `Bearer ${result}`;
+  console.log('INI TOKEB', result);
 });
 
 export const setLogin = (data, callback) => async dispatch => {
   try {
     setLoading();
     const res = await axios.post(API.API_URL.concat('auth/login'), data);
+    const token = await AsyncStorage.setItem('token', res.data.data);
     console.log(res);
     if (res.data.data) {
-      await AsyncStorage.setItem('token', res.data.data);
       dispatch({
         type: SET_LOGIN,
         payload: res.data.data,
@@ -94,7 +95,10 @@ export const setLogout = callback => async dispatch => {
 
 export const getProfileDetail = () => async dispatch => {
   try {
+    const token = await AsyncStorage.getItem('token');
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     const res = await axios.get(API.API_URL.concat('auth/detail'));
+    console.log(res);
     dispatch({
       type: GET_PROFILE_DETAILS,
       payload: res.data.msg,

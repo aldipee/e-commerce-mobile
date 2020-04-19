@@ -268,6 +268,7 @@ function CartDetails(props) {
                 props.navigation.navigate('PaymentList', {
                   totalPayment,
                   balance: props.dataUser.balance,
+                  shippingCost: selectedCourier.cost,
                 })
               }
               titleStyle={{fontSize: 14}}

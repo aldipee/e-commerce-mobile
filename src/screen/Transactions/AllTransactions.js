@@ -1,5 +1,11 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {Card, Button, ListItem} from 'react-native-elements';
 
@@ -19,10 +25,14 @@ function AllTransactions(props) {
     }, []),
   );
 
+  const onRefresh = () => {
+    console.log('lalala');
+  };
+
   return (
     <View>
       <View>
-        {!isLoading &&
+        {!isLoading ? (
           props.data.map((data, index) => (
             <TouchableOpacity
               onPress={() =>
@@ -116,7 +126,18 @@ function AllTransactions(props) {
                 </View>
               </Card>
             </TouchableOpacity>
-          ))}
+          ))
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'space-around',
+              paddingTop: 20,
+              flexDirection: 'row',
+            }}>
+            <ActivityIndicator size="large" color={myColors.MAIN_BLUE} />
+          </View>
+        )}
       </View>
     </View>
   );

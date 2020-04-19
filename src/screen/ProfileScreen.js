@@ -25,11 +25,15 @@ import {API} from '../config/server';
 
 function ProfileScreen(props) {
   const [isLoading, setIsLoading] = useState(true);
-  const [profileData, setProfileData] = useState(null);
+  const [profileDataa, setProfileData] = useState(null);
   useFocusEffect(
     useCallback(() => {
       props.getProfileDetail();
-      fetchData().then(data => {
+      async function getData() {
+        const data = fetchData();
+        return data;
+      }
+      getData().then(data => {
         console.log(data);
         setProfileData(data);
         setIsLoading(false);
@@ -40,8 +44,8 @@ function ProfileScreen(props) {
 
   const fetchData = () => {
     return new Promise((resolve, reject) => {
-      if (props.data.profileData !== {}) {
-        resolve(props.data.profileData);
+      if (props.data.token !== '') {
+        resolve(props.data);
       }
     });
   };
@@ -59,12 +63,10 @@ function ProfileScreen(props) {
     });
   };
 
-  // const {profileData} = props.data;
+  const {profileData} = props.data;
   return (
     <ScrollView>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
+      {profileData && (
         <>
           <View
             style={{

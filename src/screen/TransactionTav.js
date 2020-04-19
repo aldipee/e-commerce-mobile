@@ -18,12 +18,12 @@ function MyTabs() {
         }}>
         <Tab.Screen
           name="AllTrx"
-          options={{tabBarLabel: 'Semua'}}
+          options={{tabBarLabel: 'Belum Dibayar'}}
           component={AllTransactions}
         />
         <Tab.Screen
           name="TrxCode1"
-          options={{tabBarLabel: 'Menunggu Pembayaran'}}
+          options={{tabBarLabel: 'Dibayar'}}
           component={AllTransactions}
         />
         <Tab.Screen
