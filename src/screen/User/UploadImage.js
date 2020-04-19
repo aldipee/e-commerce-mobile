@@ -20,12 +20,9 @@ class UploadImage extends Component {
   //Handle Choose Picture
   choosePicture = () => {
     var options = {
-      quality: 0.7,
-      mediaType: 'photo',
-      noData: true,
       storageOptions: {
+        skipBackup: true,
         path: 'images',
-        cameraRoll: true,
       },
     };
     ImagePicker.showImagePicker(options, response => {
@@ -38,39 +35,39 @@ class UploadImage extends Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         console.log(response.fileName);
+        const source = { uri: response.uri };
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
         this.setState({
-          upload: true,
-          image: {
-            name: response.fileName,
-            type: response.type,
-            size: response.fileSize,
-            uri:
-              Platform.OS === 'android'
-                ? response.uri
-                : response.uri.replace('file://', ''),
-          },
+          image: response,
         });
       }
     });
   };
-  uploadPicture = async () => {
-    console.log('mulai upload');
+  uploadPicture = () => {
 
-    try {
-      const data = new FormData();
-      let File = { ...this.state.image };
-      console.log(File, 'fini fiii');
-      data.append('picture', File); // you can append anyone.
-      data.append('name', 'xie');
-      console.log(data, 'form data')
-      const res = await axios.patch(
-        API.API_URL.concat('auth/update-pic'),
-        data,
-      );
 
-    } catch (error) {
-      console.log(error);
-    }
+    const formData = new FormData();
+    formData.append('picture', {
+      uri: this.state.image.uri,
+      type: 'image/jpeg',  // <-  Did you miss that one?
+      name: 'someName',
+    }); // you can append anyone.
+    // data.append('picture', 'asas');
+
+    axios({
+      method: 'put',
+      timeout: 10000,
+      url: API.API_URL.concat('auth/update-pic'),
+      data: formData,
+    }).then((data) => {
+      console.log(data)
+    }).catch((err) => console.log({ err }))
+
+
+
   };
 
   render() {
