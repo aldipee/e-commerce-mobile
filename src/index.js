@@ -57,7 +57,12 @@ class Index extends Component {
           <Stack.Screen
             name="CartDetails"
             options={{ headerShown: true, title: 'Pengiriman' }}
-            component={CartDetails}
+            component={
+              this.props.auth.profileData.address &&
+              this.props.auth.profileData.address.length !== 0
+                ? CartDetails
+                : AddAddress
+            }
           />
           <Stack.Screen
             name="TrxDetails"

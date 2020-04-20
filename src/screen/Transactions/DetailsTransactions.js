@@ -7,45 +7,48 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { converDate, convertToRupiah } from '../../utils/convert'
 import { getStatus } from '../../utils/showDetail'
 import { API } from '../../config/server'
+import colors from '../../config/colors'
 function DetailsTransactions(props) {
-  const { data, userData } = props.route.params
+  const { item, userData } = props.route.params
   return (
     <ScrollView>
       <View style={localStyle.container}>
         {/* Basic Info */}
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Status</Text>
-          <Text style={localStyle.status}>{getStatus(data.status)}</Text>
+          <Text style={localStyle.status}>{getStatus(item && item.status)}</Text>
         </View>
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Tanggal Pembelian</Text>
-          <Text>{converDate(data.created_at)}</Text>
+          <Text>{converDate(item && item.created_at)}</Text>
         </View>
         <View style={[localStyle.containerInfo, localStyle.inline]}>
           <Text style={localStyle.infoLabel}>Nomor Transaksi</Text>
-          <Text style={{ fontSize: 14 }}>{`TRX0000${data.id}`}</Text>
+          <Text style={{ fontSize: 14 }}>{`TRX0000${item && item.id}`}</Text>
         </View>
 
         {/* Informasi Pesanan */}
 
         <View>
           <Text style={{ fontSize: 15, fontWeight: 'bold', marginTop: 20 }}>Informasi Pesanan</Text>
-          {data.transactionDetail.map((item, index) => (
-            <ListItem
-              containerStyle={{ marginVertical: 2 }}
-              title={item.name}
-              titleStyle={{ fontSize: 14, paddingBottom: 5 }}
-              subtitle={`${convertToRupiah(item.price)} | ${item.quantity} Pasang`}
-              leftAvatar={{
-                source: {
-                  uri: API.API_URL_STATIC.concat(item.picture),
-                },
-                rounded: false,
-              }}
-              bottomDivider
-              chevron
-            />
-          ))}
+          {item &&
+            item.transactionDetail &&
+            item.transactionDetail.map((d, index) => (
+              <ListItem
+                containerStyle={{ marginVertical: 2 }}
+                title={d.name}
+                titleStyle={{ fontSize: 14, paddingBottom: 5 }}
+                subtitle={`${convertToRupiah(d.price)} | ${d.quantity} Pasang`}
+                leftAvatar={{
+                  source: {
+                    uri: API.API_URL_STATIC.concat(d.picture),
+                  },
+                  rounded: false,
+                }}
+                bottomDivider
+                chevron
+              />
+            ))}
         </View>
         {/* Detail Pengiriman */}
         <View>
@@ -55,10 +58,14 @@ function DetailsTransactions(props) {
             <Text>Kurir</Text>
             <Text>JNE </Text>
           </View>
-          <View style={[localStyle.inline, localStyle.details]}>
-            <Text>No.Resi</Text>
-            <Text>GK-222344555</Text>
-          </View>
+          {item.status === 2 ? (
+            <View style={[localStyle.inline, localStyle.details]}>
+              <Text>No.Resi</Text>
+              <Text style={{ backgroundColor: colors.GREEN, padding: 4, color: colors.WHITE }}>
+                {item.receipt_number}
+              </Text>
+            </View>
+          ) : null}
           <View style={[localStyle.inline, localStyle.details]}>
             <Text>Alamat Pengiriman</Text>
             <Text>{`${userData.full_name}, ${userData.phone}, ${userData.address[0].street} ${
@@ -78,11 +85,11 @@ function DetailsTransactions(props) {
             </View>
             <View style={[localStyle.inline, localStyle.details]}>
               <Text>Total Pembelian</Text>
-              <Text>{convertToRupiah(data.total_price - data.postal_fee)}</Text>
+              <Text>{convertToRupiah(item.total_price - item.postal_fee)}</Text>
             </View>
             <View style={[localStyle.inline, localStyle.details]}>
               <Text>Total Ongkir</Text>
-              <Text>{convertToRupiah(data.postal_fee)}</Text>
+              <Text>{convertToRupiah(item && item.postal_fee)}</Text>
             </View>
             <View style={[localStyle.inline, localStyle.totalContainer]}>
               <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Total Pembayaran</Text>
@@ -92,7 +99,7 @@ function DetailsTransactions(props) {
                   fontWeight: 'bold',
                   color: myColors.ORANGE,
                 }}>
-                {convertToRupiah(data.total_price)}
+                {convertToRupiah(item && item.total_price)}
               </Text>
             </View>
           </Card>

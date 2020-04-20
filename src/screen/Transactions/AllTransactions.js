@@ -73,8 +73,10 @@ function AllTransactions(props) {
     items = (
       <>
         <FlatList
-          onEndReached={onLoadMore}
-          onEndReachedThreshold={0.2}
+          onEndReached={() => {
+            console.log('')
+          }}
+          onEndReachedThreshold={0.1}
           data={props.data}
           renderItem={({ item }) => (
             <TouchableOpacity

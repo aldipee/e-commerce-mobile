@@ -1,32 +1,34 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Button} from 'react-native-elements';
-import {ScrollView} from 'react-native-gesture-handler';
-import {addTransaction} from '../../redux/actions/TransactionActions';
-import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/AntDesign';
-import myColors from '../../config/colors';
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import { Button } from 'react-native-elements'
+import { ScrollView } from 'react-native-gesture-handler'
+import { addTransaction } from '../../redux/actions/TransactionActions'
+import { connect } from 'react-redux'
+import Icon from 'react-native-vector-icons/AntDesign'
+import myColors from '../../config/colors'
 
-import {convertToRupiah, converDate} from '../../utils/convert';
+import { convertToRupiah, converDate } from '../../utils/convert'
 function Invoice(props) {
-  const {shippingCost, totalPayment, balance, cartData} = props.route.params;
+  const { shippingCost, totalPayment, balance, cartData } = props.route.params
   const insertTransaction = () => {
-    props.addTransaction(
-      cartData.totalPayment,
-      cartData.shippingCost,
-      cartData.Product,
-      done => {
-        if (done) {
-          props.navigation.navigate('PaymentSuccess', cartData);
-        }
-      },
-    );
-  };
+    props.addTransaction(cartData.totalPayment, cartData.shippingCost, cartData.Product, done => {
+      if (done) {
+        props.navigation.navigate('PaymentSuccess', cartData)
+      }
+    })
+  }
   return (
     <ScrollView>
       <View style={localStyle.container}>
         {/* Detail Pengiriman */}
-        <View style={{marginBottom: 20}}>
+        {balance < totalPayment ? (
+          <View style={{ backgroundColor: '#d8345f', width: 170 }}>
+            <Text style={{ color: '#fff' }}>Saldo anda tidak cukup</Text>
+          </View>
+        ) : (
+          false
+        )}
+        <View style={{ marginBottom: 20 }}>
           <View style={[localStyle.containerInfo, localStyle.inline]}>
             <Text style={localStyle.infoLabel}>Tanggal Tagihan</Text>
             <Text>{converDate(new Date())}</Text>
@@ -45,13 +47,11 @@ function Invoice(props) {
           </Text>
 
           <View style={[localStyle.details]}>
-            <Text style={{color: myColors.MAIN_GREY}}>Metode Pembayaran</Text>
-            <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 5}}>
+            <Text style={{ color: myColors.MAIN_GREY }}>Metode Pembayaran</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 5 }}>
               Saldo GoldenFoot
             </Text>
-            <Text style={{fontSize: 12}}>
-              Saldo : {convertToRupiah(balance)}
-            </Text>
+            <Text style={{ fontSize: 12 }}>Saldo : {convertToRupiah(balance)}</Text>
           </View>
         </View>
 
@@ -70,9 +70,7 @@ function Invoice(props) {
             </View>
 
             <View style={[localStyle.inline, localStyle.totalContainer]}>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                Total Pembayaran
-              </Text>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Total Pembayaran</Text>
               <Text
                 style={{
                   fontSize: 16,
@@ -84,11 +82,12 @@ function Invoice(props) {
             </View>
           </View>
         </View>
-        <View style={{marginTop: 15}}>
+        <View style={{ marginTop: 15 }}>
           <Button
+            disabled={balance < totalPayment ? true : null}
             onPress={insertTransaction}
-            containerStyle={{margin: 5}}
-            titleStyle={{fontSize: 14}}
+            containerStyle={{ margin: 5 }}
+            titleStyle={{ fontSize: 14 }}
             title="Bayar Sekarang"
             buttonStyle={{
               backgroundColor: myColors.ORANGE,
@@ -98,7 +97,7 @@ function Invoice(props) {
         </View>
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -138,9 +137,9 @@ const localStyle = StyleSheet.create({
   status: {
     color: myColors.GREEN,
   },
-});
+})
 
 export default connect(
   null,
-  {addTransaction},
-)(Invoice);
+  { addTransaction }
+)(Invoice)

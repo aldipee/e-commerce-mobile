@@ -9,12 +9,13 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native'
-import { Card, colors, Avatar, Button, ListItem } from 'react-native-elements'
+import { Card, Avatar, Button, ListItem } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { connect } from 'react-redux'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { convertToRupiah } from '../utils/convert'
 import { getProfileDetail } from '../redux/actions/AuthActions'
+import colors from '../config/colors'
 
 // Local
 import myColors from '../config/colors'
@@ -233,6 +234,10 @@ function ProfileScreen(props) {
         </>
       )}
       {/* Avatar and Picture */}
+      <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+        <Text style={{ color: colors.MAIN_GREY }}>App Version</Text>
+        <Text style={{ color: colors.MAIN_GREY }}>Beta 0.0.1</Text>
+      </View>
     </ScrollView>
   )
 }

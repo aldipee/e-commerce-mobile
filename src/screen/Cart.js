@@ -1,56 +1,56 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {Card, Header, ListItem, Input, Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {API} from '../config/server';
-import {ScrollView} from 'react-native-gesture-handler';
-import {connect} from 'react-redux';
-import {addToCart, updateCart, removeItem} from '../redux/actions/CartActions';
-import DataNotFound from '../screen/Others/DataNotFound';
-import myColors from '../config/colors';
-import {convertToRupiah} from '../utils/convert';
+import React, { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { Card, Header, ListItem, Input, Button } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/AntDesign'
+import { API } from '../config/server'
+import { ScrollView } from 'react-native-gesture-handler'
+import { connect } from 'react-redux'
+import { addToCart, updateCart, removeItem } from '../redux/actions/CartActions'
+import DataNotFound from '../screen/Others/DataNotFound'
+import myColors from '../config/colors'
+import { convertToRupiah } from '../utils/convert'
 
 function Cart(props) {
-  const [totalPayment, setTotalPayment] = useState(0);
-  const [cart, setCart] = useState([]);
+  const [totalPayment, setTotalPayment] = useState(0)
+  const [cart, setCart] = useState([])
 
   const fetchData = () => {
     return new Promise((resolve, reject) => {
       if (props.cart.data.length !== 0) {
-        resolve(props.cart.data);
+        resolve(props.cart.data)
       }
-    });
-  };
+    })
+  }
   // useEffect(async () => {
   //   await setCart(props.cart.data);
   // });
 
   useEffect(() => {
     async function getData() {
-      const data = fetchData();
-      return data;
+      const data = fetchData()
+      return data
     }
     getData()
       .then(data => {
-        setCart(data);
-        return data;
+        setCart(data)
+        return data
       })
       .then(data => {
         const totalPayment = data.reduce((prev, item) => {
-          return prev + item.price * item.quantity;
-        }, 0);
-        setTotalPayment(totalPayment);
-      });
-  });
+          return prev + item.price * item.quantity
+        }, 0)
+        setTotalPayment(totalPayment)
+      })
+  })
   return (
     <>
       <Header
-        containerStyle={{marginTop: -25}}
+        containerStyle={{ marginTop: -25 }}
         placement="left"
-        leftComponent={{icon: 'menu', color: '#fff'}}
+        leftComponent={{ icon: 'menu', color: '#fff' }}
         centerComponent={{
           text: 'Cart',
-          style: {color: '#fff', fontSize: 19, fontWeight: 'bold'},
+          style: { color: '#fff', fontSize: 19, fontWeight: 'bold' },
         }}
       />
       {cart.length === 0 ? (
@@ -59,26 +59,19 @@ function Cart(props) {
         <ScrollView>
           {cart &&
             cart.map((data, index) => (
-              <View style={{backgroundColor: '#fff', marginTop: 10}}>
-                <View style={{paddingHorizontal: 10}}>
-                  <View style={{backgroundColor: '#fff'}}>
+              <View style={{ backgroundColor: '#fff', marginTop: 10 }}>
+                <View style={{ paddingHorizontal: 10 }}>
+                  <View style={{ backgroundColor: '#fff' }}>
                     <ListItem
                       rightElement={() => (
-                        <TouchableOpacity
-                          onPress={() =>
-                            props.removeItem(props.cart.data, index)
-                          }>
-                          <Icon
-                            name="delete"
-                            size={23}
-                            color={myColors.MAIN_GREY}
-                          />
+                        <TouchableOpacity onPress={() => props.removeItem(props.cart.data, index)}>
+                          <Icon name="delete" size={23} color={myColors.MAIN_GREY} />
                         </TouchableOpacity>
                       )}
-                      containerStyle={{marginVertical: 2}}
+                      containerStyle={{ marginVertical: 2 }}
                       title={data.name}
                       subtitle={'Size 42'}
-                      titleStyle={{fontSize: 14, paddingBottom: 5}}
+                      titleStyle={{ fontSize: 14, paddingBottom: 5 }}
                       leftAvatar={{
                         source: {
                           uri: API.API_URL_STATIC.concat(data.picture),
@@ -102,25 +95,15 @@ function Cart(props) {
                         alignItems: 'center',
                       }}>
                       <TouchableOpacity
-                        onPress={() =>
-                          props.updateCart(
-                            props.cart.data,
-                            data.quantity - 1,
-                            index,
-                          )
-                        }>
-                        <Icon
-                          name="minuscircleo"
-                          size={20}
-                          color={myColors.MAIN_BLUE}
-                        />
+                        onPress={() => props.updateCart(props.cart.data, data.quantity - 1, index)}>
+                        <Icon name="minuscircleo" size={20} color={myColors.MAIN_BLUE} />
                       </TouchableOpacity>
                       <Input
                         keyboardType="numeric"
                         defaultValue={`${data.quantity}`}
                         textContentType={Number}
-                        containerStyle={{width: 60}}
-                        inputStyle={{fontSize: 14, textAlign: 'center'}}
+                        containerStyle={{ width: 60 }}
+                        inputStyle={{ fontSize: 14, textAlign: 'center' }}
                         inputContainerStyle={{
                           alignItems: 'center',
                           padding: 0,
@@ -129,24 +112,14 @@ function Cart(props) {
                         }}
                       />
                       <TouchableOpacity
-                        onPress={() =>
-                          props.updateCart(
-                            props.cart.data,
-                            data.quantity + 1,
-                            index,
-                          )
-                        }>
-                        <Icon
-                          name="pluscircleo"
-                          size={20}
-                          color={myColors.MAIN_BLUE}
-                        />
+                        onPress={() => props.updateCart(props.cart.data, data.quantity + 1, index)}>
+                        <Icon name="pluscircleo" size={20} color={myColors.MAIN_BLUE} />
                       </TouchableOpacity>
 
-                      <Text style={{fontSize: 12, marginLeft: 10}}>
+                      <Text style={{ fontSize: 12, marginLeft: 10 }}>
                         x {convertToRupiah(data.price)} =
                       </Text>
-                      <Text style={{fontSize: 16, marginLeft: 5}}>
+                      <Text style={{ fontSize: 16, marginLeft: 5 }}>
                         {convertToRupiah(data.price * data.quantity)}
                       </Text>
                     </View>
@@ -157,7 +130,7 @@ function Cart(props) {
 
           <View style={[localStyle.cta]}>
             <View>
-              <Text style={{fontSize: 12}}>Total Pembelian</Text>
+              <Text style={{ fontSize: 12 }}>Total Pembelian</Text>
               <Text
                 style={{
                   fontSize: 17,
@@ -168,17 +141,21 @@ function Cart(props) {
               </Text>
             </View>
             <Button
-              onPress={() =>
-                props.navigation.navigate('CartDetails', {totalPayment, cart})
-              }
+              onPress={() => {
+                if (props.auth.isLogin) {
+                  props.navigation.navigate('CartDetails', { totalPayment, cart })
+                } else {
+                  props.navigation.navigate('LoginScreen', { totalPayment, cart })
+                }
+              }}
               title="Beli"
-              buttonStyle={{paddingHorizontal: 30, fontSize: 15}}
+              buttonStyle={{ paddingHorizontal: 30, fontSize: 15 }}
             />
           </View>
         </ScrollView>
       )}
     </>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -190,15 +167,16 @@ const localStyle = StyleSheet.create({
     padding: 15,
     backgroundColor: myColors.WHITE,
   },
-});
+})
 
 const mapStateToProps = state => ({
   cart: state.cartData,
-});
+  auth: state.authData,
+})
 
-const mapDispatchToProps = {addToCart, updateCart, removeItem};
+const mapDispatchToProps = { addToCart, updateCart, removeItem }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(Cart);
+  mapDispatchToProps
+)(Cart)

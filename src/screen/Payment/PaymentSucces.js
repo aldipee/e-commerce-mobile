@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Button} from 'react-native-elements';
-import {ScrollView} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/AntDesign';
-import myColors from '../../config/colors';
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import { Button } from 'react-native-elements'
+import { ScrollView } from 'react-native-gesture-handler'
+import Icon from 'react-native-vector-icons/AntDesign'
+import myColors from '../../config/colors'
 
-import {convertToRupiah, converDate} from '../../utils/convert';
+import { convertToRupiah, converDate } from '../../utils/convert'
 function Payment(props) {
   return (
     <ScrollView>
       <View style={localStyle.container}>
         {/* Detail Pengiriman */}
-        <View style={{marginBottom: 20}}>
+        <View style={{ marginBottom: 20 }}>
           <View
             style={{
               justifyContent: 'center',
@@ -28,15 +28,13 @@ function Payment(props) {
               }}>
               Pembayaran Berhasil
             </Text>
-            <Text style={{marginTop: 3}}>
-              Pesanan anda telah diteruskan ke penjual
-            </Text>
+            <Text style={{ marginTop: 3 }}>Pesanan anda telah diteruskan ke penjual</Text>
           </View>
           <View style={[localStyle.containerInfo, localStyle.inline]}>
             <Text style={localStyle.infoLabel}>Tanggal Tagihan</Text>
             <Text>{converDate(new Date())}</Text>
           </View>
-          <Text
+          {/* <Text
             style={{
               fontSize: 17,
               fontWeight: 'bold',
@@ -47,19 +45,19 @@ function Payment(props) {
               paddingBottom: 10,
             }}>
             Detail Pembayaran
-          </Text>
+          </Text> */}
 
-          <View style={[localStyle.details]}>
-            <Text style={{color: myColors.MAIN_GREY}}>Metode Pembayaran</Text>
-            <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 5}}>
+          {/* <View style={[localStyle.details]}>
+            <Text style={{ color: myColors.MAIN_GREY }}>Metode Pembayaran</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 5 }}>
               Saldo GoldenFoot
             </Text>
-            <Text style={{fontSize: 12}}>Saldo : {convertToRupiah(44444)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>Saldo : {convertToRupiah(44444)}</Text>
+          </View> */}
         </View>
 
         {/* Detail Pembayaran */}
-        <View>
+        {/* <View>
           <View>
             <View style={[localStyle.details, localStyle.inline]} />
             <View style={[localStyle.inline, localStyle.details]}>
@@ -71,7 +69,7 @@ function Payment(props) {
               <Text>Total Ongkir</Text>
               <Text>{convertToRupiah(5666)}</Text>
             </View>
-
+ 
             <View style={[localStyle.inline, localStyle.totalContainer]}>
               <Text style={{fontSize: 16, fontWeight: 'bold'}}>
                 Total Pembayaran
@@ -86,12 +84,12 @@ function Payment(props) {
               </Text>
             </View>
           </View>
-        </View>
-        <View style={{marginTop: 15}}>
+        </View> */}
+        <View style={{ marginTop: 15 }}>
           <Button
             onPress={() => props.navigation.navigate('Home')}
-            containerStyle={{margin: 5}}
-            titleStyle={{fontSize: 14}}
+            containerStyle={{ margin: 5 }}
+            titleStyle={{ fontSize: 14 }}
             title="Selesai"
             buttonStyle={{
               backgroundColor: myColors.ORANGE,
@@ -101,7 +99,7 @@ function Payment(props) {
         </View>
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -141,6 +139,6 @@ const localStyle = StyleSheet.create({
   status: {
     color: myColors.GREEN,
   },
-});
+})
 
-export default Payment;
+export default Payment

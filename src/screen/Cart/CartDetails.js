@@ -1,61 +1,64 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {Card, ListItem, Button} from 'react-native-elements';
-import {connect} from 'react-redux';
-import Modal from 'react-native-modal';
-import myColors from '../../config/colors';
-import {ScrollView} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {getShippingCost} from '../../redux/actions/ShippingActions';
-import {addTransaction} from '../../redux/actions/TransactionActions';
-import {getProfileDetail} from '../../redux/actions/AuthActions';
-import {convertToRupiah} from '../../utils/convert';
-import {API} from '../../config/server';
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { Card, ListItem, Button } from 'react-native-elements'
+import { connect } from 'react-redux'
+import Modal from 'react-native-modal'
+import myColors from '../../config/colors'
+import { ScrollView } from 'react-native-gesture-handler'
+import Icon from 'react-native-vector-icons/AntDesign'
+import { getShippingCost } from '../../redux/actions/ShippingActions'
+import { addTransaction } from '../../redux/actions/TransactionActions'
+import { getProfileDetail } from '../../redux/actions/AuthActions'
+import { convertToRupiah } from '../../utils/convert'
+import { API } from '../../config/server'
 
 function CartDetails(props) {
-  const dataFromCart = props.route.params;
-  console.log(dataFromCart);
-  const [showModal, setShowModal] = useState(false);
-  const toggleModal = () => setShowModal(!showModal);
-  const [courierList, setCourierList] = useState(null);
-  const [selectedCourier, setSelectedCourier] = useState(null);
-  const [totalPayment, setTotalPayment] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState(null);
+  const dataFromCart = props.route.params
+  console.log(dataFromCart)
+  const [showModal, setShowModal] = useState(false)
+  const toggleModal = () => setShowModal(!showModal)
+  const [courierList, setCourierList] = useState(null)
+  const [selectedCourier, setSelectedCourier] = useState(null)
+  const [totalPayment, setTotalPayment] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [userProfile, setUserProfile] = useState(null)
   const selectCourier = data => {
-    setSelectedCourier(data);
-    toggleModal();
-    setTotalPayment(dataFromCart.totalPayment + data.cost);
-  };
+    setSelectedCourier(data)
+    toggleModal()
+    setTotalPayment(dataFromCart.totalPayment + data.cost)
+  }
 
   const onSubmit = () => {
-    console.log('RUNNNNn');
-    props.addTransaction(totalPayment, selectedCourier.cost, dataFromCart.cart);
-  };
+    console.log('RUNNNNn')
+    props.addTransaction(totalPayment, selectedCourier.cost, dataFromCart.cart)
+  }
   const fetchData = () => {
     return new Promise((resolve, reject) => {
       if (props.dataUser.address.length !== 0) {
-        resolve(props.dataUser);
+        resolve(props.dataUser)
       }
-    });
-  };
+    })
+  }
   useEffect(() => {
-    props.getProfileDetail();
+    props.getProfileDetail()
     fetchData().then(data => {
-      setLoading(false);
-      setUserProfile(data);
-      props.getShippingCost(null, data.address[0].id, null, res => {
-        setCourierList(res.data);
-      });
-    });
-  }, []);
+      setLoading(false)
+      setUserProfile(data)
+      const total = dataFromCart.cart.reduce((prev, item) => {
+        return prev + item.quantity
+      }, 0)
+      props.getShippingCost(null, data.address[0].id, total, res => {
+        setCourierList(res.data)
+      })
+    })
+  }, [])
   return (
     <ScrollView>
       {!loading && userProfile && (
         <View style={localStyle.container}>
           {/* Modal */}
-          <Modal isVisible={showModal} style={{margin: 0}} coverScreen={true}>
-            <View style={{flex: 1}}>
+          <Modal isVisible={showModal} style={{ margin: 0 }} coverScreen={true}>
+            <View style={{ flex: 1 }}>
               <View
                 style={{
                   backgroundColor: myColors.WHITE,
@@ -73,32 +76,26 @@ function CartDetails(props) {
                     alignContent: 'center',
                     flexDirection: 'row',
                   }}>
-                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                    Pilih Kurir
-                  </Text>
+                  <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Pilih Kurir</Text>
                   <TouchableOpacity onPress={toggleModal}>
                     <Icon name="close" size={23} />
                   </TouchableOpacity>
                 </View>
-                <View style={{paddingHorizontal: 15, paddingVertical: 10}}>
+                <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
                   {courierList &&
                     courierList.costs.map((data, index) => (
                       <TouchableOpacity
                         onPress={() =>
                           selectCourier({
-                            title: `${courierList.code.toUpperCase()} ${
-                              data.service
-                            }`,
+                            title: `${courierList.code.toUpperCase()} ${data.service}`,
                             cost: data.cost[0].value,
                             etd: data.cost[0].etd,
                           })
                         }>
                         <ListItem
-                          containerStyle={{marginVertical: 2}}
-                          title={`${courierList.code.toUpperCase()} ${
-                            data.service
-                          }`}
-                          titleStyle={{fontSize: 14, paddingBottom: 5}}
+                          containerStyle={{ marginVertical: 2 }}
+                          title={`${courierList.code.toUpperCase()} ${data.service}`}
+                          titleStyle={{ fontSize: 14, paddingBottom: 5 }}
                           subtitle={`${convertToRupiah(data.cost[0].value)} | ${
                             data.cost[0].etd
                           } Hari`}
@@ -118,7 +115,7 @@ function CartDetails(props) {
             </View>
           </Modal>
           {/* Detail Pengiriman */}
-          <View style={{marginBottom: 20}}>
+          <View style={{ marginBottom: 20 }}>
             <Text
               style={{
                 fontSize: 17,
@@ -133,16 +130,14 @@ function CartDetails(props) {
             </Text>
 
             <View style={[localStyle.details]}>
-              <Text style={{color: myColors.MAIN_GREY}}>Penerima</Text>
-              <Text style={{fontSize: 15, fontWeight: 'bold', marginBottom: 5}}>
+              <Text style={{ color: myColors.MAIN_GREY }}>Penerima</Text>
+              <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 5 }}>
                 {userProfile && userProfile.full_name}
               </Text>
-              <Text style={{fontSize: 12}}>
-                {`${userProfile && userProfile.phone}, ${
-                  userProfile.address[0].street
-                }, ${userProfile.address[0].city} , ${
-                  userProfile.address[0].district
-                }, (${userProfile.address[0].postcode})`}
+              <Text style={{ fontSize: 12 }}>
+                {`${userProfile && userProfile.phone}, ${userProfile.address[0].street}, ${
+                  userProfile.address[0].city
+                } , ${userProfile.address[0].district}, (${userProfile.address[0].postcode})`}
               </Text>
             </View>
           </View>
@@ -150,18 +145,16 @@ function CartDetails(props) {
           {/* Informasi Pesanan */}
 
           <View>
-            <Text style={{fontSize: 17, fontWeight: 'bold', marginTop: 20}}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', marginTop: 20 }}>
               Informasi Pesanan
             </Text>
             {dataFromCart &&
               dataFromCart.cart.map((data, index) => (
                 <ListItem
-                  containerStyle={{marginVertical: 2}}
+                  containerStyle={{ marginVertical: 2 }}
                   title={data.name}
-                  titleStyle={{fontSize: 14, paddingBottom: 5}}
-                  subtitle={`${convertToRupiah(data.price)} | ${
-                    data.quantity
-                  } item`}
+                  titleStyle={{ fontSize: 14, paddingBottom: 5 }}
+                  subtitle={`${convertToRupiah(data.price)} | ${data.quantity} item`}
                   leftAvatar={{
                     source: {
                       uri: API.API_URL_STATIC.concat(data.picture),
@@ -175,11 +168,9 @@ function CartDetails(props) {
           </View>
 
           {/* Select Jasa Kurir */}
-          <Text style={{fontSize: 17, fontWeight: 'bold', marginTop: 20}}>
-            Informasi Pesanan
-          </Text>
+          <Text style={{ fontSize: 17, fontWeight: 'bold', marginTop: 20 }}>Informasi Pesanan</Text>
           <View style={[localStyle.inline, localStyle.justifyContent]}>
-            <View style={{marginTop: 15}}>
+            <View style={{ marginTop: 15 }}>
               <Text>Jasa Pengiriman</Text>
               {selectCourier && (
                 <View>
@@ -205,8 +196,8 @@ function CartDetails(props) {
             </View>
             <Button
               onPress={toggleModal}
-              containerStyle={{margin: 5}}
-              titleStyle={{fontSize: 14}}
+              containerStyle={{ margin: 5 }}
+              titleStyle={{ fontSize: 14 }}
               title="Pilih"
               buttonStyle={{
                 backgroundColor: myColors.ORANGE,
@@ -231,7 +222,7 @@ function CartDetails(props) {
 
           {/* Detail Pembayaran */}
           <View>
-            <Text style={{fontSize: 17, fontWeight: 'bold', marginTop: 20}}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', marginTop: 20 }}>
               Detail Pembayaran
             </Text>
             <Card>
@@ -247,9 +238,7 @@ function CartDetails(props) {
                 </View>
               )}
               <View style={[localStyle.inline, localStyle.totalContainer]}>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                  Total Pembayaran
-                </Text>
+                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Total Pembayaran</Text>
                 <Text
                   style={{
                     fontSize: 16,
@@ -261,9 +250,9 @@ function CartDetails(props) {
               </View>
             </Card>
           </View>
-          <View style={{marginTop: 15}}>
+          <View style={{ marginTop: 15 }}>
             <Button
-              containerStyle={{margin: 5}}
+              containerStyle={{ margin: 5 }}
               onPress={() =>
                 props.navigation.navigate('PaymentList', {
                   totalPayment,
@@ -276,7 +265,7 @@ function CartDetails(props) {
                   },
                 })
               }
-              titleStyle={{fontSize: 14}}
+              titleStyle={{ fontSize: 14 }}
               disabled={!selectedCourier ? true : null}
               title="Pilih Pembayaran"
               buttonStyle={{
@@ -288,7 +277,7 @@ function CartDetails(props) {
         </View>
       )}
     </ScrollView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -328,15 +317,15 @@ const localStyle = StyleSheet.create({
   status: {
     color: myColors.GREEN,
   },
-});
+})
 
 const mapStateToProps = state => ({
   dataUser: state.authData.profileData,
-});
+})
 
-const mapDispatchToProps = {getShippingCost, addTransaction, getProfileDetail};
+const mapDispatchToProps = { getShippingCost, addTransaction, getProfileDetail }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(CartDetails);
+  mapDispatchToProps
+)(CartDetails)
