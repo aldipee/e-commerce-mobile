@@ -94,7 +94,6 @@ const HomeForm = props => {
         imageSrc={require('../../src/banner.jpeg')}
         titleStyle={{ fontSize: 10 }}
         contentContainerStyle={{
-          backgroundColor: 'red',
           height: 0,
           flex: 0,
         }}

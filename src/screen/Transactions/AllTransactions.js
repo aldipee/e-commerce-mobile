@@ -28,6 +28,7 @@ function AllTransactions(props) {
   const [sortValue, setSortValue] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [momentumScroll, setMomentumScroll] = useState(true)
   const toggleModal = () => setShowModal(!showModal)
   useFocusEffect(
     useCallback(() => {
@@ -43,15 +44,18 @@ function AllTransactions(props) {
   )
 
   const onLoadMore = () => {
-    Alert.alert('Jalan BRO')
-    props.getTransactionLoadMore(
-      props.route.params && props.route.params.itemId,
-      {
-        key: 0,
-        sort: sortValue,
-      },
-      props.pageInfo.page + 1
-    )
+    if (!momentumScroll) {
+      Alert.alert('Jalan BRO')
+      setMomentumScroll(true)
+    }
+    // props.getTransactionLoadMore(
+    //   props.route.params && props.route.params.itemId,
+    //   {
+    //     key: 0,
+    //     sort: sortValue,
+    //   },
+    //   props.pageInfo.page + 1
+    // )
   }
   const filterNow = () => {
     const conditions = {
@@ -73,10 +77,9 @@ function AllTransactions(props) {
     items = (
       <>
         <FlatList
-          onEndReached={() => {
-            console.log('')
-          }}
-          onEndReachedThreshold={0.1}
+          onEndReached={onLoadMore}
+          onEndReachedThreshold={1.9}
+          onMomentumScrollBegin={() => setMomentumScroll(false)}
           data={props.data}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -269,15 +272,7 @@ function AllTransactions(props) {
             </View>
           </View>
         </View>
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              title="Loading.."
-              progressViewOffset={10}
-              refreshing={isLoading}
-              onRefresh={onRefresh}
-            />
-          }>
+        <View>
           {!isLoading ? (
             <View style={{ marginTop: 10 }}>{items}</View>
           ) : (
@@ -291,7 +286,7 @@ function AllTransactions(props) {
               {/* <ActivityIndicator size="large" color={myColors.MAIN_BLUE} /> */}
             </View>
           )}
-        </ScrollView>
+        </View>
       </View>
     </View>
   )

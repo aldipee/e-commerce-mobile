@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {SearchBar, Card, ListItem} from 'react-native-elements';
+import React, { useState } from 'react'
+import { SearchBar, Card, ListItem } from 'react-native-elements'
 import {
   View,
   ScrollView,
@@ -8,46 +8,46 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import {connect} from 'react-redux';
-import {getProducts} from '../redux/actions/ProductActions';
-import colors from '../config/colors';
-import {convertToRupiah} from '../utils/convert';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/Feather'
+import { connect } from 'react-redux'
+import { getProducts } from '../redux/actions/ProductActions'
+import colors from '../config/colors'
+import { convertToRupiah } from '../utils/convert'
+import { API } from '../config/server'
 
 function SearchScreen(props) {
   const onSeachKeyword = keyword => {
-    setSearchKeyword(keyword);
-    const query = `product/all?search[key]=products.name&search[value]=${keyword}&limit=10`;
-    props.getProducts(query);
-  };
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [searchData, setSearchData] = useState([]);
+    setSearchKeyword(keyword)
+    const query = `product/all?search[key]=products.name&search[value]=${keyword}&limit=10`
+    props.getProducts(query)
+  }
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [searchData, setSearchData] = useState([])
 
   const searchByBrand = data => {
     // going to show product with particular brand
-  };
+  }
 
   // Item will be rendered when search show
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => props.navigation.navigate('ProductDetails', {data: item})}>
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => props.navigation.navigate('ProductDetails', { data: item })}>
       <ListItem
-        containerStyle={{marginVertical: 2}}
+        containerStyle={{ marginVertical: 2 }}
         title={item.name}
-        titleStyle={{fontSize: 14, paddingBottom: 5}}
+        titleStyle={{ fontSize: 14, paddingBottom: 5 }}
         subtitle={`${convertToRupiah(item.price)} | AT-3300405`}
         leftAvatar={{
-          source: {uri: item.picture},
+          source: { uri: API.API_URL_STATIC.concat(item.picture) },
           rounded: false,
         }}
         bottomDivider
         chevron
       />
     </TouchableOpacity>
-  );
+  )
 
-  const keyExtractor = [];
+  const keyExtractor = []
 
   return (
     <SafeAreaView>
@@ -55,7 +55,7 @@ function SearchScreen(props) {
         onChangeText={keyword => onSeachKeyword(keyword)}
         value={searchKeyword}
         placeholder="Coba cari 'sepatu nike '...."
-        cancelIcon={{name: 'arrow-left', color: 'red', type: 'feather'}}
+        cancelIcon={{ name: 'arrow-left', color: 'red', type: 'feather' }}
         containerStyle={{
           backgroundColor: colors.SECOND_BLUE,
           borderTopWidth: 0,
@@ -67,7 +67,7 @@ function SearchScreen(props) {
           backgroundColor: colors.WHITE,
           height: 46,
         }}
-        inputStyle={{fontSize: 14}}
+        inputStyle={{ fontSize: 14 }}
         underlineColorAndroid={colors.MAIN_GREY}
       />
       {/* Brand search button card */}
@@ -107,14 +107,14 @@ function SearchScreen(props) {
 
       {/* Searched item will be rendere here with flatlist */}
       <FlatList
-        style={{padding: 5}}
+        style={{ padding: 5 }}
         data={props.data.data && props.data.data}
         renderItem={searchKeyword ? renderItem : null}
       />
       {/* End Searched Item here */}
       <ScrollView />
     </SafeAreaView>
-  );
+  )
 }
 
 const localStyle = StyleSheet.create({
@@ -139,15 +139,15 @@ const localStyle = StyleSheet.create({
     marginTop: 9,
     marginHorizontal: 15,
   },
-});
+})
 
 const mapStateToProps = state => ({
   data: state.productData,
-});
+})
 
-const mapDispatchToProps = {getProducts};
+const mapDispatchToProps = { getProducts }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(SearchScreen);
+  mapDispatchToProps
+)(SearchScreen)
