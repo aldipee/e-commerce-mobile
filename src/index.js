@@ -19,6 +19,7 @@ import AddAddress from './screen/User/AddAddress';
 import Invoice from './screen/Payment/Invoice';
 import PaymentSuccess from './screen/Payment/PaymentSucces';
 import DataNotFound from './screen/Others/DataNotFound';
+import TopUp from './screen/Payment/TopUp';
 
 const Stack = createStackNavigator();
 
@@ -28,9 +29,20 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
-            options={{headerShown: false}}
-            component={MainHome}
+          // Home change to TopUp, component= MainHome
+            name="TopUp"
+            options={{
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: '#3c1361',
+              },
+              
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              }
+            }}
+            component={TopUp}
           />
           <Stack.Screen
             name="PaymentSuccess"
@@ -101,6 +113,12 @@ class Index extends Component {
             name="PaymentList"
             options={{headerShown: true, title: 'Select Payament Method'}}
             component={PayamentList}
+          />
+          <Stack.Screen
+          // TopUp change to home
+            name="Home"
+            options={{headerShown: false}}
+            component={MainHome}
           />
         </Stack.Navigator>
       </NavigationContainer>
