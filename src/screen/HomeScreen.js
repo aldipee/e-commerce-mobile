@@ -7,6 +7,7 @@ import {
   StatusBar,
   ScrollView,
   SafeAreaView,
+  TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
 import {Card, Tile, SearchBar} from 'react-native-elements';

@@ -361,11 +361,7 @@ function SearchScreen(props) {
             renderItem={searchKeyword ? renderItem : null}
           />
         )}
-        {/* End of search brand in here */}
 
-        {/* Searched item will be rendere here with flatlist */}
-
-        {/* End Searched Item here */}
         <ScrollView />
       </View>
     </SafeAreaView>
