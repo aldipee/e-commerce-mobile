@@ -62,7 +62,6 @@ export default class TopUp extends Component {
               placeholder="Rp. xxx.xxx"
               keyboardType="number-pad"
               maxLength={6}
-              
               style={{
                 backgroundColor: '#f0f0f0',
                 width: '60%',
@@ -89,50 +88,12 @@ export default class TopUp extends Component {
         </ScrollView>
         <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
           <Card containerStyle={{marginHorizontal: 0}}>
-            <Button title="Top Up" buttonStyle={{borderRadius:20, backgroundColor:'#663a82'}}/>
+            <Button
+              title="Top Up"
+              buttonStyle={{borderRadius: 20, backgroundColor: '#663a82'}}
+            />
           </Card>
         </View>
-        {/* <View style={localStyle.container}>
-            <View style={localStyle.wrapper1}>
-              <Text style={{fontWeight: 'bold', fontSize:20, marginLeft:15, marginBottom:0}}>Top Up ke</Text>
-              <TouchableOpacity style={localStyle.Touchable}>
-                <Wallet name='wallet' size={25} color='black' style={{margin:15}}/>
-                <View style={{flexDirection: 'column', marginLeft:20, marginTop:10}}>
-                  <Text style={{fontWeight:'bold'}}>Ovo Cash</Text>
-                  <Text>Detail saldo</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-              <View style={localStyle.wrapper2}>
-                <Text style={{fontWeight:'bold', fontSize:20, marginLeft:15}}>Pilih Nominal Top Up</Text>
-                <View style={localStyle.wrapperTopup}>
-                  <TouchableOpacity style={localStyle.topUpOption}>
-                    <Text>Rp.100.000</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={localStyle.topUpOption}>
-                    <Text>Rp.200.000</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={localStyle.topUpOption}>
-                    <Text>Rp.500.000</Text>
-                  </TouchableOpacity>
-                </View>
-                <Text style={{marginLeft:10, fontSize:15}}>Atau masukkan nominal top up di sini</Text>
-                <TextInput placeholder='Rp. xxx.xxx' keyboardType='number-pad' style={{backgroundColor:'#f0f0f0', width:'60%', marginTop:5, marginLeft:10, borderRadius:10}}/>
-              </View>
-            <View style={localStyle.wrapper2}>
-              <View style={{flexDirection:'column', marginLeft:10, marginTop:10}}>
-                  <Text style={{fontWeight:'bold', fontSize:20}}>Metode pembayaran lain</Text>
-                  <View style={{flexDirection:'row'}}>
-                    <Text>logo 1</Text>
-                    <Text>logo 1</Text>
-                    <Text>logo 1</Text>
-                  </View>
-              </View>
-            </View>
-        </View>
-        <View>
-          <Text>asdasd</Text>
-        </View> */}
       </>
     );
   }
@@ -154,21 +115,6 @@ const localStyle = StyleSheet.create({
     shadowRadius: 6.68,
     elevation: 11,
   },
-  // container: {
-  //   backgroundColor: 'grey',
-  //   flex: 1
-  // },
-  // wrapper1: {
-  //   backgroundColor: 'white',
-  //   height:'25%',
-  //   justifyContent:'center'
-  // },
-  // wrapper2: {
-  //   backgroundColor: 'white',
-  //   marginTop:10,
-  //   height:'25%',
-  //   flexDirection: 'column'
-  // },
   Touchable: {
     flexDirection: 'row',
     borderRadius: 10,
@@ -187,20 +133,4 @@ const localStyle = StyleSheet.create({
     shadowRadius: 6.68,
     elevation: 11,
   },
-  // wrapperTopup: {
-  //   flexDirection: 'row',
-  //   backgroundColor:'white',
-  //   height:'35%',
-  //   width:'100%',
-  //   justifyContent:'center'
-  // },
-  // topUpOption: {
-  //   borderRadius:15,
-  //   width:'30%',
-  //   height:'50%',
-  //   backgroundColor:'#f0f0f0',
-  //   alignItems:'center',
-  //   justifyContent:'center',
-  //   marginTop:10, marginLeft:5, marginRight:5,
-  // }
 });
