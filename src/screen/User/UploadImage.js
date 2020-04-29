@@ -46,25 +46,56 @@ class UploadImage extends Component {
       }
     });
   };
-  uploadPicture = () => {
-    const formData = new FormData();
-    formData.append('picture', {
-      uri: this.state.image.uri,
-      type: 'image/jpeg', // <-  Did you miss that one?
-      name: 'someName',
-    }); // you can append anyone.
-    // data.append('picture', 'asas');
 
-    axios({
-      method: 'put',
-      timeout: 10000,
-      url: API.API_URL.concat('auth/update-pic'),
-      data: formData,
-    })
-      .then(data => {
-        console.log(data);
+  uriToBlob = uri => {
+    console.log('URI', uri);
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+
+      xhr.onerror = function() {
+        reject(new Error('Error on upload image'));
+      };
+
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  };
+
+  uploadPicture = async () => {
+    try {
+      const file = await this.uriToBlob(
+        this.state.image.uri.replace('file://', ''),
+      );
+      console.log(file, 'DEEEEEEWWW DEWWW');
+      const formData = new FormData();
+      // formData.append('gambar', {
+      //   uri:
+      //     Platform.OS === 'android'
+      //       ? this.state.image.uri
+      //       : this.state.image.uri.replace('file://', ''),
+      //   type: this.state.image.type, // <-  Did you miss that one?
+      //   name: 'someName.jpg',
+      // }); // you can append anyone.
+      // data.append('picture', 'asas');
+
+      formData.append('file', file);
+      axios({
+        method: 'put',
+        url: API.API_URL.concat('auth/update-pic'),
+        data: formData,
+        headers: {'Content-Type': 'multipart/form-data'},
       })
-      .catch(err => console.log({err}, 'SSS'));
+        .then(data => {
+          console.log(data);
+        })
+        .catch(err => console.log({err}, 'SSS'));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {

@@ -34,7 +34,6 @@ class Index extends Component {
             options={{headerShown: false}}
             component={MainHome}
           />
-
           <Stack.Screen
             // Home change to TopUp, component= MainHome
             name="TopUp"
@@ -51,6 +50,13 @@ class Index extends Component {
             }}
             component={TopUp}
           />
+
+          <Stack.Screen
+            name="UploadImage"
+            options={{headerShown: false}}
+            component={UploadImage}
+          />
+
           <Stack.Screen
             name="PaymentSuccess"
             options={{headerShown: false}}
@@ -93,11 +99,7 @@ class Index extends Component {
             options={{headerShown: false}}
             component={TransactionList}
           />
-          <Stack.Screen
-            name="UploadImage"
-            options={{headerShown: false}}
-            component={UploadImage}
-          />
+
           <Stack.Screen
             name="SignUp"
             options={{title: 'SignUp', headerShown: true}}

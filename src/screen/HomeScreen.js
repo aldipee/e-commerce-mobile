@@ -232,7 +232,10 @@ const HomeForm = props => {
             <View />
           </Card>
           {props.userData && props.userData.username && (
-            <BalanceCard balance={props.userData.balance} />
+            <BalanceCard
+              balance={props.userData.balance}
+              navigation={props.navigation}
+            />
           )}
 
           {/* Horizontal Scroll */}

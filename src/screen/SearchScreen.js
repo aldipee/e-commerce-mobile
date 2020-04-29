@@ -25,14 +25,14 @@ function SearchScreen(props) {
   const [searchData, setSearchData] = useState([]);
   const [showData, setShowData] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [maxFilter, setMaxFilter] = useState(0);
-  const [minFilter, setMinFilter] = useState(0);
+  const [maxFilter, setMaxFilter] = useState(props.route.params.maxPrice);
+  const [minFilter, setMinFilter] = useState(props.route.params.minPrice);
   const [filterData, setFilterData] = useState({
     key: {key: 'idProduct', value: '0'},
   });
   const onSeachKeyword = keyword => {
     setShowData(true);
-    console.log('JAAAAA');
+
     const query2 = `product/all?search[key]=products.name&search[value]=${keyword}&sort[key]=${
       filterData.key.key
     }&sort[value]=${
@@ -87,7 +87,9 @@ function SearchScreen(props) {
     if (filterData) {
       const query = `product/all?search[key]=products.name&search[value]=${searchKeyword}&sort[key]=${
         filterData.key.key
-      }&sort[value]=${filterData.key.value}&limit=10`;
+      }&sort[value]=${
+        filterData.key.value
+      }&limit=10&maxPrice=${maxFilter}&minPrice=${minFilter}`;
       props.getProducts(query);
       setShowFilter(!showFilter);
     }

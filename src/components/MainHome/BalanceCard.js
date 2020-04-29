@@ -4,7 +4,7 @@ import {View, Text} from 'react-native';
 import {convertToRupiah} from '../../utils/convert';
 import colors from '../../config/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
-function BalanceCard({balance}) {
+function BalanceCard({balance, navigation}) {
   return (
     <>
       <Card
@@ -39,6 +39,7 @@ function BalanceCard({balance}) {
             </Text>
             <Button
               containerStyle={{marginTop: -16}}
+              onPress={() => navigation.navigate('TopUp')}
               icon={<Icon name="md-wallet" size={18} color="#fff" />}
               title="Top up"
             />

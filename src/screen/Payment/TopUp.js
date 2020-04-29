@@ -8,22 +8,47 @@ import {
   Alert,
   StatusBar,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import {Header, Card, Button} from 'react-native-elements';
 import Wallet from 'react-native-vector-icons/FontAwesome5';
 import Left from 'react-native-vector-icons/AntDesign';
+import Axios from 'axios';
+import {API} from '../../config/server';
 export default class TopUp extends Component {
+  state = {
+    nominal: 0,
+  };
+
+  onSubmitTopUp = () => {
+    Axios.post(API.API_URL.concat('topup/user'), {
+      nominal: this.state.nominal,
+    })
+      .then(data => {
+        ToastAndroid.show('Request Succesfsully', ToastAndroid.SHORT);
+        return data;
+      })
+      .then(data => {
+        this.props.navigation.navigate('Home');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     return (
       <>
         <StatusBar backgroundColor="#3c1361" />
         <Header
           containerStyle={{
-            backgroundColor: '#3c1361',
+            height: 50,
           }}
           leftComponent={<Left name="arrowleft" size={25} color="white" />}
           centerComponent={
-            <Text style={{fontSize: 25, color: 'white'}}>Top Up</Text>
+            <Text style={{fontSize: 18, marginTop: -10, color: 'white'}}>
+              Top Up
+            </Text>
           }
         />
         <ScrollView>
@@ -61,17 +86,17 @@ export default class TopUp extends Component {
             <TextInput
               placeholder="Rp. xxx.xxx"
               keyboardType="number-pad"
-              maxLength={6}
+              onChangeText={value => this.setState({nominal: value})}
               style={{
                 backgroundColor: '#f0f0f0',
-                width: '60%',
+
                 marginTop: 5,
                 marginLeft: 10,
-                borderRadius: 10,
+                borderRadius: 4,
               }}
             />
           </Card>
-          <Card>
+          {/* <Card>
             <Text>Pilih Metode Pembayaran lain</Text>
             <View style={{flexDirection: 'column', width: '100%'}}>
               <TouchableOpacity style={localStyle.Touchable}>
@@ -84,13 +109,14 @@ export default class TopUp extends Component {
                 <Text>Alfamart</Text>
               </TouchableOpacity>
             </View>
-          </Card>
+          </Card> */}
         </ScrollView>
         <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
           <Card containerStyle={{marginHorizontal: 0}}>
             <Button
               title="Top Up"
               buttonStyle={{borderRadius: 20, backgroundColor: '#663a82'}}
+              onPress={this.onSubmitTopUp}
             />
           </Card>
         </View>
@@ -105,32 +131,18 @@ const localStyle = StyleSheet.create({
     marginTop: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
+    borderRadius: 2,
   },
   Touchable: {
     flexDirection: 'row',
     borderRadius: 10,
     backgroundColor: 'white',
     padding: 8,
-    marginLeft: 10,
+    marginLeft: 2,
     marginRight: 10,
     marginBottom: 15,
     marginTop: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
+    borderColor: '#000',
+    borderWidth: 1,
   },
 });
