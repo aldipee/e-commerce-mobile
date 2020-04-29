@@ -102,7 +102,11 @@ const localStyle = StyleSheet.create({
 
 const HomeForm = props => {
   const searchOnFocus = () => {
-    props.navigation.navigate('SearchScreen');
+    const priceData = {
+      maxPrice: Math.max.apply(null, props.data.data.map(item => item.price)),
+      minPrice: Math.min.apply(null, props.data.data.map(item => item.price)),
+    };
+    props.navigation.navigate('SearchScreen', priceData);
   };
   const [currentSlider, setCurrentSlider] = useState(1);
   const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
@@ -114,119 +118,31 @@ const HomeForm = props => {
     }, []),
   );
 
-  const _renderItem = ({item, index}) => {
-    return (
-      <Tile
-        imageSrc={require('../../src/banner.jpeg')}
-        titleStyle={{fontSize: 10}}
-        contentContainerStyle={{
-          backgroundColor: 'red',
-          height: 0,
-          flex: 0,
-        }}
-        width={300}
-        height={150}
-      />
-    );
-  };
-
-  const _renderItemHorizontalProduct = ({item, index}) => {
-    return (
-      <Tile
-        imageSrc={require('../../src/product.jpg')}
-        width={'100%'}
-        height={400}
-        imageContainerStyle={{borderRadius: 3}}>
-        <View>
-          <View style={{marginTop: -30}}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-                color: colors.BLACK,
-              }}>
-              Sepatu Futsal Nike Phantom Venom
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 5,
-              }}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  color: colors.ORANGE,
-                  fontWeight: 'bold',
-                }}>
-                Rp 874.000
-              </Text>
-              <Text style={{color: colors.MAIN_GREY, fontWeight: 'bold'}}>
-                340 Terjual
-              </Text>
-            </View>
-          </View>
-        </View>
-      </Tile>
-    );
-  };
-
   return (
     <>
       <StatusBar backgroundColor="#fff" />
       <SafeAreaView>
-        <SearchBar
-          onFocus={() => searchOnFocus()}
-          placeholder="Type Here..."
-          containerStyle={{
-            backgroundColor: colors.SECOND_BLUE,
-            borderBottomColor: '#fff',
-            borderTopColor: '#fff',
-            paddingTop: 5,
-            paddingBottom: 8,
-          }}
-          inputContainerStyle={{
-            backgroundColor: colors.SECOND_GREY,
-            height: 46,
-          }}
-          inputStyle={{fontSize: 14}}
-          underlineColorAndroid={colors.MAIN_GREY}
-        />
+        <TouchableOpacity onPress={searchOnFocus}>
+          <SearchBar
+            disabled={true}
+            placeholder="Type Here..."
+            containerStyle={{
+              backgroundColor: colors.SECOND_BLUE,
+              borderBottomColor: '#fff',
+              borderTopColor: '#fff',
+              paddingTop: 5,
+              paddingBottom: 8,
+            }}
+            inputContainerStyle={{
+              backgroundColor: colors.SECOND_GREY,
+              height: 46,
+            }}
+            inputStyle={{fontSize: 14}}
+            underlineColorAndroid={colors.MAIN_GREY}
+          />
+        </TouchableOpacity>
 
         <ScrollView style={localStyle.cardContainer}>
-          <View>
-            <Card>
-              <Carousel
-                ref={c => setCurrentSlider(c)}
-                data={[1, 2, 3, 4, 5]}
-                renderItem={_renderItem}
-                sliderWidth={sliderWidth}
-                itemWidth={itemWidth}
-                hasParallaxImages={true}
-                inactiveSlideScale={0.94}
-                inactiveSlideOpacity={0.7}
-                loop={true}
-                loopClonesPerSide={2}
-                autoplay={true}
-                autoplayDelay={500}
-                autoplayInterval={1400}
-                onSnapToItem={index => setSlider1ActiveSlide(index)}
-              />
-            </Card>
-            <Pagination
-              style={{paddingTop: -40}}
-              dotsLength={5}
-              activeDotIndex={slider1ActiveSlide}
-              dotColor={'rgba(255, 255, 255, 0.92)'}
-              dotStyle={localStyle.paginationDot}
-              inactiveDotColor={colors.black}
-              inactiveDotOpacity={0.4}
-              inactiveDotScale={0.6}
-              carouselRef={currentSlider}
-              tappableDots={!!currentSlider}
-            />
-          </View>
-
           <Card
             containerStyle={{
               borderTopWidth: 0,

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Platform } from 'react-native';
-import { Card, Avatar, Button } from 'react-native-elements';
+import React, {Component} from 'react';
+import {Text, View, ScrollView, StyleSheet, Platform} from 'react-native';
+import {Card, Avatar, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { connect } from 'react-redux';
-import { API } from '../../config/server';
+import {connect} from 'react-redux';
+import {API} from '../../config/server';
 import ImagePicker from 'react-native-image-picker';
 
 // Local
 import myColors from '../../config/colors';
-import { setLogout } from '../../redux/actions/AuthActions';
+import {setLogout} from '../../redux/actions/AuthActions';
 import axios from 'axios';
 
 class UploadImage extends Component {
@@ -35,7 +35,7 @@ class UploadImage extends Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         console.log(response.fileName);
-        const source = { uri: response.uri };
+        const source = {uri: response.uri};
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -47,12 +47,10 @@ class UploadImage extends Component {
     });
   };
   uploadPicture = () => {
-
-
     const formData = new FormData();
     formData.append('picture', {
       uri: this.state.image.uri,
-      type: 'image/jpeg',  // <-  Did you miss that one?
+      type: 'image/jpeg', // <-  Did you miss that one?
       name: 'someName',
     }); // you can append anyone.
     // data.append('picture', 'asas');
@@ -62,12 +60,11 @@ class UploadImage extends Component {
       timeout: 10000,
       url: API.API_URL.concat('auth/update-pic'),
       data: formData,
-    }).then((data) => {
-      console.log(data)
-    }).catch((err) => console.log({ err }))
-
-
-
+    })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => console.log({err}, 'SSS'));
   };
 
   render() {
@@ -105,7 +102,7 @@ class UploadImage extends Component {
             Abi Daniela
           </Text>
         </View>
-        <View style={{ paddingHorizontal: 10, backgroundColor: '#fff' }}>
+        <View style={{paddingHorizontal: 10, backgroundColor: '#fff'}}>
           {/* Balance Info */}
           <View>
             <Card
@@ -128,8 +125,8 @@ class UploadImage extends Component {
                     borderColor: myColors.MAIN_GREY,
                   }}>
                   <Icon name="wallet" size={35} color={myColors.SECOND_BLUE} />
-                  <View style={{ marginLeft: 10 }}>
-                    <Text style={{ fontSize: 9, textTransform: 'uppercase' }}>
+                  <View style={{marginLeft: 10}}>
+                    <Text style={{fontSize: 9, textTransform: 'uppercase'}}>
                       Saldo Dompet
                     </Text>
                     <Text
@@ -145,16 +142,16 @@ class UploadImage extends Component {
                 <Button
                   title="Top up"
                   type="outline"
-                  titleStyle={{ fontSize: 13, paddingHorizontal: 10 }}
+                  titleStyle={{fontSize: 13, paddingHorizontal: 10}}
                 />
               </View>
             </Card>
           </View>
-          <View style={{ marginBottom: 20 }}>
+          <View style={{marginBottom: 20}}>
             <Button
               onPress={this.uploadPicture}
               title="Upload"
-              buttonStyle={{ backgroundColor: myColors.ORANGE }}
+              buttonStyle={{backgroundColor: myColors.ORANGE}}
             />
           </View>
         </View>
@@ -169,10 +166,10 @@ const localStyle = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
   },
-  iconDesc: { fontSize: 11, alignItems: 'center' },
+  iconDesc: {fontSize: 11, alignItems: 'center'},
 });
 
 export default connect(
   null,
-  { setLogout },
+  {setLogout},
 )(UploadImage);
