@@ -29,18 +29,25 @@ class Index extends Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-          // Home change to TopUp, component= MainHome
+            // TopUp change to home
+            name="Home"
+            options={{headerShown: false}}
+            component={MainHome}
+          />
+
+          <Stack.Screen
+            // Home change to TopUp, component= MainHome
             name="TopUp"
             options={{
               headerShown: false,
               headerStyle: {
                 backgroundColor: '#3c1361',
               },
-              
+
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-              }
+              },
             }}
             component={TopUp}
           />
@@ -113,12 +120,6 @@ class Index extends Component {
             name="PaymentList"
             options={{headerShown: true, title: 'Select Payament Method'}}
             component={PayamentList}
-          />
-          <Stack.Screen
-          // TopUp change to home
-            name="Home"
-            options={{headerShown: false}}
-            component={MainHome}
           />
         </Stack.Navigator>
       </NavigationContainer>

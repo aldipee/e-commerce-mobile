@@ -35,7 +35,9 @@ function SearchScreen(props) {
     console.log('JAAAAA');
     const query2 = `product/all?search[key]=products.name&search[value]=${keyword}&sort[key]=${
       filterData.key.key
-    }&sort[value]=${filterData.key.value}&limit=10`;
+    }&sort[value]=${
+      filterData.key.value
+    }&limit=10&maxPrice=${maxFilter}&minPrice=${minFilter}`;
     const query = `product/all?search[key]=products.name&search[value]=${keyword}&limit=10`;
     props.getProducts(query2);
   };
