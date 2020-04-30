@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {connect} from 'react-redux';
 import {API} from '../../config/server';
 import ImagePicker from 'react-native-image-picker';
-
+import storage from '@react-native-firebase/storage';
 // Local
 import myColors from '../../config/colors';
 import {setLogout} from '../../redux/actions/AuthActions';
@@ -54,11 +54,9 @@ class UploadImage extends Component {
       xhr.onload = function() {
         resolve(xhr.response);
       };
-
       xhr.onerror = function() {
         reject(new Error('Error on upload image'));
       };
-
       xhr.responseType = 'blob';
       xhr.open('GET', uri, true);
       xhr.send(null);
@@ -72,6 +70,20 @@ class UploadImage extends Component {
       );
       console.log(file, 'DEEEEEEWWW DEWWW');
       const formData = new FormData();
+
+      storage()
+        .ref(`profile/a.png`)
+        .put(file)
+        .then(async () => {
+          const url = await storage()
+            .ref(`profile/a.png`)
+            .getDownloadURL();
+          console.log(url);
+        })
+        .catch(err => {
+          console.log({err}, 'ERROR IN UPLOAD IMAGEPICKER');
+        });
+
       // formData.append('gambar', {
       //   uri:
       //     Platform.OS === 'android'
@@ -82,17 +94,17 @@ class UploadImage extends Component {
       // }); // you can append anyone.
       // data.append('picture', 'asas');
 
-      formData.append('file', file);
-      axios({
-        method: 'put',
-        url: API.API_URL.concat('auth/update-pic'),
-        data: formData,
-        headers: {'Content-Type': 'multipart/form-data'},
-      })
-        .then(data => {
-          console.log(data);
-        })
-        .catch(err => console.log({err}, 'SSS'));
+      // formData.append('file', file);
+      // axios({
+      //   method: 'put',
+      //   url: API.API_URL.concat('auth/update-pic'),
+      //   data: formData,
+      //   headers: {'Content-Type': 'multipart/form-data'},
+      // })
+      //   .then(data => {
+      //     console.log(data);
+      //   })
+      //   .catch(err => console.log({err}, 'SSS'));
     } catch (error) {
       console.log(error);
     }
