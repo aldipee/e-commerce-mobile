@@ -14,8 +14,8 @@ import axios from 'axios';
 class UploadImage extends Component {
   state = {
     uri: '',
-    upload: true,
-    image: '',
+    upload: false,
+    image: {uri: API.API_URL_STATIC.concat(this.props.route.params.avatar)},
   };
   //Handle Choose Picture
   choosePicture = () => {
@@ -47,67 +47,27 @@ class UploadImage extends Component {
     });
   };
 
-  uriToBlob = uri => {
-    console.log('URI', uri);
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function() {
-        reject(new Error('Error on upload image'));
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
-    });
-  };
+  uploadPicture = () => {
+    const formData = new FormData();
+    this.setState({upload: true});
+    formData.append('picture', {
+      uri: this.state.image.uri,
+      type: this.state.image.type, // <-  Did you miss that one?
+      name: this.state.image.fileName,
+    }); // you can append anyone.
 
-  uploadPicture = async () => {
-    try {
-      const file = await this.uriToBlob(
-        this.state.image.uri.replace('file://', ''),
-      );
-      console.log(file, 'DEEEEEEWWW DEWWW');
-      const formData = new FormData();
-
-      storage()
-        .ref(`profile/a.png`)
-        .put(file)
-        .then(async () => {
-          const url = await storage()
-            .ref(`profile/a.png`)
-            .getDownloadURL();
-          console.log(url);
-        })
-        .catch(err => {
-          console.log({err}, 'ERROR IN UPLOAD IMAGEPICKER');
-        });
-
-      // formData.append('gambar', {
-      //   uri:
-      //     Platform.OS === 'android'
-      //       ? this.state.image.uri
-      //       : this.state.image.uri.replace('file://', ''),
-      //   type: this.state.image.type, // <-  Did you miss that one?
-      //   name: 'someName.jpg',
-      // }); // you can append anyone.
-      // data.append('picture', 'asas');
-
-      // formData.append('file', file);
-      // axios({
-      //   method: 'put',
-      //   url: API.API_URL.concat('auth/update-pic'),
-      //   data: formData,
-      //   headers: {'Content-Type': 'multipart/form-data'},
-      // })
-      //   .then(data => {
-      //     console.log(data);
-      //   })
-      //   .catch(err => console.log({err}, 'SSS'));
-    } catch (error) {
-      console.log(error);
-    }
+    // formData.append('file', file);
+    axios({
+      method: 'put',
+      url: API.API_URL.concat('auth/update-pic'),
+      data: formData,
+      headers: {'Content-Type': 'multipart/form-data'},
+    })
+      .then(data => {
+        console.log(data);
+        this.props.navigation.goBack();
+      })
+      .catch(err => console.log({err}, 'SSS'));
   };
 
   render() {
@@ -194,6 +154,7 @@ class UploadImage extends Component {
             <Button
               onPress={this.uploadPicture}
               title="Upload"
+              loading={this.state.upload}
               buttonStyle={{backgroundColor: myColors.ORANGE}}
             />
           </View>

@@ -87,7 +87,11 @@ function ProfileScreen(props) {
                   : null,
               }}
               title={profileData.photo ? profileData.photo : 'AP'}
-              onPress={() => props.navigation.navigate('UploadImage')}
+              onPress={() =>
+                props.navigation.navigate('UploadImage', {
+                  avatar: profileData.photo,
+                })
+              }
               activeOpacity={0.7}
             />
             <Text
