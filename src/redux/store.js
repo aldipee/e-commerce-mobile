@@ -9,7 +9,6 @@ import rootReducer from './reducers';
 const config = {
   key: 'container',
   storage: AsyncStorage,
-  blacklit: ['cartData'],
 };
 
 const persistedReducer = persistReducer(config, rootReducer);

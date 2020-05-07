@@ -7,12 +7,9 @@ import {
   StatusBar,
   ScrollView,
   SafeAreaView,
-  TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
 import {Card, Tile, SearchBar} from 'react-native-elements';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {itemWidth, sliderWidth} from '../style/SlideEntry';
 import Icon from 'react-native-vector-icons/Ionicons';
 //ICON
 import SoccerIcon from 'react-native-vector-icons/FontAwesome';
@@ -28,6 +25,7 @@ import {getProfileDetail} from '../redux/actions/AuthActions';
 import BalanceCard from '../components/MainHome/BalanceCard';
 import colors from '../config/colors';
 import HorizontalProducts from '../components/MainHome/HorizontalProducts';
+import SecondHorizontalProducts from '../components/MainHome/HorizontalProducts2';
 import VerticalProducts from '../components/MainHome/VerticalProducts';
 
 const localStyle = StyleSheet.create({
@@ -87,14 +85,9 @@ const localStyle = StyleSheet.create({
   iconContianer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    flexWrap: 'wrap',
   },
   iconItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
-    borderWidth: 1,
-    borderColor: colors.SECOND_GREY,
+    alignItems: 'center',
     padding: 8,
     marginTop: 9,
     width: 110,
@@ -131,6 +124,7 @@ const HomeForm = props => {
               backgroundColor: colors.SECOND_BLUE,
               borderBottomColor: '#fff',
               borderTopColor: '#fff',
+              borderBottomWidth: 0,
               paddingTop: 5,
               paddingBottom: 8,
             }}
@@ -144,15 +138,28 @@ const HomeForm = props => {
         </TouchableOpacity>
 
         <ScrollView style={localStyle.cardContainer}>
+          <View
+            style={{
+              marginTop: -20,
+              backgroundColor: colors.SECOND_BLUE,
+              paddingBottom: 20,
+            }}>
+            <SecondHorizontalProducts
+              items={props.data.data && props.data.data}
+              navigation={props.navigation}
+              buttonColor="orange"
+            />
+          </View>
+
           <Card
             containerStyle={{
               borderTopWidth: 0,
+              marginTop: -20,
               borderRightWidth: 0,
               borderLeftWidth: 0,
               borderBottomWidth: 0,
               borderRadius: 5,
               marginBottom: 30,
-              marginTop: -10,
               shadowColor: '#000',
               shadowOffset: {width: 0, height: 2},
               shadowOpacity: 0.8,
@@ -163,7 +170,7 @@ const HomeForm = props => {
                 <BasketBallIcon
                   name="basketball-ball"
                   color={colors.SECOND_BLUE}
-                  size={35}
+                  size={23}
                 />
                 <Text
                   style={{
@@ -173,14 +180,14 @@ const HomeForm = props => {
                     color: colors.MAIN_GREY,
                     textTransform: 'uppercase',
                   }}>
-                  Sepatu Futsal
+                  Futsal
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={localStyle.iconItem}>
                 <SoccerIcon
                   name="soccer-ball-o"
                   color={colors.SECOND_BLUE}
-                  size={35}
+                  size={23}
                 />
                 <Text
                   style={{
@@ -190,14 +197,14 @@ const HomeForm = props => {
                     color: colors.MAIN_GREY,
                     textTransform: 'uppercase',
                   }}>
-                  Sepatu Bola
+                  Bola
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={localStyle.iconItem}>
                 <CasualIcon
                   name="sunglasses-alt"
                   color={colors.SECOND_BLUE}
-                  size={35}
+                  size={23}
                 />
                 <Text
                   style={{
@@ -207,14 +214,14 @@ const HomeForm = props => {
                     color: colors.MAIN_GREY,
                     textTransform: 'uppercase',
                   }}>
-                  Sepatu Casual
+                  Casual
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity style={localStyle.iconItem}>
                 <SneakerIcon
                   name="run-fast"
                   color={colors.SECOND_BLUE}
-                  size={35}
+                  size={23}
                 />
                 <Text
                   style={{
@@ -224,7 +231,7 @@ const HomeForm = props => {
                     color: colors.MAIN_GREY,
                     textTransform: 'uppercase',
                   }}>
-                  Sepatu Sneaker
+                  Sneaker
                 </Text>
               </TouchableOpacity>
             </View>
@@ -252,12 +259,12 @@ const HomeForm = props => {
                 fontSize: 20,
                 fontWeight: 'bold',
                 marginLeft: 15,
-                marginTop: 10,
-                marginBottom: -10,
+                marginTop: 5,
+                marginBottom: -30,
               }}>
               New Arrivals!
             </Text>
-            <HorizontalProducts
+            <SecondHorizontalProducts
               items={props.data.data && props.data.data}
               navigation={props.navigation}
               buttonColor="orange"

@@ -47,11 +47,11 @@ function SearchScreen(props) {
       key: {value: 0, key: 'idProduct'},
       text: 'Terbaru',
     },
-    {
-      id: 2,
-      key: 'terlaris',
-      text: 'Terlaris',
-    },
+    // {
+    //   id: 2,
+    //   key: 'terlaris',
+    //   text: 'Terlaris',
+    // },
     {
       id: 3,
       key: {value: 1, key: 'price'},
@@ -65,18 +65,18 @@ function SearchScreen(props) {
   ];
 
   const options = [
-    {
-      key: 'pay',
-      text: 'Man',
-    },
-    {
-      key: 'performance',
-      text: 'Woman',
-    },
-    {
-      key: 'aToZ',
-      text: 'Sport',
-    },
+    // {
+    //   key: 'pay',
+    //   text: 'Man',
+    // },
+    // {
+    //   key: 'performance',
+    //   text: 'Woman',
+    // },
+    // {
+    //   key: 'aToZ',
+    //   text: 'Sport',
+    // },
   ];
 
   const toggleFilter = () => {

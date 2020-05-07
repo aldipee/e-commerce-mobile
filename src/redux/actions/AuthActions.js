@@ -19,6 +19,7 @@ export const setLogin = (data, callback) => async dispatch => {
   try {
     setLoading();
     const res = await axios.post(API.API_URL.concat('auth/login'), data);
+    console.log(res.data, 'INIREPOSSS');
     const token = await AsyncStorage.setItem('token', res.data.data);
     console.log(res);
     if (res.data.data) {

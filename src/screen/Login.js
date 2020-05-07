@@ -39,6 +39,7 @@ class Login extends Component {
       password: this.state.password,
     };
     this.props.setLogin(data, status => {
+      console.log(status, 'FFFF');
       if (status.status) {
         this.props.navigation.navigate('Home');
       } else if (status.status === 'ERRVERIFY') {
