@@ -1,6 +1,7 @@
 // Product
 export const GET_PRODUCTS = 'GET_PRODUCTS';
 export const SET_LOADING_PRODUCT = 'SET_LOADING_PRODUCT';
+export const DATA_ON_SEARCH = 'DATA_ON_SEARCH';
 
 // Auth
 export const SET_LOGIN = 'SET_LOGIN';

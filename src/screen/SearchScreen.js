@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {SearchBar, Card, ListItem} from 'react-native-elements';
 import {
   View,
@@ -11,6 +11,7 @@ import {
   FlatList,
   Slider,
   Button,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
@@ -19,7 +20,7 @@ import colors from '../config/colors';
 import RadioButton from '../components/RadioButton';
 import Modal from 'react-native-modal';
 import {convertToRupiah} from '../utils/convert';
-
+import {API} from '../config/server';
 function SearchScreen(props) {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchData, setSearchData] = useState([]);
@@ -27,11 +28,26 @@ function SearchScreen(props) {
   const [showFilter, setShowFilter] = useState(false);
   const [maxFilter, setMaxFilter] = useState(props.route.params.maxPrice);
   const [minFilter, setMinFilter] = useState(props.route.params.minPrice);
+  const [loading, setLoading] = useState(false);
   const [filterData, setFilterData] = useState({
     key: {key: 'idProduct', value: '0'},
   });
+
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    console.log(ref.current, value.data, 'Shi');
+    return ref.current;
+  }
   const onSeachKeyword = keyword => {
-    setShowData(true);
+    setLoading(true);
+    if (showData !== '') {
+      setShowData(true);
+    } else {
+      setShowData(false);
+    }
 
     const query2 = `product/all?search[key]=products.name&search[value]=${keyword}&sort[key]=${
       filterData.key.key
@@ -39,7 +55,11 @@ function SearchScreen(props) {
       filterData.key.value
     }&limit=10&maxPrice=${maxFilter}&minPrice=${minFilter}`;
     const query = `product/all?search[key]=products.name&search[value]=${keyword}&limit=10`;
-    props.getProducts(query2);
+    props.getProducts(query2, success => {
+      if (success) {
+        setLoading(false);
+      }
+    });
   };
   const optionsSort = [
     {
@@ -84,34 +104,56 @@ function SearchScreen(props) {
   };
 
   const onSubmitFilter = () => {
+    setLoading(true);
     if (filterData) {
       const query = `product/all?search[key]=products.name&search[value]=${searchKeyword}&sort[key]=${
         filterData.key.key
       }&sort[value]=${
         filterData.key.value
       }&limit=10&maxPrice=${maxFilter}&minPrice=${minFilter}`;
-      props.getProducts(query);
+      props.getProducts(query, status => {
+        if (status) {
+          setLoading(false);
+        }
+      });
       setShowFilter(!showFilter);
     }
   };
 
   // Item will be rendered when search show
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => props.navigation.navigate('ProductDetails', {data: item})}>
-      <ListItem
-        containerStyle={{marginVertical: 2}}
-        title={item.name}
-        titleStyle={{fontSize: 14, paddingBottom: 5}}
-        subtitle={`${convertToRupiah(item.price)} | AT-3300405`}
-        leftAvatar={{
-          source: {uri: item.picture},
-          rounded: false,
-        }}
-        bottomDivider
-        chevron
-      />
-    </TouchableOpacity>
+  const renderItem = ({item}) => {
+    console.log(API.API_URL_STATIC.concat(item.thumbnail));
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate('ProductDetails', {data: item})
+        }>
+        <ListItem
+          containerStyle={{marginVertical: 2}}
+          title={item.name}
+          titleStyle={{fontSize: 14, paddingBottom: 5}}
+          subtitle={`${convertToRupiah(item.price)} | AT-3300405`}
+          leftAvatar={{
+            source: {uri: API.API_URL_STATIC.concat(item.picture)},
+            rounded: false,
+          }}
+          bottomDivider
+          chevron
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const renderFlatList = !loading ? (
+    <FlatList
+      style={{padding: 5}}
+      data={props.data.searchData && props.data.searchData}
+      renderItem={searchKeyword ? renderItem : null}
+    />
+  ) : (
+    <View style={{flex: 1, justifyContent: 'center'}}>
+      <ActivityIndicator size="large" color="#0000ff" />
+    </View>
   );
 
   return (
@@ -280,7 +322,12 @@ function SearchScreen(props) {
               />
             </View>
             <View style={{paddingHorizontal: 20}}>
-              <Button title="Filter" onPress={onSubmitFilter} />
+              <Button
+                title="Filter"
+                onPress={onSubmitFilter}
+                loading={loading}
+                disabled={loading}
+              />
             </View>
           </View>
         </View>
@@ -326,45 +373,40 @@ function SearchScreen(props) {
           />
         </View>
 
-        <View
-          style={{
-            paddingHorizontal: 15,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <RadioButton options={options} />
-          <TouchableOpacity onPress={() => toggleFilter()}>
-            <Icon name="ios-options" size={30} />
-          </TouchableOpacity>
-        </View>
-
         {/* Brand search button card */}
-        {!searchKeyword && showData ? (
-          <View>
-            <Card containerStyle={localStyle.cardBrand}>
-              <View style={localStyle.iconContianer}>
-                <TouchableOpacity style={localStyle.iconItem}>
-                  <Icon />
-                  <Text>Nike</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={localStyle.iconItem}>
-                  <Icon />
-                  <Text>Nike</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={localStyle.iconItem}>
-                  <Icon />
-                  <Text>Nike</Text>
-                </TouchableOpacity>
-              </View>
-            </Card>
+
+        {/* <View>
+          <Card containerStyle={localStyle.cardBrand}>
+            <View style={localStyle.iconContianer}>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon />
+                <Text>Nike</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon />
+                <Text>Nike</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={localStyle.iconItem}>
+                <Icon />
+                <Text>Nike</Text>
+              </TouchableOpacity>
+            </View>
+          </Card>
+        </View> */}
+        {showData && (
+          <View
+            style={{
+              paddingHorizontal: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <RadioButton options={options} />
+            <TouchableOpacity onPress={() => toggleFilter()}>
+              <Icon name="ios-options" size={30} />
+            </TouchableOpacity>
           </View>
-        ) : (
-          <FlatList
-            style={{padding: 5}}
-            data={props.data.data && props.data.data}
-            renderItem={searchKeyword ? renderItem : null}
-          />
         )}
+        {showData && renderFlatList}
 
         <ScrollView />
       </View>

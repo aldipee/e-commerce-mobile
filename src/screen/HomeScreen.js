@@ -9,8 +9,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import {Card, Tile, SearchBar} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {Card, SearchBar} from 'react-native-elements';
 //ICON
 import SoccerIcon from 'react-native-vector-icons/FontAwesome';
 import BasketBallIcon from 'react-native-vector-icons/FontAwesome5';
@@ -19,14 +18,14 @@ import CasualIcon from 'react-native-vector-icons/Fontisto';
 
 // Redux
 import {connect} from 'react-redux';
-import {getProducts} from '../redux/actions/ProductActions';
+import {getProductsHome} from '../redux/actions/ProductActions';
 import {getProfileDetail} from '../redux/actions/AuthActions';
 // Lokal Config
 import BalanceCard from '../components/MainHome/BalanceCard';
 import colors from '../config/colors';
-import HorizontalProducts from '../components/MainHome/HorizontalProducts';
 import SecondHorizontalProducts from '../components/MainHome/HorizontalProducts2';
 import VerticalProducts from '../components/MainHome/VerticalProducts';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const localStyle = StyleSheet.create({
   button: {
@@ -107,7 +106,7 @@ const HomeForm = props => {
 
   useFocusEffect(
     useCallback(() => {
-      props.getProducts();
+      props.getProductsHome();
       props.getProfileDetail();
     }, []),
   );
@@ -116,7 +115,7 @@ const HomeForm = props => {
     <>
       <StatusBar backgroundColor="#fff" />
       <SafeAreaView>
-        <TouchableOpacity onPress={searchOnFocus}>
+        <TouchableWithoutFeedback onPress={searchOnFocus}>
           <SearchBar
             disabled={true}
             placeholder="Type Here..."
@@ -135,7 +134,7 @@ const HomeForm = props => {
             inputStyle={{fontSize: 14}}
             underlineColorAndroid={colors.MAIN_GREY}
           />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
 
         <ScrollView style={localStyle.cardContainer}>
           <View
@@ -272,12 +271,6 @@ const HomeForm = props => {
           </View>
           {/* End of Horizontal Scroll */}
 
-          <HorizontalProducts
-            title="Product Terbaik"
-            items={props.data.data && props.data.data}
-            navigation={props.navigation}
-          />
-
           {/* Start Scroll Vertical */}
           <VerticalProducts
             title="Paling laris"
@@ -297,7 +290,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getProducts,
+  getProductsHome,
   getProfileDetail,
 };
 
