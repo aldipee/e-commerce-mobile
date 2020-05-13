@@ -223,21 +223,23 @@ function ProfileScreen(props) {
                   titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
                   bottomDivider
                 />
-                <ListItem
-                  containerStyle={{paddingLeft: 1}}
-                  title={'Alamat'}
-                  subtitle={
-                    profileData.address &&
-                    `${profileData.address[0].street}, ${
-                      profileData.address[0].city
-                    }, ${profileData.address[0].district} - ${
-                      profileData.address[0].postcode
-                    }`
-                  }
-                  rightTitleStyle={{fontSize: 11}}
-                  titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
-                  bottomDivider
-                />
+                {profileData.address && (
+                  <ListItem
+                    containerStyle={{paddingLeft: 1}}
+                    title={'Alamat'}
+                    subtitle={
+                      profileData.address[0] &&
+                      `${profileData.address[0].street}, ${
+                        profileData.address[0].city
+                      }, ${profileData.address[0].district} - ${
+                        profileData.address[0].postcode
+                      }`
+                    }
+                    rightTitleStyle={{fontSize: 11}}
+                    titleStyle={{fontSize: 12, color: myColors.MAIN_GREY}}
+                    bottomDivider
+                  />
+                )}
                 {/* {['Alamat', 'Tanggal lahir'].map((data, index) => (
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('AddAddress')}>
