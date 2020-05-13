@@ -8,6 +8,7 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {Card, SearchBar} from 'react-native-elements';
 //ICON
@@ -135,158 +136,162 @@ const HomeForm = props => {
             underlineColorAndroid={colors.MAIN_GREY}
           />
         </TouchableWithoutFeedback>
-
-        <ScrollView style={localStyle.cardContainer}>
-          <View
-            style={{
-              marginTop: -20,
-              backgroundColor: colors.SECOND_BLUE,
-              paddingBottom: 20,
-            }}>
-            <SecondHorizontalProducts
-              items={props.data.data && props.data.data}
-              navigation={props.navigation}
-              buttonColor="orange"
-            />
-          </View>
-
-          <Card
-            containerStyle={{
-              borderTopWidth: 0,
-              marginTop: -20,
-              borderRightWidth: 0,
-              borderLeftWidth: 0,
-              borderBottomWidth: 0,
-              borderRadius: 5,
-              marginBottom: 30,
-              shadowColor: '#000',
-              shadowOffset: {width: 0, height: 2},
-              shadowOpacity: 0.8,
-              shadowRadius: 2,
-            }}>
-            <View style={localStyle.iconContianer}>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <BasketBallIcon
-                  name="basketball-ball"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Futsal
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <SoccerIcon
-                  name="soccer-ball-o"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Bola
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <CasualIcon
-                  name="sunglasses-alt"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Casual
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <SneakerIcon
-                  name="run-fast"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Sneaker
-                </Text>
-              </TouchableOpacity>
+        {props.userData.username ? (
+          <ScrollView style={localStyle.cardContainer}>
+            <View
+              style={{
+                marginTop: -20,
+                backgroundColor: colors.SECOND_BLUE,
+                paddingBottom: 20,
+              }}>
+              <SecondHorizontalProducts
+                items={props.data.data && props.data.data}
+                navigation={props.navigation}
+                buttonColor="orange"
+              />
             </View>
 
-            <View />
-          </Card>
-          {props.userData && props.userData.username && (
-            <BalanceCard
-              balance={props.userData.balance}
-              navigation={props.navigation}
-            />
-          )}
-
-          {/* Horizontal Scroll */}
-          <View
-            style={{
-              backgroundColor: colors.SECOND_BLUE,
-              paddingBottom: 20,
-              marginTop: 9,
-              marginBottom: 20,
-            }}>
-            <Text
-              style={{
-                color: colors.WHITE,
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginLeft: 15,
-                marginTop: 5,
-                marginBottom: -30,
+            <Card
+              containerStyle={{
+                borderTopWidth: 0,
+                marginTop: -20,
+                borderRightWidth: 0,
+                borderLeftWidth: 0,
+                borderBottomWidth: 0,
+                borderRadius: 5,
+                marginBottom: 30,
+                shadowColor: '#000',
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
               }}>
-              New Arrivals!
-            </Text>
-            <SecondHorizontalProducts
+              <View style={localStyle.iconContianer}>
+                <TouchableOpacity
+                  style={localStyle.iconItem}
+                  onPress={() => props.navigation.navigate('Category')}>
+                  <BasketBallIcon
+                    name="basketball-ball"
+                    color={colors.SECOND_BLUE}
+                    size={23}
+                  />
+                  <Text
+                    style={{
+                      marginTop: 5,
+                      fontSize: 11,
+                      fontWeight: 'bold',
+                      color: colors.MAIN_GREY,
+                      textTransform: 'uppercase',
+                    }}>
+                    Futsal
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={localStyle.iconItem}
+                  onPress={() => props.navigation.navigate('Category')}>
+                  <SoccerIcon
+                    name="soccer-ball-o"
+                    color={colors.SECOND_BLUE}
+                    size={23}
+                  />
+                  <Text
+                    style={{
+                      marginTop: 5,
+                      fontSize: 11,
+                      fontWeight: 'bold',
+                      color: colors.MAIN_GREY,
+                      textTransform: 'uppercase',
+                    }}>
+                    Bola
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={localStyle.iconItem}
+                  onPress={() => props.navigation.navigate('Category')}>
+                  <CasualIcon
+                    name="sunglasses-alt"
+                    color={colors.SECOND_BLUE}
+                    size={23}
+                  />
+                  <Text
+                    style={{
+                      marginTop: 5,
+                      fontSize: 11,
+                      fontWeight: 'bold',
+                      color: colors.MAIN_GREY,
+                      textTransform: 'uppercase',
+                    }}>
+                    Casual
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={localStyle.iconItem}
+                  onPress={() => props.navigation.navigate('Category')}>
+                  <SneakerIcon
+                    name="run-fast"
+                    color={colors.SECOND_BLUE}
+                    size={23}
+                  />
+                  <Text
+                    style={{
+                      marginTop: 5,
+                      fontSize: 11,
+                      fontWeight: 'bold',
+                      color: colors.MAIN_GREY,
+                      textTransform: 'uppercase',
+                    }}>
+                    Sneaker
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View />
+            </Card>
+            {props.userData && props.userData.username && (
+              <BalanceCard
+                balance={props.userData.balance}
+                navigation={props.navigation}
+              />
+            )}
+
+            {/* Horizontal Scroll */}
+            <View
+              style={{
+                backgroundColor: colors.SECOND_BLUE,
+                paddingBottom: 20,
+                marginTop: 9,
+                marginBottom: 20,
+              }}>
+              <Text
+                style={{
+                  color: colors.WHITE,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  marginLeft: 15,
+                  marginTop: 5,
+                  marginBottom: -30,
+                }}>
+                New Arrivals!
+              </Text>
+              <SecondHorizontalProducts
+                items={props.data.data && props.data.data}
+                navigation={props.navigation}
+                buttonColor="orange"
+              />
+            </View>
+            {/* End of Horizontal Scroll */}
+
+            {/* Start Scroll Vertical */}
+            <VerticalProducts
+              title="Paling laris"
               items={props.data.data && props.data.data}
               navigation={props.navigation}
-              buttonColor="orange"
             />
+          </ScrollView>
+        ) : (
+          <View style={{marginTop: 200, justifyContent: 'center'}}>
+            <ActivityIndicator size="large" color="#0000ff" />
           </View>
-          {/* End of Horizontal Scroll */}
-
-          {/* Start Scroll Vertical */}
-          <VerticalProducts
-            title="Paling laris"
-            items={props.data.data && props.data.data}
-            navigation={props.navigation}
-          />
-        </ScrollView>
-        {/* End of Scroll Vertical */}
+        )}
       </SafeAreaView>
     </>
   );
