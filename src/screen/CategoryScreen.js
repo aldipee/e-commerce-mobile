@@ -101,8 +101,6 @@ const HomeForm = props => {
     };
     props.navigation.navigate('SearchScreen', priceData);
   };
-  const [currentSlider, setCurrentSlider] = useState(1);
-  const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
 
   useFocusEffect(
     useCallback(() => {
@@ -136,121 +134,27 @@ const HomeForm = props => {
           />
         </TouchableWithoutFeedback>
 
+        <Card
+          containerStyle={{
+            borderTopWidth: 0,
+            borderRightWidth: 0,
+            borderLeftWidth: 0,
+            borderBottomWidth: 0,
+            borderRadius: 5,
+            marginBottom: 10,
+            shadowColor: '#000',
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+          }}
+        />
+
         <ScrollView style={localStyle.cardContainer}>
-          <View
-            style={{
-              marginTop: -20,
-              backgroundColor: colors.SECOND_BLUE,
-              paddingBottom: 20,
-            }}>
-            <SecondHorizontalProducts
-              items={props.data.data && props.data.data}
-              navigation={props.navigation}
-              buttonColor="orange"
-            />
-          </View>
-
-          <Card
-            containerStyle={{
-              borderTopWidth: 0,
-              marginTop: -20,
-              borderRightWidth: 0,
-              borderLeftWidth: 0,
-              borderBottomWidth: 0,
-              borderRadius: 5,
-              marginBottom: 30,
-              shadowColor: '#000',
-              shadowOffset: {width: 0, height: 2},
-              shadowOpacity: 0.8,
-              shadowRadius: 2,
-            }}>
-            <View style={localStyle.iconContianer}>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <BasketBallIcon
-                  name="basketball-ball"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Futsal
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <SoccerIcon
-                  name="soccer-ball-o"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Bola
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <CasualIcon
-                  name="sunglasses-alt"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Casual
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={localStyle.iconItem}
-                onPress={() => props.navigation.navigate('Category')}>
-                <SneakerIcon
-                  name="run-fast"
-                  color={colors.SECOND_BLUE}
-                  size={23}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    fontSize: 11,
-                    fontWeight: 'bold',
-                    color: colors.MAIN_GREY,
-                    textTransform: 'uppercase',
-                  }}>
-                  Sneaker
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View />
-          </Card>
-          {props.userData && props.userData.username && (
-            <BalanceCard
-              balance={props.userData.balance}
-              navigation={props.navigation}
-            />
-          )}
+          <SecondHorizontalProducts
+            items={props.data.data && props.data.data}
+            navigation={props.navigation}
+            buttonColor="orange"
+          />
 
           {/* Horizontal Scroll */}
           <View
@@ -278,13 +182,6 @@ const HomeForm = props => {
             />
           </View>
           {/* End of Horizontal Scroll */}
-
-          {/* Start Scroll Vertical */}
-          <VerticalProducts
-            title="Paling laris"
-            items={props.data.data && props.data.data}
-            navigation={props.navigation}
-          />
         </ScrollView>
         {/* End of Scroll Vertical */}
       </SafeAreaView>

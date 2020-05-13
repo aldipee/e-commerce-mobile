@@ -17,6 +17,7 @@ import UploadImage from './screen/User/UploadImage';
 import CartDetails from './screen/Cart/CartDetails';
 import AddAddress from './screen/User/AddAddress';
 import Invoice from './screen/Payment/Invoice';
+import CategoryScreen from './screen/CategoryScreen';
 import PaymentSuccess from './screen/Payment/PaymentSucces';
 import DataNotFound from './screen/Others/DataNotFound';
 import TopUp from './screen/Payment/TopUp';
@@ -55,6 +56,11 @@ class Index extends Component {
             name="UploadImage"
             options={{headerShown: false}}
             component={UploadImage}
+          />
+          <Stack.Screen
+            name="Category"
+            options={{headerShown: true}}
+            component={CategoryScreen}
           />
 
           <Stack.Screen
