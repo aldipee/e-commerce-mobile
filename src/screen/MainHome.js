@@ -37,9 +37,9 @@ function MainHome(props) {
     const route = url.replace(/.*?:\/\//g, '');
     const id = route.match(/\/([^\/]+)\/?$/)[1];
     const routeName = route.split('/')[0];
-
+    console.log(routeName, url);
     if (routeName === 'people') {
-      navigate('LoginScreen', {id, name: 'chris'});
+      navigate('LoginScreen', {register: true});
     }
   };
   return (
