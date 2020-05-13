@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import Button from '../components/Button';
@@ -24,6 +25,12 @@ class Login extends Component {
     error: null,
   };
   componentDidMount() {
+    if (this.props.route.params && this.props.route.params.register) {
+      ToastAndroid.show(
+        'Your account has been verified, please login',
+        ToastAndroid.SHORT,
+      );
+    }
     AsyncStorage.getItem('token', (err, result) => {
       if (result) {
         console.log('HEREEEEE', result);
