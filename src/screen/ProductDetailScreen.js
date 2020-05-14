@@ -24,7 +24,7 @@ import {API} from '../config/server';
 import Modal from 'react-native-modal';
 function ProductDetailScreen(props) {
   const [quantity, setQuantity] = useState(1);
-  const {data} = props.route.params;
+  const data = props.route.params.item;
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
 
@@ -288,15 +288,6 @@ function ProductDetailScreen(props) {
           </View>
         </View>
       </View>
-      {/* <View style={[localStyle.sheet]}>
-        <Animated.View style={[localStyle.popup]}>
-          <TouchableOpacity>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-
-      <Animated.View style={[StyleSheet.absoluteFill, localStyle.cover]} /> */}
     </SafeAreaView>
   );
 }
