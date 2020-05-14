@@ -16,11 +16,13 @@ export default function HorizontalProducts({title, items, navigation}) {
       <View
         style={{
           marginBottom: 100,
+          justifyContent: 'space-around',
           flexDirection: 'row',
-          flexWrap: 'wrap',
         }}>
         <FlatList
           data={items}
+          key={2}
+          numColumns={2}
           renderItem={({item}) => (
             <Card
               containerStyle={{
