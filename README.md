@@ -55,11 +55,15 @@ git clone https://github.com/aldipee/e-commerce-mobile.git
 5. Type `yarn start` to run this application.
 
 **Related Project Backend**
+
 [`Backend-RESTful-API`](https://github.com/ainayaaurel/Backend-RESTful-API) created by [Dika Frandita](https://github.com/captaindika)
 
 **Download App**
+
 You can download the app [`Here`](https://github.com/ainayaaurel/Backend-RESTful-API)
 
 **Contributors**
+
 [Aldi Pranata](https://github.com/aldipee/)
+
 [Dika Frandita](https://github.com/captaindika)
