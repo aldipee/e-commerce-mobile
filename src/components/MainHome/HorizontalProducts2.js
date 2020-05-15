@@ -34,7 +34,7 @@ export default function HorizontalProducts({
                   marginHorizontal: 0,
                   padding: 2,
                   width: 210,
-                  height: 280,
+                  height: 260,
                   marginLeft: 5,
                   borderRadius: 7,
                   shadowColor: '#000',
@@ -65,7 +65,7 @@ export default function HorizontalProducts({
                         color: colors.ORANGE,
                         marginTop: 5,
                       }}>
-                      {convertToRupiah(data.price)}
+                      {data.price && convertToRupiah(data.price)}
                     </Text>
                     <Text
                       style={{

@@ -34,7 +34,7 @@ export default function HorizontalProducts({
                   marginHorizontal: 0,
                   padding: 2,
                   width: 210,
-                  height: 290,
+                  height: 270,
                   marginLeft: 5,
                   borderRadius: 1,
                   marginBottom: 15,

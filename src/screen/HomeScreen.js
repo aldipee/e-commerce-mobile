@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
@@ -102,12 +102,13 @@ const HomeForm = props => {
     };
     props.navigation.navigate('SearchScreen', priceData);
   };
-  const [currentSlider, setCurrentSlider] = useState(1);
-  const [slider1ActiveSlide, setSlider1ActiveSlide] = useState(1);
 
+  useEffect(() => {
+    props.getProductsHome(1, 6, '');
+  }, []);
   useFocusEffect(
     useCallback(() => {
-      props.getProductsHome();
+      // props.getProductsHome();
       props.getProfileDetail();
     }, []),
   );

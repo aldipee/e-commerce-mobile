@@ -5,8 +5,14 @@ import {Card, Image, Button} from 'react-native-elements';
 import {API} from '../../config/server';
 import colors from '../../config/colors';
 import {convertToRupiah} from '../../utils/convert';
+import {connect} from 'react-redux';
+import {getProductsHome} from '../../redux/actions/ProductActions';
+function VerticalProducts({title, items, navigation, ...props}) {
+  const loadMore = () => {
+    console.log('Jalana');
+    props.getProductsHome(2, 6, '', true);
+  };
 
-export default function HorizontalProducts({title, items, navigation}) {
   return (
     <View style={{marginTop: 10}}>
       <Text style={{marginLeft: 8, fontSize: 18, fontWeight: 'bold'}}>
@@ -22,6 +28,7 @@ export default function HorizontalProducts({title, items, navigation}) {
         <FlatList
           data={items}
           key={2}
+          onEndReachedThreshold={1}
           numColumns={2}
           renderItem={({item}) => (
             <Card
@@ -34,46 +41,49 @@ export default function HorizontalProducts({title, items, navigation}) {
                 width: '48%',
                 padding: 2,
                 marginLeft: 5,
-                borderRadius: 1,
-                marginBottom: 0,
+                borderRadius: 3,
+                marginBottom: -10,
                 shadowColor: '#000',
                 shadowOffset: {width: 0, height: 2},
                 shadowOpacity: 0.8,
                 shadowRadius: 2,
               }}>
-              <Image
-                source={{
-                  uri: API.API_URL_STATIC.concat(item.picture),
-                }}
-                style={{width: '100%', height: 150}}
-                PlaceholderContent={<ActivityIndicator />}
-              />
+              <View style={{width: '100%', height: 150}}>
+                <Image
+                  source={{
+                    uri: API.API_URL_STATIC.concat(item.picture),
+                  }}
+                  style={{width: '100%', height: 140}}
+                  PlaceholderContent={<ActivityIndicator />}
+                />
+              </View>
               <View style={{padding: 5}}>
                 <Text
                   style={{
-                    textAlign: 'center',
-                    height: 40,
+                    textAlign: 'left',
+                    height: 20,
+                    fontSize: 13,
                   }}>
                   {item.name}
                 </Text>
                 <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-around',
+                    justifyContent: 'space-between',
                   }}>
                   <Text
                     style={{
-                      fontSize: 17,
+                      fontSize: 14,
                       fontWeight: 'bold',
                       color: colors.ORANGE,
-                      marginTop: 5,
+                      marginTop: 1,
                     }}>
-                    {convertToRupiah(item.price)}
+                    {item.price && convertToRupiah(item.price)}
                   </Text>
                   <Text style={{fontSize: 9, marginTop: 9}}>300 Terjual</Text>
                 </View>
               </View>
-              <View style={{padding: 10}}>
+              <View style={{padding: 5}}>
                 <Button
                   title="Beli"
                   buttonStyle={{borderRadius: 1}}
@@ -89,3 +99,7 @@ export default function HorizontalProducts({title, items, navigation}) {
     </View>
   );
 }
+export default connect(
+  null,
+  {getProductsHome},
+)(VerticalProducts);
